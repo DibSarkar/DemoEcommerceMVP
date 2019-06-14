@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">DemoOpenCartApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="discount_text">25%\nOFF</string>
+    <string name="Rs">You have save \u20B9 200</string>
+    <string name="Rs1">\u20B9 500</string>
+    <string name="Rs2">\u20B9 700</string>
+    <string name="hint_account">New Customer?</string>
+    <string name="hint_sign_up">Sign Up</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="no_products">No Products Found</string>
+</resources>

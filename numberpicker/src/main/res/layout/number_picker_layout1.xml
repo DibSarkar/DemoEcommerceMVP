@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="130dp"
+    android:layout_height="40dp">
+
+    <LinearLayout
+        android:id="@+id/ll_adddelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#ffffff"
+        android:weightSum="3">
+
+        <Button
+            android:id="@+id/decrement"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:padding="0dp"
+            android:textColor="#fff"
+            android:background="#69A03B"
+            android:textSize="20sp"
+            android:text="—"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/display"
+            android:minWidth="30dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="0"
+            android:background="#fff"
+            android:textColor="#000"
+            android:focusable="false"
+            android:inputType="number"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/increment"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:padding="0dp"
+            android:textSize="20sp"
+            android:textColor="#fff"
+            android:background="#69A03B"
+            android:text="+"
+            android:layout_weight="1"/>
+    </LinearLayout>
+
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal"
+         android:background="#ffffff"
+         android:weightSum="4">
+         <Button
+
+             android:id="@+id/add"
+             android:layout_width="0dp"
+             android:layout_height="35dp"
+             android:background="#69A03B"
+             android:textColor="#fff"
+             android:visibility="visible"
+             android:text="Add To Cart "
+             android:textAppearance="?android:textAppearanceSmall"
+             android:layout_weight="3"/>
+
+         <Button
+             android:id="@+id/bt_add"
+             android:layout_width="0dp"
+             android:layout_height="35dp"
+             android:background="#376B22"
+             android:textColor="#fff"
+             android:visibility="visible"
+             android:text="+"
+             android:textStyle="bold"
+             android:textAppearance="?android:textAppearanceSmall"
+             android:layout_weight="1"/>
+     </LinearLayout>
+
+</FrameLayout>

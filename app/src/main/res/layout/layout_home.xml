@@ -1,0 +1,489 @@
+<?xml version="1.0"?>
+
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:fillViewport="true"
+    android:background="#ececec"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+    tools:showIn="@layout/app_bar_home"
+
+    android:orientation="vertical">
+
+   <!-- <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:id="@+id/rl_details"
+     >
+
+        <ImageView
+            android:id="@+id/iv_menu"
+            android:layout_width="25dp"
+            android:layout_centerInParent="true"
+            android:layout_alignParentLeft="true"
+            android:layout_height="25dp"
+            android:background="@drawable/ic_drawer"
+
+            android:layout_centerVertical="true"/>
+
+      &lt;!&ndash;  <ImageView
+            android:id="@+id/iv_cart"
+            android:layout_width="25dp"
+            android:layout_alignParentRight="true"
+            android:layout_height="25dp"
+            android:background="@drawable/cart"
+
+            android:layout_centerVertical="true"/>
+
+&ndash;&gt;
+        <TextView
+            android:id="@+id/tv_actionBarTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textSize="18dp"
+            android:text="MachinoTools"
+            android:textColor="#000"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_centerInParent="true"/>
+
+        &lt;!&ndash;<TextView
+            android:id="@+id/tv_actionBarOptionRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="Option Right"
+            android:textColor="@color/text_white"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:visibility="gone"/>&ndash;&gt;
+
+    </RelativeLayout>-->
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_marginTop="5dp"-->
+    <!--android:text="Welcome to Presto"-->
+    <!--android:textColor="#acacac"-->
+    <!--android:textSize="20dp"-->
+    <!--android:id="@+id/weltext"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"/>-->
+
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        custom:auto_cycle="true"
+        custom:indicator_visibility="visible"
+        custom:pager_animation="Accordion"
+        custom:pager_animation_span="1100"
+
+
+        />
+
+    <com.daimajia.slider.library.Indicators.PagerIndicator
+        android:id="@+id/custom_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        custom:selected_color="#0095BF"
+
+        custom:shape="oval"
+        custom:selected_padding_left="5dp"
+        custom:selected_padding_right="5dp"
+        custom:unselected_padding_left="5dp"
+        custom:unselected_padding_right="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        custom:selected_width="6dp"
+        custom:selected_height="6dp"
+        custom:unselected_width="6dp"
+        custom:unselected_height="6dp"
+        android:layout_marginBottom="10dp"
+        />
+  <!--  <com.daimajia.slider.library.Indicators.PagerIndicator
+        android:id="@+id/custom_indicator2"
+        style="@style/AndroidImageSlider_Corner_Oval_Orange"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
+        />
+-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F0FAFC"
+
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:id="@+id/ll_deals"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_deals"
+
+                android:layout_width="match_parent"
+               android:background="@color/category_bg"
+               android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_deals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btnMoreDeals"
+                    android:text="Deals of the Day"
+                    android:textColor="@color/category_text_color"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"/>
+
+            <!--    <TextView
+                    android:id="@+id/btnMoreDeals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="View More"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    />
+-->
+            </RelativeLayout>
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_deals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"/>
+
+
+
+
+
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_offers"
+            android:layout_margin="3dp"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F0FAFC"
+            android:layout_marginTop="5dp"
+            android:layout_margin="3dp"
+            android:id="@+id/ll_best_sellers"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_best_sellers"
+
+                android:layout_width="match_parent"
+                android:background="@color/category_bg"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_best_sellers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btnMoreBestSellers"
+                    android:text="Best Sellers"
+                    android:textColor="@color/category_text_color"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="5dp"/>
+<!--
+                <TextView
+                    android:id="@+id/btnMoreBestSellers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="View More"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    />-->
+
+            </RelativeLayout>
+
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_best_sellers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"/>
+
+
+
+
+
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_offers1"
+            android:layout_margin="3dp"
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="15dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F0FAFC"
+            android:layout_marginTop="5dp"
+            android:layout_margin="3dp"
+            android:id="@+id/ll_testing"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_testing"
+
+                android:layout_width="match_parent"
+                android:background="@color/category_bg"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_testing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btnMoreTesting"
+                    android:text="Testing and Measuring Instruments"
+                    android:textColor="@color/category_text_color"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="5dp"/>
+
+              <!--  <TextView
+                    android:id="@+id/btnMoreTesting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="View More"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    />-->
+
+            </RelativeLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_testing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"/>
+
+
+
+
+
+
+
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_offers2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="7dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#F0FAFC"
+            android:layout_marginTop="5dp"
+            android:layout_margin="3dp"
+            android:id="@+id/ll_angle"
+            android:orientation="vertical"
+            >
+
+            <RelativeLayout
+                android:id="@+id/rl_angle"
+
+                android:layout_width="match_parent"
+                android:background="@color/category_bg"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tv_angle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/btnMoreAngles"
+                    android:text="Angle Grinders"
+                    android:textColor="@color/category_text_color"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="5dp"/>
+
+              <!--  <TextView
+                    android:id="@+id/btnMoreAngles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="View More"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    />
+-->
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_angle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="3dp"/>
+
+
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0FAFC"
+        android:layout_marginTop="5dp"
+        android:layout_margin="3dp"
+        android:id="@+id/ll_brand_offers"
+
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:id="@+id/rl_brand_offers"
+
+            android:layout_width="match_parent"
+            android:background="@color/category_bg"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/tv_brand_offers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+
+                android:text="Branded Offers"
+                android:textColor="@color/category_text_color"
+                android:textSize="16sp"
+                android:layout_marginLeft="5dp"/>
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:weightSum="3"
+
+
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_weight="1"
+
+                android:id="@+id/iv_branded_left"
+                android:layout_marginLeft="5dp"
+                android:layout_centerInParent="true"
+                android:layout_alignParentLeft="true"
+                android:layout_gravity="center"
+                android:layout_height="35dp"
+                android:src="@drawable/ic_offers_left"/>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="270dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/rv_branded"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/iv_branded_right"
+
+                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:layout_centerInParent="true"
+
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_offers_right"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

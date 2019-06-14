@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_close_subcategory"
+        android:icon="@drawable/ic_left_arrow"
+        android:title=""
+ />
+
+    <!--<group-->
+    <!--android:id="@+id/group_settings"-->
+    <!--android:checkableBehavior="single">-->
+    <!--<item-->
+    <!--android:id="@+id/category1"-->
+    <!--android:title="Category 1" />-->
+    <!--</group>-->
+    <!--<group-->
+    <!--android:id="@+id/group_settings1"-->
+    <!--android:checkableBehavior="single">-->
+    <!--<item-->
+    <!--android:id="@+id/category2"-->
+    <!--android:title="Category 2" />-->
+    <!--</group>-->
+
+</menu>

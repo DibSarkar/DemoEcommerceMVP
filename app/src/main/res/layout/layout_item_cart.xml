@@ -1,0 +1,115 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/product_img"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+               android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:src="@drawable/pro1"
+                android:padding="5dp"
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:paddingLeft="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="Test Product"
+                    android:ellipsize="end"
+
+                    android:textAllCaps="false"
+                    android:id="@+id/product_title"
+                    android:textColor="#e00015"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_alignParentRight="true"
+                    android:orientation="vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="right|bottom"
+                        android:id="@+id/delete"
+                        android:src="@drawable/cart_delete"/>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:ems="12"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12dp"
+                    android:singleLine="true"
+                    android:text="TEST 123"
+                    android:layout_below="@+id/product_title"
+                    android:id="@+id/product_model"
+                    android:textColor="#191919"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:text="@string/Rs2"
+                    android:layout_marginTop="5dp"
+                    android:layout_below="@+id/product_model"
+                    android:id="@+id/product_cost"
+                    android:textColor="#191919"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+                <RelativeLayout
+                    android:id="@+id/lytCounter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                  android:gravity="left"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="20dp"
+
+                    android:layout_below="@+id/product_cost">
+
+                    <com.travijuu.numberpicker.library.NumberPicker
+                        android:id="@+id/np_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:custom_layout="@layout/cart_details_pick_layout"
+                        android:layout_centerHorizontal="true"
+                        app:min="0"
+                        app:max="10"
+                        app:value="0"
+                        />
+
+
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

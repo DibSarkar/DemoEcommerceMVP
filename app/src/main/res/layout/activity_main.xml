@@ -1,0 +1,78 @@
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include
+        layout="@layout/app_bar_home"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.app.demoopencartapp.ui.DoubleDrawerView
+        android:id="@+id/double_drawer_view"
+        android:layout_width="wrap_content"
+        android:fitsSystemWindows="true"
+        app:itemBackground="@drawable/drawable_selected"
+
+        android:background="@color/colorPrimaryDark"
+
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/main_navigation_view"
+            android:theme="@style/NavigationTheme"
+            app:headerLayout="@layout/nav_header_main"
+            android:background="@color/colorPrimaryDark"
+            app:itemTextColor="@color/text_selected"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+
+
+            app:itemBackground="@drawable/drawable_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:menu="@menu/activity_main_drawer" />
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/categories_navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+
+            android:background="@color/colorPrimaryDark"
+
+            app:itemTextColor="@color/text_selected"
+
+            android:theme="@style/NavigationTheme"
+
+
+            app:menu="@menu/navigation_category"
+            app:itemBackground="@drawable/drawable_selected"/>
+        <android.support.design.widget.NavigationView
+            android:id="@+id/sub_navigationview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+
+            android:fitsSystemWindows="true"
+
+            android:background="@color/colorPrimaryDark"
+
+            app:itemTextColor="@color/text_selected"
+
+            android:theme="@style/NavigationTheme"
+
+
+            app:menu="@menu/navigation_subcategory"
+            app:itemBackground="@drawable/drawable_selected">
+
+        </android.support.design.widget.NavigationView>
+
+
+    </com.app.demoopencartapp.ui.DoubleDrawerView>
+
+</android.support.v4.widget.DrawerLayout>

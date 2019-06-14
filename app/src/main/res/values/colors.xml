@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#00fdff</color>
+    <color name="colorPrimaryDark">#04b7ba</color>
+    <color name="colorAccent">#e50000</color>
+    <color name="selectcolor">#525d62</color>
+    <color name="category_bg">#4bfff0</color>
+    <color name="selectcolor1">#f0f0f0</color>
+    <color name="green_discount">#0fb07f</color>
+    <color name="white">#ffffff</color>
+    <color name="textcolor">#777777</color>
+    <color name="grey_color">#ececec</color>
+    <color name="grey_color1">#bfbfbe</color>
+    <color name="box_color">#b7c2c4</color>
+    <color name="black_color">#000000</color>
+    <color name="category_text_color">#2b2e39</color>
+    <color name="golden">#ffdb48</color>
+    <color name="coupon_bg">#d1e8e6</color>
+    <color name="unselected_rating">#D7D7DA</color>
+</resources>

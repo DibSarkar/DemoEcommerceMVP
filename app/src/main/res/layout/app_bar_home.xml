@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+
+<android.support.design.widget.CoordinatorLayout
+    android:fitsSystemWindows="true"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <include layout="@layout/layout_home"
+        android:id="@+id/include"
+        />
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="MachinoTools"
+                android:textColor="#fff"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <RelativeLayout
+
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:padding="6dip"
+
+
+
+                >
+                <!--<ImageView-->
+                <!--android:id="@+id/counterBackground1"-->
+                <!--android:includeFontPadding="false"-->
+                <!--android:layout_width="30dp"-->
+
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:scaleType="fitXY"-->
+                <!--android:layout_alignParentLeft="true"-->
+
+
+                <!--android:layout_height="30dp"-->
+                <!--android:background="@drawable/search" />-->
+                <!--<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:orientation="vertical" android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--&gt;-->
+                <ImageView
+                    android:id="@+id/iv_cart"
+                    android:includeFontPadding="false"
+                    android:layout_width="30dp"
+
+                    android:layout_alignParentTop="true"
+                    android:scaleType="fitXY"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="30dp"
+                    android:background="@drawable/cart" />
+              <!--  <LinearLayout
+                    android:layout_width="wrap_content"
+
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/counterBackground"
+                    android:layout_alignRight="@id/counterBackground"
+
+                    android:id="@+id/rg"
+                    >
+
+
+                    <TextView
+                        android:id="@+id/countcart"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:text=""
+
+                        android:adjustViewBounds="true"
+                        android:gravity="center"
+                        android:textStyle="bold"
+
+                        android:textSize="8sp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+
+
+
+
+                        android:textAlignment="center"
+
+                        android:includeFontPadding="false"
+                        android:background="@drawable/cart_round"
+                        android:textColor="#fff" />
+                </LinearLayout>-->
+
+
+            </RelativeLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
