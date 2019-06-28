@@ -7,12 +7,14 @@ import com.app.demoopencartapp.ui.home.MainMvpPresenter;
 import com.app.demoopencartapp.ui.home.MainMvpView;
 import com.app.demoopencartapp.ui.home.MainPresenter;
 import com.app.demoopencartapp.utils.Constants;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -26,8 +28,10 @@ public class RegisterPresenter <V extends RegisterMvpView> extends BasePresenter
     public static final String TAG = RegisterPresenter.class.getSimpleName();
 
     @Inject
-    public RegisterPresenter(DataManager dataManager) {
-        super(dataManager);
+    public RegisterPresenter(DataManager dataManager,
+                             SchedulerProvider schedulerProvider,
+                             CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(

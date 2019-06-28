@@ -12,8 +12,8 @@ public class Constants {
    public static String DESC_ORDER = "DESC";
    public static String PRIORITY_PRICE = "p.price";
    public static String PRIORITY_RATING = "rating";
+   public static String OPEN_FROM_LOGIN= "open_from_login";
 
-   public static int  OPEN_FROM_LOGIN = 1;
    public static int  OPEN_FROM_MYPROFILE = 2;
    public static String U_DEVICETOKEN = "devicetoken";
    public static String DEVICE_TYPE = "A";

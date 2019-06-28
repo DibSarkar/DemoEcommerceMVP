@@ -7,4 +7,5 @@ public interface MyAccountMvpPresenter <V extends MyAccountMvpView> extends MvpP
 
     void onOpenEditAccount();
     void onOpenAddressBook();
+    void onOpenWishlist();
 }

@@ -10,12 +10,14 @@ import com.app.demoopencartapp.ui.myaccount.MyAccountMvpPresenter;
 import com.app.demoopencartapp.ui.myaccount.MyAccountMvpView;
 import com.app.demoopencartapp.ui.myaccount.MyAccountPresenter;
 import com.app.demoopencartapp.utils.Constants;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -29,8 +31,10 @@ public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePre
     public static final String TAG = EditAccountPresenter.class.getSimpleName();
 
     @Inject
-    public EditAccountPresenter(DataManager dataManager) {
-        super(dataManager);
+    public EditAccountPresenter(DataManager dataManager,
+                                SchedulerProvider schedulerProvider,
+                                CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     public final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(

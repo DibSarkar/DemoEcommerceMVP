@@ -3,24 +3,33 @@ package com.app.demoopencartapp.data.network;
 
 
 
+import com.app.demoopencartapp.data.network.models.AddRatingResponse;
+import com.app.demoopencartapp.data.network.models.AddUpdateCartResponse;
+import com.app.demoopencartapp.data.network.models.AddressListResponse;
 import com.app.demoopencartapp.data.network.models.AllCategoriesResponse;
+import com.app.demoopencartapp.data.network.models.CartListResponse;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
+import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
 import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
-import com.app.demoopencartapp.utils.Constants;
+import com.app.demoopencartapp.data.network.models.ReviewsResponse;
 
-import okhttp3.MultipartBody;
+import java.util.ArrayList;
+import java.util.Map;
+
+import io.reactivex.Single;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -50,10 +59,11 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/customer/login&api_token=b1f24cb121c30a6765791ec1b0")
-    Call<RegisterResponse> login(@Part("email") RequestBody email,
-                                    @Part("password") RequestBody password,
-                                    @Part("device_type") RequestBody device_type,
-                                    @Part("device_token") RequestBody device_token);
+   Single<RegisterResponse> login(@Part("email") RequestBody email,
+                                @Part("password") RequestBody password,
+                                @Part("device_type") RequestBody device_type,
+                                @Part("device_token") RequestBody device_token,
+                                @Part("session_id") RequestBody session_id);
 
     @Multipart
     @POST("index.php?route=api/category/catProduct")
@@ -62,16 +72,20 @@ public interface ApiHelper {
                                     @Query("order") String order,
                                     @Query("api_token") String apitoken,
                                     @Part("category_id") RequestBody category_id,
-                                    @Part("customer_id") RequestBody customer_id);
-
+                                    @Part("customer_id") RequestBody customer_id,
+                                    @Part("session_id") RequestBody session_id);
+    @Multipart
     @POST("index.php?route=api/home/homePage")
-    Call<HomeProductsResponse> getHomeProducts(@Query("api_token") String apitoken);
+    Call<HomeProductsResponse> getHomeProducts(@Query("api_token") String apitoken,
+                                               @Part("customer_id") RequestBody customer_id,
+                                               @Part("session_id") RequestBody session_id);
 
     @Multipart
     @POST("index.php?route=api/product/getproduct")
     Call<ProductDetailsResponse> getProductDetails(@Query("api_token") String apitoken,
                                                    @Part("product_id") RequestBody product_id,
-                                                   @Part("customer_id") RequestBody customer_id);
+                                                   @Part("customer_id") RequestBody customer_id,
+                                                   @Part("session_id") RequestBody session_id);
 
     @Multipart
     @POST("index.php?route=api/customer/myAccount")
@@ -94,6 +108,114 @@ public interface ApiHelper {
     Call<MessageResponse> changePass(@Query("api_token") String apitoken,
                                      @Part("customer_id") RequestBody customer_id,
                                      @Part("password") RequestBody password);
+
+    @Multipart
+    @POST("index.php?route=api/product/reviewadd")
+    Call<AddRatingResponse> addRating(@Query("api_token") String apitoken,
+                                       @Part("product_id") RequestBody product_id,
+                                       @Part("name") RequestBody name,
+                                       @Part("review") RequestBody review,
+                                       @Part("rating") RequestBody rating,
+                                       @Part("customer_id") RequestBody customer_id);
+
+    @Multipart
+    @POST("index.php?route=api/product/reviewList")
+    Call<ReviewsResponse> getReviews(@Query("api_token") String apitoken,
+                                     @Part("product_id") RequestBody product_id);
+
+
+    @POST("index.php?route=api/address/countryList")
+    Call<CountriesStatesResponse> getCountries(@Query("api_token") String apitoken);
+
+    @Multipart
+    @POST("index.php?route=api/address/stateList")
+    Call<CountriesStatesResponse> getStates(@Query("api_token") String apitoken,
+                                            @Part("country_id") RequestBody country_id);
+
+    @Multipart
+    @POST("index.php?route=api/address/addressAdd")
+    Call<MessageResponse> addAddress(@Query("api_token") String apitoken,
+                                            @Part("customer_id") RequestBody customer_id,
+                                            @Part("firstname") RequestBody firstname,
+                                            @Part("lastname") RequestBody lastname,
+                                            @Part("company") RequestBody company,
+                                            @Part("gst_no") RequestBody gst_no,
+                                            @Part("address_1") RequestBody address_1,
+                                            @Part("address_2") RequestBody address_2,
+                                            @Part("city") RequestBody city,
+                                            @Part("country_id") RequestBody country_id,
+                                            @Part("state_id") RequestBody state_id,
+                                            @Part("postcode") RequestBody postcode,
+                                            @Part("default_address") RequestBody default_address);
+
+    @Multipart
+    @POST("index.php?route=api/address/addressEdit")
+    Call<MessageResponse> editAddress(@Query("api_token") String apitoken,
+                                      @Part("address_id") RequestBody address_id,
+                                      @Part("customer_id") RequestBody customer_id,
+                                      @Part("firstname") RequestBody firstname,
+                                      @Part("lastname") RequestBody lastname,
+                                      @Part("company") RequestBody company,
+                                      @Part("gst_no") RequestBody gst_no,
+                                      @Part("address_1") RequestBody address_1,
+                                      @Part("address_2") RequestBody address_2,
+                                      @Part("city") RequestBody city,
+                                      @Part("country_id") RequestBody country_id,
+                                      @Part("state_id") RequestBody state_id,
+                                      @Part("postcode") RequestBody postcode,
+                                      @Part("default_address") RequestBody default_address);
+
+    @Multipart
+    @POST("index.php?route=api/address/getAddress")
+    Call<AddressListResponse> getAddress(@Query("api_token") String apitoken,
+                                         @Part("customer_id") RequestBody customer_id);
+
+    @Multipart
+    @POST("index.php?route=api/address/deleteAddress")
+    Call<MessageResponse> deleteAddress(@Query("api_token") String apitoken,
+                                            @Part("customer_id") RequestBody customer_id,
+                                            @Part("address_id") RequestBody address_id);
+
+    @Multipart
+    @POST("index.php?route=api/cart/add")
+    Call<AddUpdateCartResponse> addCart(@Query("api_token") String apitoken,
+                                        @Part("customer_id") RequestBody customer_id,
+                                        @Part("product_id") RequestBody product_id,
+                                        @Part("quantity") RequestBody quantity,
+                                        @Part("session_id") RequestBody session_id);
+
+    @FormUrlEncoded
+    @POST("index.php?route=api/cart/add")
+    Call<AddUpdateCartResponse> addCustomizableCart(@Query("api_token") String apitoken,
+                                        @Field("customer_id") String customer_id,
+                                        @Field("product_id") String product_id,
+                                        @Field("quantity") String quantity,
+                                        @Field("session_id") String session_id,
+                                        @FieldMap Map<String,String> option);
+
+
+    @GET("http://www.mocky.io/v2/5d0db7083400006800ca4a42")
+    Call<CategoriesProductsResponse> getWishlistProducts();
+
+    @Multipart
+    @POST("index.php?route=api/cart/cartList")
+    Call<CartListResponse> getCartList(@Query("api_token") String apitoken,
+                                       @Part("customer_id") RequestBody customer_id,
+                                       @Part("session_id") RequestBody session_id);
+
+    @Multipart
+    @POST("index.php?route=api/cart/updateCart")
+    Call<MessageResponse> updateCart(@Query("api_token") String apitoken,
+                                     @Part("cart_id") RequestBody cart_id,
+                                     @Part("quantity") RequestBody quantity);
+
+    @Multipart
+    @POST("index.php?route=api/cart/deleteCart")
+    Call<MessageResponse> deleteCart(@Query("api_token") String apitoken,
+                                     @Part("cart_id") RequestBody cart_id);
+
+
+
  /*
     @Multipart
     @POST("editProfile")

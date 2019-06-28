@@ -55,13 +55,24 @@
 
 
             </FrameLayout>
-            <ImageView
+            <com.varunest.sparkbutton.SparkButton
+                android:id="@+id/like_button"
+                android:layout_width="40dp"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                app:sparkbutton_activeImage="@drawable/active_wish"
+                app:sparkbutton_inActiveImage="@drawable/inactive_wish"
+                app:sparkbutton_iconSize="20dp"
+                app:sparkbutton_primaryColor="@color/colorPrimary"
+                app:sparkbutton_secondaryColor="@color/colorPrimaryDark" />
+         <!--   <ImageView
                 android:layout_width="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_height="20dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/like"/>
+                android:src="@drawable/inactive_wish"/>-->
 
         </RelativeLayout>
 
@@ -138,15 +149,27 @@
 
                 android:layout_marginTop="5dp"
                 android:textColor="@color/green_discount"
-
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 />
 
+            <Button
+                android:layout_width="70dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Add"
+                android:textColor="#fff"
+                android:id="@+id/btn_add"
+
+                android:textAppearance="?android:textAppearanceSmall"
+
+
+                android:background="#35e0ff"
+                android:layout_height="28dp" />
 
 
 
-            <com.travijuu.numberpicker.library.NumberPicker
+          <!--  <com.travijuu.numberpicker.library.NumberPicker
                 android:id="@+id/np_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,7 +182,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center"/>
-
+-->
         </LinearLayout>
 
 

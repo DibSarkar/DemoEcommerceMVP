@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+
+        android:gravity="center"
+        android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/ll_address"
+
+
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            >
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:text="dhasdhaki"
+            android:id="@+id/tv_address_name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="#191919"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_height="wrap_content" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="20dp"
+            android:layout_below="@+id/ll_address"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="15dp"
+            android:src="@drawable/edit"
+            android:layout_marginRight="15dp"
+
+            android:id="@+id/iv_edit"
+
+
+            android:layout_height="15dp" />
+        <ImageView
+            android:layout_width="15dp"
+            android:id="@+id/iv_delete"
+            android:src="@drawable/cart_delete"
+            android:layout_below="@+id/ll_address"
+            android:layout_height="15dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -20,14 +20,20 @@ import android.support.v7.app.AppCompatActivity;
 
 
 import com.app.demoopencartapp.data.local_models.CartListBean;
-import com.app.demoopencartapp.data.local_models.SpecsBean;
+import com.app.demoopencartapp.data.network.models.AddressListResponse;
+import com.app.demoopencartapp.data.network.models.CartListResponse;
+import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
+import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
+import com.app.demoopencartapp.data.network.models.ReviewsResponse;
 import com.app.demoopencartapp.di.ActivityContext;
 import com.app.demoopencartapp.ui.BrandedOffersAdapter;
-import com.app.demoopencartapp.ui.CartAdapter;
+
 import com.app.demoopencartapp.ui.HomeOffersListAdapter;
-import com.app.demoopencartapp.ui.SpecificationAdapter;
+import com.app.demoopencartapp.ui.addAddress.CountryStateAdpater;
+import com.app.demoopencartapp.ui.addressBook.AddressBookAdapter;
+import com.app.demoopencartapp.ui.cart.CartAdapter;
 import com.app.demoopencartapp.ui.home.AngleAdapter;
 import com.app.demoopencartapp.ui.home.BestSellerListAdapter;
 import com.app.demoopencartapp.ui.home.DealsProductListAdapter;
@@ -36,11 +42,16 @@ import com.app.demoopencartapp.ui.productDetails.MultipleImagesAdapter;
 import com.app.demoopencartapp.ui.productDetails.QuantityAdapter;
 import com.app.demoopencartapp.ui.productDetails.SimilarProductsAdapter;
 import com.app.demoopencartapp.ui.productDetails.VariationsAdapter;
+import com.app.demoopencartapp.ui.reviews.ReviewAdapter;
+import com.app.demoopencartapp.ui.wishlist.WishlistAdapter;
+import com.app.demoopencartapp.utils.rx.AppSchedulerProvider;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.util.ArrayList;
 
 import dagger.Module;
 import dagger.Provides;
+import io.reactivex.disposables.CompositeDisposable;
 
 @Module
 public class ActivityModule {
@@ -60,6 +71,16 @@ public class ActivityModule {
     @Provides
     AppCompatActivity provideActivity() {
         return mActivity;
+    }
+
+    @Provides
+    CompositeDisposable provideCompositeDisposable() {
+        return new CompositeDisposable();
+    }
+
+    @Provides
+    SchedulerProvider provideSchedulerProvider() {
+        return new AppSchedulerProvider();
     }
 
   /*  @Provides
@@ -201,10 +222,7 @@ public class ActivityModule {
         return new MultipleImagesAdapter(new ArrayList<ProductDetailsResponse.ProductBean.ImagesBean.ImageBean>());
     }
 
-    @Provides
-    SpecificationAdapter provideSpecificationAdapter() {
-        return new SpecificationAdapter(new ArrayList<SpecsBean>());
-    }
+
 
     @Provides
     QuantityAdapter provideQuantityAdapter() {
@@ -221,17 +239,32 @@ public class ActivityModule {
         return new SimilarProductsAdapter(new ArrayList<ProductDetailsResponse.RelatedProductBean>());
     }
 
+    @Provides
+    ReviewAdapter provideReviewAdapter() {
+        return new ReviewAdapter(new ArrayList<ReviewsResponse.ReviewListBean>());
+    }
+
+    @Provides
+    CountryStateAdpater provideCountryStateAdpater() {
+        return new CountryStateAdpater(new ArrayList<CountriesStatesResponse.DataBean>());
+    }
+
 
     @Provides
     CartAdapter provideCartAdapter() {
-        return new CartAdapter(new ArrayList<CartListBean>());
-    }
-/*
-    @Provides
-    BookingHistoryAdapter provideBookingHistoryAdapter() {
-        return new BookingHistoryAdapter(new ArrayList<BookingHistoryResponse.BookingListBean>());
+        return new CartAdapter(new ArrayList<CartListResponse.CartlistBean.ProductsBean>());
     }
 
+    @Provides
+    AddressBookAdapter provideAddressBookAdapter() {
+        return new AddressBookAdapter(new ArrayList<AddressListResponse.ResponseDataBean>());
+    }
+
+    @Provides
+    WishlistAdapter provideWishlistAdapter() {
+        return new WishlistAdapter(new ArrayList<CategoriesProductsResponse.ProductBean>());
+    }
+/*
     @Provides
     BookingItemsAdapter provideBookingItemsAdapter() {
         return new BookingItemsAdapter(new ArrayList<BookingDetailsResponse.BookingItemsBean>());

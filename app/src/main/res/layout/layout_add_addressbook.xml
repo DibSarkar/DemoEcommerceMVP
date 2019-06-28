@@ -80,11 +80,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
                             android:hint="Enter"
+                            android:inputType="text"
+                            android:singleLine="true"
                             android:layout_gravity="center"
                             android:paddingLeft="20dp"
                             android:textColor="#000"
                             android:textSize="16dp"
                             android:textColorHint="#000"
+                            android:id="@+id/et_fname"
                             android:paddingRight="20dp"
                             android:layout_marginLeft="20dp"
                             android:background="@drawable/estimate_round"/>
@@ -112,10 +115,13 @@
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
                             android:hint="Enter"
+                            android:inputType="text"
+                            android:singleLine="true"
                             android:layout_gravity="center"
                             android:paddingLeft="20dp"
                             android:textColor="#000"
                             android:textSize="16dp"
+                            android:id="@+id/et_lname"
                             android:textColorHint="#000"
                             android:paddingRight="20dp"
                             android:layout_marginLeft="20dp"
@@ -144,8 +150,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
                             android:hint="Enter"
+                            android:inputType="text"
+                            android:singleLine="true"
                             android:layout_gravity="center"
                             android:paddingLeft="20dp"
+                            android:id="@+id/et_comp"
                             android:textColor="#000"
                             android:textSize="16dp"
                             android:textColorHint="#000"
@@ -176,9 +185,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
                             android:hint="Enter"
+                            android:inputType="text"
+                            android:singleLine="true"
                             android:layout_gravity="center"
                             android:paddingLeft="20dp"
                             android:textColor="#000"
+                            android:id="@+id/et_gstin"
                             android:textSize="16dp"
                             android:textColorHint="#000"
                             android:paddingRight="20dp"
@@ -208,9 +220,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
                             android:hint="Enter"
+                            android:inputType="text"
+                            android:singleLine="true"
                             android:layout_gravity="center"
                             android:paddingLeft="20dp"
                             android:textColor="#000"
+                            android:id="@+id/et_address1"
                             android:textSize="16dp"
                             android:textColorHint="#000"
                             android:paddingRight="20dp"
@@ -226,7 +241,7 @@
 
                         <TextView
                             android:layout_width="100dp"
-                            android:text="*Address 2"
+                            android:text="Address 2"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="#000"
                             android:textSize="16dp"
@@ -243,12 +258,16 @@
                             android:layout_gravity="center"
                             android:paddingLeft="20dp"
                             android:textColor="#000"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:id="@+id/et_address2"
                             android:textSize="16dp"
                             android:textColorHint="#000"
                             android:paddingRight="20dp"
                             android:layout_marginLeft="20dp"
                             android:background="@drawable/estimate_round"/>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -268,12 +287,84 @@
 
                             />
 
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:hint="Enter"
+                            android:layout_gravity="center"
+                            android:paddingLeft="20dp"
+                            android:textColor="#000"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:id="@+id/et_city"
+                            android:textSize="16dp"
+                            android:textColorHint="#000"
+                            android:paddingRight="20dp"
+                            android:layout_marginLeft="20dp"
+                            android:background="@drawable/estimate_round"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:text="*Country"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="#000"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+
+                            />
+
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
+                            android:id="@+id/sp_country"
 
                             android:layout_gravity="center"
 
+                            android:layout_marginLeft="20dp"
+                            android:background="@drawable/estimate_round"/>
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:layout_width="100dp"
+                            android:text="*Pin Code"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="#000"
+                            android:textSize="16dp"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:layout_height="wrap_content"
+
+                            />
+
+                        <EditText
+                            android:layout_width="match_parent"
+                            android:layout_height="36dp"
+                            android:hint="Enter"
+                            android:layout_gravity="center"
+                            android:paddingLeft="20dp"
+                            android:textColor="#000"
+                            android:textSize="16dp"
+
+                            android:singleLine="true"
+                            android:inputType="number"
+                            android:id="@+id/et_pin"
+                            android:textColorHint="#000"
+                            android:paddingRight="20dp"
                             android:layout_marginLeft="20dp"
                             android:background="@drawable/estimate_round"/>
                     </LinearLayout>
@@ -299,7 +390,7 @@
                         <Spinner
                             android:layout_width="match_parent"
                             android:layout_height="36dp"
-
+                            android:id="@+id/sp_state"
                             android:layout_gravity="center"
 
                             android:layout_marginLeft="20dp"
@@ -309,6 +400,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:id="@+id/ll_default"
                     android:orientation="horizontal">
 
                     <TextView
@@ -327,7 +419,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:id="@+id/rg_news"
+                        android:id="@+id/rg_default"
                         android:layout_marginLeft="20dp"
                         android:orientation="horizontal">
 
@@ -380,6 +472,7 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:text="Add"
+        android:id="@+id/btn_add"
         android:textColor="#fff"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:background="@drawable/continue_btn"

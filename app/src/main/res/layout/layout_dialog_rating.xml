@@ -48,12 +48,12 @@
                   />-->
             <android.support.v7.widget.AppCompatRatingBar
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
+                android:layout_height="43dp"
                 style="@style/RatingBar"
-                android:id="@+id/ratingbar_review"
+                android:id="@+id/rb_review"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
-                android:progressTint="@color/colorPrimary"
+                android:progressTint="@color/colorPrimaryDark"
                 android:progressBackgroundTint="@color/unselected_rating"
                 android:secondaryProgressTint="@color/unselected_rating"
 
@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
 
                 android:gravity="top"
-                android:id="@+id/et_feedback"
+                android:id="@+id/et_review"
                 android:textColor="@color/black_color"
                 android:textColorHint="@color/black_color"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -118,7 +118,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/submit_review_btn"
-                android:layout_height="35dp" />
+                android:layout_height="40dp" />
 
 
         </LinearLayout>

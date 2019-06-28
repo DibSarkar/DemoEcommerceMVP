@@ -1,17 +1,20 @@
 package com.app.demoopencartapp.di.components;
 
-
-
-
 import com.app.demoopencartapp.di.PerActivity;
 import com.app.demoopencartapp.di.modules.ActivityModule;
-import com.app.demoopencartapp.ui.CartActivity;
+import com.app.demoopencartapp.ui.cart.CartActivity;
+import com.app.demoopencartapp.ui.wishlist.WishlistActivity;
+import com.app.demoopencartapp.ui.addAddress.AddAddressActivity;
+import com.app.demoopencartapp.ui.addressBook.AddressBookActivity;
 import com.app.demoopencartapp.ui.editAccount.ChangePasswordDialogFragment;
 import com.app.demoopencartapp.ui.editAccount.EditMyAccount;
+import com.app.demoopencartapp.ui.editAddress.EditAddressActivity;
 import com.app.demoopencartapp.ui.home.MainActivity;
 import com.app.demoopencartapp.ui.login.LoginActivity;
 import com.app.demoopencartapp.ui.myaccount.MyAccountActivity;
+import com.app.demoopencartapp.ui.productDetails.AddReviewDialogFragment;
 import com.app.demoopencartapp.ui.productDetails.ProductDetailsActivity;
+import com.app.demoopencartapp.ui.reviews.ReviewsListActivity;
 import com.app.demoopencartapp.ui.zoom.ZoomActivity;
 import com.app.demoopencartapp.ui.productList.ProductListActivity;
 import com.app.demoopencartapp.ui.register.RegisterActivity;
@@ -42,17 +45,19 @@ public  interface ActivityComponent {
 
     void inject(ChangePasswordDialogFragment dialogFragment);
 
-    /* void inject(OrderSuccessActivity activity);
+    void inject(AddReviewDialogFragment dialogFragment);
 
-    void inject(NotificationActivity activity);
+    void inject(ReviewsListActivity activity);
 
-    void inject(NotificationDetailsActivity activity);
+    void inject(AddAddressActivity activity);
 
-    void inject(MyAccountActivity activity);
+    void inject(AddressBookActivity activity);
 
-    void inject(AddressActivity activity);
+    void inject(EditAddressActivity activity);
 
-    void inject(AboutActivity activity);
+    void inject(WishlistActivity activity);
+
+    /* void inject(AboutActivity activity);
 
     void inject(PrivacyActivity activity);
 

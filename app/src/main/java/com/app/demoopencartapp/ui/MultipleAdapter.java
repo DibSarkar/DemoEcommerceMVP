@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.BrandedOffersBean;
 import com.bumptech.glide.Glide;
 
 

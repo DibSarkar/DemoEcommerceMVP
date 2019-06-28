@@ -7,4 +7,5 @@ public interface LoginMvpPresenter  <V extends LoginMvpView> extends MvpPresente
 
     void onConfirmLogin(String email, String password);
     void onLogin(String email, String password,String device_type,String device_token);
+    void onOpenSignup();
 }

@@ -4,12 +4,14 @@ import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -23,8 +25,10 @@ public class ChangePassDialogPresenter <V extends ChangePassDialogMvpView> exten
     public static final String TAG = ChangePassDialogPresenter.class.getSimpleName();
 
     @Inject
-    public ChangePassDialogPresenter(DataManager dataManager) {
-        super(dataManager);
+    public ChangePassDialogPresenter(DataManager dataManager,
+                                     SchedulerProvider schedulerProvider,
+                                     CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     @Override

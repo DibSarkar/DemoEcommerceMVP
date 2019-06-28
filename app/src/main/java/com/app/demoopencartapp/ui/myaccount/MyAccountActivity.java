@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.shared.base.BaseActivity;
-import com.app.demoopencartapp.ui.AddAddressActivity;
 
+import com.app.demoopencartapp.ui.addressBook.AddressBookActivity;
 import com.app.demoopencartapp.ui.editAccount.EditMyAccount;
+import com.app.demoopencartapp.ui.addAddress.AddAddressActivity;
+import com.app.demoopencartapp.ui.wishlist.WishlistActivity;
 
 import javax.inject.Inject;
 
@@ -25,6 +28,8 @@ public class MyAccountActivity extends BaseActivity implements MyAccountMvpView 
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+
 
     @Inject
     MyAccountPresenter<MyAccountMvpView> myAccountPresenter;
@@ -57,7 +62,7 @@ public class MyAccountActivity extends BaseActivity implements MyAccountMvpView 
         super.onDestroy();
     }
 
-    @OnClick({R.id.tv_edit_acc,R.id.tv_address_book})
+    @OnClick({R.id.tv_edit_acc,R.id.tv_address_book,R.id.tv_wishlist})
     void onClickEvent(View view) {
         switch (view.getId()) {
 
@@ -68,8 +73,10 @@ public class MyAccountActivity extends BaseActivity implements MyAccountMvpView 
 
             case R.id.tv_address_book :
                 myAccountPresenter.onOpenAddressBook();
+                break;
 
-
+            case R.id.tv_wishlist :
+                myAccountPresenter.onOpenWishlist();
                 break;
 
 
@@ -84,7 +91,13 @@ public class MyAccountActivity extends BaseActivity implements MyAccountMvpView 
 
     @Override
     public void openAddressBook() {
-        Intent intent1 = new Intent(mContext,AddAddressActivity.class);
+        Intent intent1 = new Intent(mContext, AddressBookActivity.class);
+        startActivity(intent1);
+    }
+
+    @Override
+    public void openWishlist() {
+        Intent intent1 = new Intent(mContext, WishlistActivity.class);
         startActivity(intent1);
     }
 

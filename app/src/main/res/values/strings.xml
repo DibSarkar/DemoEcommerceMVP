@@ -10,4 +10,7 @@
     <string name="hint_sign_up">Sign Up</string>
     <string name="terms_conditions">Terms &amp; Conditions</string>
     <string name="no_products">No Products Found</string>
+    <string name="no_address">No Address added</string>
+    <string name="no_wishlist">Your wishlist is empty.</string>
+    <string name="no_cartlist">Your cart is empty.</string>
 </resources>

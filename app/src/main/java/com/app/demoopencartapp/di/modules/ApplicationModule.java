@@ -7,8 +7,10 @@ import android.content.Context;
 
 import com.app.demoopencartapp.data.AppDataManager;
 import com.app.demoopencartapp.data.DataManager;
+import com.app.demoopencartapp.data.prefs.AppPreferenceSessionHelper;
 import com.app.demoopencartapp.data.prefs.AppPreferencesHelper;
 import com.app.demoopencartapp.data.prefs.PreferencesHelper;
+import com.app.demoopencartapp.data.prefs.SessionPreferenceHelper;
 import com.app.demoopencartapp.di.ApplicationContext;
 
 import javax.inject.Singleton;
@@ -44,6 +46,13 @@ public class ApplicationModule {
     PreferencesHelper providePrefHelper(AppPreferencesHelper mAppPreferencesHelper){
         return mAppPreferencesHelper;
     }
+
+    @Singleton
+    @Provides
+    SessionPreferenceHelper provideSessionPreferenceHelper(AppPreferenceSessionHelper appPreferenceSessionHelper){
+        return appPreferenceSessionHelper;
+    }
+
 
     @Provides
     @Singleton

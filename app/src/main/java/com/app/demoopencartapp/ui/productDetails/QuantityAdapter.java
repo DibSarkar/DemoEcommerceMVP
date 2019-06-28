@@ -92,7 +92,9 @@ public class QuantityAdapter extends BaseAdapter {
 
     public void loadQuantities(ArrayList<Integer> quantityList) {
 
+        mList.clear();
         mList.addAll(quantityList);
+
         notifyDataSetChanged();
     }
 

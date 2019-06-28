@@ -6,12 +6,15 @@ import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.ui.register.RegisterMvpPresenter;
 import com.app.demoopencartapp.ui.register.RegisterMvpView;
 import com.app.demoopencartapp.ui.register.RegisterPresenter;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -25,8 +28,10 @@ public class LoginPresenter <V extends LoginMvpView> extends BasePresenter<V>
     public static final String TAG = LoginPresenter.class.getSimpleName();
 
     @Inject
-    public LoginPresenter(DataManager dataManager) {
-        super(dataManager);
+    public LoginPresenter(DataManager dataManager,
+                          SchedulerProvider schedulerProvider,
+                          CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
 
@@ -78,15 +83,68 @@ public class LoginPresenter <V extends LoginMvpView> extends BasePresenter<V>
     @Override
     public void onLogin(String email, String password,String device_type,String device_token) {
 
+        RequestBody session_id;
         RequestBody email1 = RequestBody.create(MediaType.parse("multipart/form-data"), email);
 
         RequestBody password1 = RequestBody.create(MediaType.parse("multipart/form-data"), password);
 
         RequestBody device_type1 = RequestBody.create(MediaType.parse("multipart/form-data"), device_type);
         RequestBody device_token1 = RequestBody.create(MediaType.parse("multipart/form-data"), device_token);
+        if(getDataManager().getSessionId()!=null) {
 
+            if (!getDataManager().getSessionId().equals("")) {
+
+                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getSessionId());
+            }
+            else {
+                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+
+            }
+        }
+        else {
+            session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+        }
         getMvpView().showLoading();
-        getDataManager().login(email1,password1,device_type1, device_token1).enqueue(new Callback<RegisterResponse>() {
+
+        getCompositeDisposable().add(getDataManager().login(email1,password1,device_type1, device_token1,session_id)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<RegisterResponse>() {
+                    @Override
+                    public void accept(RegisterResponse response) throws Exception {
+
+                        if (!isViewAttached()) {
+                            return;
+                        }
+                        getMvpView().hideLoading();
+                        getMvpView().showMessage(response.getResponseText());
+                        getDataManager().setCurrentUserId(String.valueOf(response.getResponseData().getId()));
+                        getDataManager().setCurrentMobileNumber(response.getResponseData().getTelephone());
+                        getDataManager().setCurrentUserEmail(response.getResponseData().getEmail());
+                        getMvpView().loginDone();
+
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception{
+                        System.out.println("hjhdf"+throwable.getMessage());
+
+                        if (!isViewAttached()) {
+                            return;
+                        }
+
+                        getMvpView().hideLoading();
+
+                        // handle the login error here
+
+                    }
+                }));
+
+
+
+
+
+      /*  getDataManager().login(email1,password1,device_type1, device_token1,session_id).enqueue(new Callback<RegisterResponse>() {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 getMvpView().hideLoading();
@@ -130,6 +188,12 @@ public class LoginPresenter <V extends LoginMvpView> extends BasePresenter<V>
                 getMvpView().onError("Retrofit failure.Check LOG");
             }
         });
+*/
+    }
 
+    @Override
+    public void onOpenSignup() {
+
+        getMvpView().openSignup();
     }
 }

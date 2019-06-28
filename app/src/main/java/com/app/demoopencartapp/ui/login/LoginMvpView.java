@@ -6,4 +6,5 @@ public interface LoginMvpView extends MvpView {
 
     void confirmLogin(String email,String password);
     void loginDone();
+    void openSignup();
 }

@@ -1,9 +1,12 @@
 package com.app.demoopencartapp.ui.productDetails;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -19,26 +23,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.ProductListBean;
-import com.app.demoopencartapp.data.local_models.SpecsBean;
-import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
-import com.app.demoopencartapp.ui.SpecificationAdapter;
+
+import com.app.demoopencartapp.ui.login.LoginActivity;
+import com.app.demoopencartapp.ui.reviews.ReviewsListActivity;
 import com.app.demoopencartapp.ui.zoom.ZoomActivity;
+import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.GlideApp;
+import com.varunest.sparkbutton.SparkButton;
+import com.varunest.sparkbutton.SparkEventListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class ProductDetailsActivity extends BaseActivity implements ProductDetailsMvpView{
 
@@ -113,6 +118,11 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     @BindView(R.id.ll_variations)
     LinearLayout ll_variations;
 
+    @BindView(R.id.ll_cart_count)
+    LinearLayout ll_cart_count;
+
+    @BindView(R.id.tv_cart_count)
+    TextView tv_cart_count;
 
     @BindView(R.id.rb_product)
     RatingBar rb_product;
@@ -125,6 +135,14 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
     @BindView(R.id.rv_variations)
     RecyclerView rv_variations;
+
+    @BindView(R.id.like_button)
+    SparkButton like_button;
+
+    @BindView(R.id.ll_add_cart)
+    LinearLayout ll_add_cart;
+
+
 
 
     @Inject
@@ -140,14 +158,12 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     SimilarProductsAdapter similarProductsAdapter;
 
 
-    @Inject
-    SpecificationAdapter specificationAdapter;
+
 
     @Inject
     ProductDetailsPresenter<ProductDetailsMvpView> productDetailsPresenter;
 
-    ArrayList<ProductListBean> productListBeanArrayList;
-    ArrayList<SpecsBean> specsBeanArrayList;
+    AddReviewDialogFragment addReviewDialogFragment;
 
     public ArrayList<Integer> quantity_list ;
 
@@ -155,6 +171,17 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
     public boolean showDesc = true;
     public boolean showSpec = true;
+
+    public static final int OPEN_LOGIN = 500;
+    String reviews = "";
+    String quantity = "";
+    public boolean isCustomizable = false;
+    String product_option_id = "";
+    String product_option_value_id = "";
+    public boolean isStock = false;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,14 +213,69 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             productDetailsPresenter.onGetProductDetails(getIntent().getExtras().getString("product_id"));
         }
 
+
+        like_button.setEventListener(new SparkEventListener() {
+            @Override
+            public void onEvent(ImageView button, boolean buttonState) {
+
+                if(buttonState)
+                {
+                    productDetailsPresenter.onCheckWishlistByUser();
+                }
+            }
+
+            @Override
+            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
+
+            }
+
+            @Override
+            public void onEventAnimationStart(ImageView button, boolean buttonState) {
+
+            }
+        });
+
+        sp_quantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               if(quantity_list!=null)
+               {
+                   quantity = quantity_list.get(position).toString();
+               }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+      /*  iv_heart.setOnLikeListener(new OnLikeListener() {
+            @Override
+            public void liked(LikeButton likeButton) {
+                iv_heart.setLiked(false);
+                iv_heart.setLikeDrawableRes(R.drawable.inactive_wish);
+
+            }
+
+            @Override
+            public void unLiked(LikeButton likeButton) {
+                iv_heart.setLiked(true);
+                iv_heart.setLikeDrawableRes(R.drawable.active_wish);
+
+            }
+        });*/
+
     }
 
-    @OnClick({R.id.btndesc,R.id.btnspecific,R.id.iv_pro})
+    @OnClick({R.id.btndesc,R.id.btnspecific,R.id.iv_pro,R.id.tv_add_review,R.id.ll_reviews,R.id.ll_add_cart,R.id.iv_add_cart,R.id.btn_add_cart})
     void onClickEvent(View view) {
         switch (view.getId()) {
 
             case R.id.btndesc :
-                productDetailsPresenter.onHideDesc(showDesc);
+                 productDetailsPresenter.onHideDesc(showDesc);
                 break;
 
             case R.id.btnspecific :
@@ -204,6 +286,26 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
                 if(!product_show_img.equals("")) {
                     productDetailsPresenter.onOpenZoom(product_show_img);
                 }
+                break;
+
+            case R.id.tv_add_review :
+                productDetailsPresenter.onShowAddOpenDialog();
+                break;
+
+            case R.id.ll_reviews :
+                productDetailsPresenter.onConfirmOpenReviews(reviews);
+                break;
+
+            case R.id.ll_add_cart :
+                productDetailsPresenter.onConfirmAddCart(getIntent().getExtras().getString("product_id"), quantity,isCustomizable,product_option_id,product_option_value_id,isStock);
+                break;
+
+            case R.id.iv_add_cart :
+                productDetailsPresenter.onConfirmAddCart(getIntent().getExtras().getString("product_id"), quantity,isCustomizable,product_option_id,product_option_value_id,isStock);
+                break;
+
+            case R.id.btn_add_cart :
+                productDetailsPresenter.onConfirmAddCart(getIntent().getExtras().getString("product_id"), quantity,isCustomizable,product_option_id,product_option_value_id,isStock);
                 break;
 
 
@@ -217,80 +319,31 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
         super.onDestroy();
     }
 
-    private void loadMultipleImages()
-    {
-
-        rv_multiplelist.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-        rv_multiplelist.setHasFixedSize(true);
-        rv_multiplelist.setItemAnimator(new DefaultItemAnimator());
-        rv_multiplelist.setNestedScrollingEnabled(false);
-        rv_multiplelist.setAdapter(multipleAdapter);
-        multipleAdapter.setAdapterListener(new MultipleImagesAdapter.MultipleImagesListener() {
-            @Override
-            public void onItemClick(ProductDetailsResponse.ProductBean.ImagesBean.ImageBean item, int position) {
-                productDetailsPresenter.onChangeImage(item.getThumb());
-            }
-        });
-
-    }
-
-    private void loadSimilarProducts(List<ProductDetailsResponse.RelatedProductBean> relatedProduct)
-    {
-        if(relatedProduct.size()>0) {
-            rv_similar.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-            rv_similar.setHasFixedSize(true);
-            rv_similar.setItemAnimator(new DefaultItemAnimator());
-            rv_similar.setNestedScrollingEnabled(false);
-            rv_similar.setAdapter(similarProductsAdapter);
-            similarProductsAdapter.loadProducts(relatedProduct);
-
-            similarProductsAdapter.setAdapterListener(new SimilarProductsAdapter.RelatedProductListListener() {
-                @Override
-                public void onItemClick(ProductDetailsResponse.RelatedProductBean item, int position) {
-
-                    productDetailsPresenter.onOpenProductDetails(item.getProduct_id());
-                }
-            });
-        }
-
-
-    }
-
-    private void loadVariations(List<ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean> product_option_value)
-    {
-
-        if(product_option_value.size()>0) {
-            product_option_value.get(0).setSelected(true);
-            rv_variations.setHasFixedSize(true);
-            rv_variations.setItemAnimator(new DefaultItemAnimator());
-            LinearLayoutManager variationLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
-            rv_variations.setLayoutManager(variationLayoutManager);
-            rv_variations.setAdapter(variationsAdapter);
-            rv_variations.setNestedScrollingEnabled(false);
-            variationsAdapter.loadVariations(product_option_value);
-
-            variationsAdapter.setAdapterListener(new VariationsAdapter.VariationListener() {
-                @Override
-                public void onItemClick(ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean item, int position) {
-
-                    variationsAdapter.changeItemBg(item,position);
-                }
-            });
-        }
-    }
-
-
-
 
     @Override
-    public void getProductDetails(ProductDetailsResponse.ProductBean product, List<ProductDetailsResponse.RelatedProductBean> relatedProduct) {
+    public void getProductDetails(ProductDetailsResponse.ProductBean product, List<ProductDetailsResponse.RelatedProductBean> relatedProduct, int total_qty) {
 
 
+
+        if(total_qty==0)
+        {
+            ll_cart_count.setVisibility(View.GONE);
+        }
+        else {
+            ll_cart_count.setVisibility(View.VISIBLE);
+            tv_cart_count.setText(String.valueOf(total_qty));
+        }
         if(product!=null)
         {
-            DecimalFormat decimalFormat = new DecimalFormat("0.00");
             tv_pro_name.setText(Html.fromHtml(product.getName()));
             tv_specs.setText(Html.fromHtml(product.getSpecification()));
+            tv_desc.setText(Html.fromHtml(product.getDescription()));
+            tv_manufacturer.setText("By - "+product.getManufacturer());
+            tv_features.setText(Html.fromHtml(product.getFeatures()));
+            tv_stock.setText(product.getStock());
+            reviews=String.valueOf(product.getReviews());
+            tv_rating.setText(String.valueOf(product.getReviews()));
+            rb_product.setRating(Float.parseFloat(String.valueOf(product.getRating())));
             if(!product.getThumb().equals("")) {
                 GlideApp.with(mContext)
                         .load(product.getThumb())
@@ -301,30 +354,26 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             }
 
 
-
-
             if(!product.getSpecial().equals(""))
             {
-                tv_product_price.setText('\u20B9'+" "+decimalFormat.format(Double.parseDouble(product.getSpecial())));
+                tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(product.getSpecial()))));
                 ll_offer_price.setVisibility(View.VISIBLE);
-                tv_product_old__price.setText('\u20B9'+" "+decimalFormat.format(Double.parseDouble(product.getPrice())));
+                tv_product_old__price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(product.getPrice()))));
                 tv_product_old__price.setPaintFlags( tv_product_old__price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                 double offer = Math.round(((Double.parseDouble(product.getPrice())-Double.parseDouble(product.getSpecial()))/Double.parseDouble(product.getPrice()))*100);
                 DecimalFormat df = new DecimalFormat("###.#");
                 tv_offer.setText("("+df.format(offer)+"%"+" "+"OFF"+")");
                 tv_product_old__price.setPaintFlags( tv_product_old__price.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-
-
             }
             else {
-               tv_product_price.setText('\u20B9'+" "+decimalFormat.format(Double.parseDouble(product.getPrice())));
+               tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(product.getPrice()))));
                 tv_product_old__price.setVisibility(View.GONE);
                 ll_offer_price.setVisibility(View.GONE);
 
             }
 
-            tv_desc.setText(Html.fromHtml(product.getDescription()));
+
             if(!product.getDelivery_status().equals(""))
             {
                 tv_delivery.setVisibility(View.VISIBLE);
@@ -333,16 +382,25 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             else {
                 tv_delivery.setVisibility(View.GONE);
             }
-            tv_manufacturer.setText("By - "+product.getManufacturer());
-            tv_features.setText(Html.fromHtml(product.getFeatures()));
-            tv_stock.setText(product.getStock());
-            tv_rating.setText(String.valueOf(product.getRating()));
-            rb_product.setRating(Float.parseFloat(String.valueOf(product.getRating())));
 
+            if(product.getStock().equals("In Stock"))
+            {
+                 isStock = true;
+            }
+            else {
+                isStock = false;
+            }
 
             if(!product.getMinimum().equals("0")) {
                 ll_quantity_select.setVisibility(View.VISIBLE);
-                productDetailsPresenter.onLoadQuantities(product.getMinimum(), product.getQuantity());
+
+                if(product.getOptions().isEmpty()) {
+                    productDetailsPresenter.onLoadQuantities(product.getMinimum(), product.getQuantity());
+                }
+                else {
+                    productDetailsPresenter.onLoadQuantities("1", product.getOptions().get(0).getProduct_option_value().get(0).getQuantity());
+
+                }
             }
             else {
                 ll_quantity_select.setVisibility(View.GONE);
@@ -350,12 +408,18 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
             if(!product.getOptions().isEmpty())
             {
+                isCustomizable=true;
                 ll_variations.setVisibility(View.VISIBLE);
                 tv_variation_type.setText(product.getOptions().get(0).getName());
-                loadVariations(product.getOptions().get(0).getProduct_option_value());
+                product_option_id = product.getOptions().get(0).getProduct_option_id();
+                product_option_value_id=product.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id();
+
+                productDetailsPresenter.onLoadVariations(product.getOptions().get(0).getProduct_option_value());
+
 
             }
             else {
+                isCustomizable=false;
                 ll_variations.setVisibility(View.GONE);
             }
 
@@ -369,9 +433,9 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
                 {
                   product.getImages().getImage().add(0,new ProductDetailsResponse.ProductBean.ImagesBean.ImageBean(product.getThumb(),product.getThumb()));
                 }
-                loadMultipleImages();
 
-                multipleAdapter.loadImages(product.getImages().getImage());
+                productDetailsPresenter.onMultipleImages(product.getImages().getImage());
+
             }
             else {
                 rl_multiple.setVisibility(View.GONE);
@@ -381,7 +445,8 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
                 if(relatedProduct.size()>0)
                 {
                     ll_similar_product.setVisibility(View.VISIBLE);
-                    loadSimilarProducts(relatedProduct);
+                    productDetailsPresenter.onLoadRelatedProducts(relatedProduct);
+
                 }
                 else {
                     ll_similar_product.setVisibility(View.GONE);
@@ -440,6 +505,8 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
     @Override
     public void loadQuantities(String min, String max) {
+
+        System.out.println("minnnn"+" "+min+" "+max+" "+quantity_list);
         quantity_list = new ArrayList<>();
         int min1=Integer.parseInt(min);
         int max1=Integer.parseInt(max);
@@ -448,8 +515,10 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             quantity_list.add(i);
             System.out.println("last quantity"+" "+i);
         }
+
         sp_quantity.setAdapter(quantityAdapter);
         quantityAdapter.loadQuantities(quantity_list);
+
     }
 
     @Override
@@ -471,6 +540,202 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     }
 
     @Override
+    public void showAddReviewDialog() {
+
+        addReviewDialogFragment = new AddReviewDialogFragment();
+        Bundle bundle = new Bundle();
+
+        bundle.putString("product_id", getIntent().getExtras().getString("product_id"));
+        addReviewDialogFragment.setArguments(bundle);
+        addReviewDialogFragment.show(getSupportFragmentManager(), "addReview");
+
+    }
+
+    @Override
+    public void openReviewsActivity(String total_reviews) {
+
+        Intent intent = new Intent(mContext, ReviewsListActivity.class);
+        intent.putExtra("product_id",getIntent().getExtras().getString("product_id"));
+        startActivity(intent);
+
+    }
+
+    @Override
+    public void checkWishlistByUser() {
+       like_button.setChecked(false);
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.app_name);
+            builder.setMessage("Please login to add this product to your wishlist");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    productDetailsPresenter.onOpenLoginActivity();
+
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        } catch (Exception e){
+            Timber.tag(TAG).e(e);
+        }
+    }
+
+    @Override
+    public void openLoginActvity() {
+        Intent intent = new Intent(mContext, LoginActivity.class);
+        intent.putExtra(Constants.OPEN_FROM_LOGIN,1);
+        if(getIntent().getExtras().getString("product_id")!=null)
+        {
+            intent.putExtra("product_id",getIntent().getExtras().getString("product_id"));
+        }
+        startActivityForResult(intent,OPEN_LOGIN);
+
+
+    }
+
+    @Override
+    public void checkWish(ProductDetailsResponse.RelatedProductBean relatedProductBean, int pos) {
+        relatedProductBean.setActiveWish(false);
+        if(similarProductsAdapter!=null)
+        {
+            similarProductsAdapter.changeWish(relatedProductBean,pos);
+        }
+
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.app_name);
+            builder.setMessage("Please login to add this product to your wishlist");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    productDetailsPresenter.onOpenLoginActivity();
+
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        } catch (Exception e){
+            Timber.tag(TAG).e(e);
+        }
+    }
+
+    @Override
+    public void similarAddCart(String product_id, String quantity) {
+
+        productDetailsPresenter.onAddtoCart(product_id,quantity);
+
+    }
+
+
+
+    @Override
+    public void singleAddCart(String product_id, String quantity, boolean isCustomizable, String product_option_id, String product_option_value_id) {
+
+        if(isCustomizable) {
+            productDetailsPresenter.onSingleAddCart(product_id, quantity, isCustomizable, product_option_id, product_option_value_id);
+        }
+        else {
+            productDetailsPresenter.onAddtoCart(getIntent().getExtras().getString("product_id"),quantity);
+        }
+    }
+
+    @Override
+    public void addToCartDone(int cart_count) {
+
+        if(cart_count==0)
+        {
+            ll_cart_count.setVisibility(View.GONE);
+        }
+        else {
+            ll_cart_count.setVisibility(View.VISIBLE);
+            tv_cart_count.setText(String.valueOf(cart_count));
+        }
+
+
+    }
+
+    @Override
+    public void loadMultipleImages(List<ProductDetailsResponse.ProductBean.ImagesBean.ImageBean> image) {
+        rv_multiplelist.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+        rv_multiplelist.setHasFixedSize(true);
+        rv_multiplelist.setItemAnimator(new DefaultItemAnimator());
+        rv_multiplelist.setNestedScrollingEnabled(false);
+        rv_multiplelist.setAdapter(multipleAdapter);
+        multipleAdapter.setAdapterListener(new MultipleImagesAdapter.MultipleImagesListener() {
+            @Override
+            public void onItemClick(ProductDetailsResponse.ProductBean.ImagesBean.ImageBean item, int position) {
+                productDetailsPresenter.onChangeImage(item.getThumb());
+            }
+        });
+        multipleAdapter.loadImages(image);
+    }
+
+    @Override
+    public void loadVariations(List<ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean> product_option_value) {
+        if(product_option_value.size()>0) {
+            product_option_value.get(0).setSelected(true);
+            rv_variations.setHasFixedSize(true);
+            rv_variations.setItemAnimator(new DefaultItemAnimator());
+            LinearLayoutManager variationLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
+            rv_variations.setLayoutManager(variationLayoutManager);
+            rv_variations.setAdapter(variationsAdapter);
+            rv_variations.setNestedScrollingEnabled(false);
+            variationsAdapter.loadVariations(product_option_value);
+
+            variationsAdapter.setAdapterListener(new VariationsAdapter.VariationListener() {
+                @Override
+                public void onItemClick(ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean item, int position) {
+
+                    product_option_value_id=item.getProduct_option_value_id();
+                    variationsAdapter.changeItemBg(item,position);
+                    if(quantity_list!=null)
+                    {
+                        quantity_list.clear();
+                    }
+                    productDetailsPresenter.onLoadQuantities("1", item.getQuantity());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void loadRelatedProducts(List<ProductDetailsResponse.RelatedProductBean> relatedProduct) {
+        if(relatedProduct.size()>0) {
+            rv_similar.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+            rv_similar.setHasFixedSize(true);
+            rv_similar.setItemAnimator(new DefaultItemAnimator());
+            rv_similar.setNestedScrollingEnabled(false);
+            rv_similar.setAdapter(similarProductsAdapter);
+            similarProductsAdapter.loadProducts(relatedProduct);
+
+            similarProductsAdapter.setAdapterListener(new SimilarProductsAdapter.RelatedProductListListener() {
+                @Override
+                public void onItemClick(ProductDetailsResponse.RelatedProductBean item, int position) {
+
+                    productDetailsPresenter.onOpenProductDetails(item.getProduct_id());
+                }
+
+                @Override
+                public void onWishSelected(ProductDetailsResponse.RelatedProductBean item, int position) {
+                    productDetailsPresenter.onCheckWish(item,position);
+                }
+
+                @Override
+                public void onAddtoCart(ProductDetailsResponse.RelatedProductBean item, int position, String quantity) {
+
+                    productDetailsPresenter.onConfirmSimilarAddCart(item.getProduct_id(),quantity,item.getStock());
+                }
+            });
+        }
+    }
+
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -478,6 +743,17 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
                 return true;
         }
         return super.onOptionsItemSelected(item);
+
+    }
+
+    public void setRatingText(String ratingText, String reviews){
+      tv_rating.setText(reviews);
+      rb_product.setRating(Float.parseFloat(ratingText));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 }

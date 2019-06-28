@@ -5,16 +5,21 @@ import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.ui.productList.ProductListMvpPresenter;
 import com.app.demoopencartapp.ui.productList.ProductListMvpView;
 import com.app.demoopencartapp.ui.productList.ProductListPresenter;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 public class ZoomPresenter <V extends ZoomMvpView> extends BasePresenter<V> implements ZoomMvpPresenter<V> {
 
     public static final String TAG = ZoomPresenter.class.getSimpleName();
 
     @Inject
-    public ZoomPresenter(DataManager dataManager) {
-        super(dataManager);
+    public ZoomPresenter(DataManager dataManager,
+                         SchedulerProvider schedulerProvider,
+                         CompositeDisposable compositeDisposable) {
+        super(dataManager, schedulerProvider, compositeDisposable);
     }
 
     @Override

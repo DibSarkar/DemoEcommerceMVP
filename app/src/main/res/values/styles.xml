@@ -23,8 +23,8 @@
         <item name="colorAccent">@color/black_color</item>
         <item name="colorControlNormal">@color/black_color</item>
 
-        <item name="colorControlHighlight">@color/colorPrimary</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorPrimaryDark</item>
+        <item name="colorControlActivated">@color/colorPrimaryDark</item>
     </style>
     <style name="mySearchResult" parent="TextAppearance.AppCompat.SearchResult.Title">
         <item name="android:textColor">#FFF</item>
@@ -60,6 +60,11 @@
         <item name="otherButtonSpacing">0dp</item>
         <item name="cancelButtonMarginTop">10dp</item>
         <item name="actionSheetTextSize">12sp</item>
+    </style>
+
+    <style name="DialogTheme">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>

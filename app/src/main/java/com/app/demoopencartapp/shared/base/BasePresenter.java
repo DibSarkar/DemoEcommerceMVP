@@ -23,8 +23,11 @@ package com.app.demoopencartapp.shared.base;
 
 
 import com.app.demoopencartapp.data.DataManager;
+import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.CompositeDisposable;
 
 
 /**
@@ -39,10 +42,15 @@ public  class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
     private final DataManager mDataManager;
 
     private V mMvpView;
+    private final SchedulerProvider mSchedulerProvider;
+    private final CompositeDisposable mCompositeDisposable;
 
     @Inject
-    public BasePresenter(DataManager dataManager) {
+    public BasePresenter(DataManager dataManager,SchedulerProvider schedulerProvider,
+                         CompositeDisposable compositeDisposable) {
         this.mDataManager = dataManager;
+        this.mSchedulerProvider = schedulerProvider;
+        this.mCompositeDisposable = compositeDisposable;
     }
 
     @Override
@@ -53,6 +61,15 @@ public  class BasePresenter<V extends MvpView> implements MvpPresenter<V> {
     @Override
     public void onDetach() {
         mMvpView = null;
+        mCompositeDisposable.dispose();
+    }
+
+    public SchedulerProvider getSchedulerProvider() {
+        return mSchedulerProvider;
+    }
+
+    public CompositeDisposable getCompositeDisposable() {
+        return mCompositeDisposable;
     }
 
     public boolean isViewAttached() {

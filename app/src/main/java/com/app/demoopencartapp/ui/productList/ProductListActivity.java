@@ -2,23 +2,26 @@ package com.app.demoopencartapp.ui.productList;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.ProductListBean;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
+import com.app.demoopencartapp.ui.login.LoginActivity;
 import com.app.demoopencartapp.ui.productDetails.ProductDetailsActivity;
 import com.app.demoopencartapp.utils.Constants;
 import com.baoyz.actionsheet.ActionSheet;
@@ -31,6 +34,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class ProductListActivity extends BaseActivity implements ProductListMvpView,ActionSheet.ActionSheetListener {
 
@@ -54,6 +58,12 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
     @BindView(R.id.ll_products)
     LinearLayout ll_products;
 
+    @BindView(R.id.ll_cart_count)
+    LinearLayout ll_cart_count;
+
+    @BindView(R.id.tv_cart_count)
+    TextView tv_cart_count;
+
     ProductListAdapter productListAdapter;
 
     LinearLayoutManager linearLayoutManager;
@@ -66,7 +76,7 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
     private BottomSheetBehavior mBottomSheetBehavior;
 
     List<CategoriesProductsResponse.ProductBean> productBeanList;
-
+    public static final int OPEN_LOGIN = 502;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +202,20 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
                 productListPresenter.onOpenProductDetails(item.getProduct_id());
 
             }
+
+            @Override
+            public void onWishSelected(CategoriesProductsResponse.ProductBean item, int position) {
+
+                productListPresenter.onCheckWish(item,position);
+
+            }
+
+            @Override
+            public void onAddtoCart(CategoriesProductsResponse.ProductBean item, int position, String quantity) {
+
+                productListPresenter.onConfirmAddCart(item.getProduct_id(),quantity,item.getStock());
+
+            }
         });
 
 
@@ -202,7 +226,16 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
 
     @SuppressLint("RestrictedApi")
     @Override
-    public void getProducts(List<CategoriesProductsResponse.ProductBean> product) {
+    public void getProducts(List<CategoriesProductsResponse.ProductBean> product, int total_qty) {
+
+        if(total_qty==0)
+        {
+            ll_cart_count.setVisibility(View.GONE);
+        }
+        else {
+            ll_cart_count.setVisibility(View.VISIBLE);
+            tv_cart_count.setText(String.valueOf(total_qty));
+        }
         if(product.size()>0)
         {
 
@@ -248,6 +281,60 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
     }
 
     @Override
+    public void checkWish(CategoriesProductsResponse.ProductBean productBean, int pos) {
+        productBean.setActiveWish(false);
+        if(productListAdapter!=null)
+        {
+            productListAdapter.changeWish(productBean,pos);
+        }
+
+        try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.app_name);
+            builder.setMessage("Please login to add this product to your wishlist");
+            builder.setCancelable(false);
+            builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    productListPresenter.onOpenLoginActivity();
+
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        } catch (Exception e){
+            Timber.tag(TAG).e(e);
+        }
+    }
+
+    @Override
+    public void openLoginActivity() {
+
+        Intent intent1 = new Intent(mContext, LoginActivity.class);
+        intent1.putExtra(Constants.OPEN_FROM_LOGIN,0);
+        startActivityForResult(intent1,OPEN_LOGIN);
+    }
+
+    @Override
+    public void addToCart(String product_id, String quantity) {
+
+        productListPresenter.onAddtoCart(product_id,quantity);
+    }
+
+    @Override
+    public void addToCartDone(int cart_count) {
+        if(cart_count==0)
+        {
+            ll_cart_count.setVisibility(View.GONE);
+        }
+        else {
+            ll_cart_count.setVisibility(View.VISIBLE);
+            tv_cart_count.setText(String.valueOf(cart_count));
+        }
+    }
+
+    @Override
     public void onDismiss(ActionSheet actionSheet, boolean isCancel) {
 
     }
@@ -277,6 +364,17 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
         {
             getProducts(Constants.PRIORITY_RATING,Constants.ASC_ORDER);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
     }
 }
 

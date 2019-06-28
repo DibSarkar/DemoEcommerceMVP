@@ -16,6 +16,7 @@
     <color name="black_color">#000000</color>
     <color name="category_text_color">#2b2e39</color>
     <color name="golden">#ffdb48</color>
+    <color name="btn_border_red">#ff462d</color>
     <color name="coupon_bg">#d1e8e6</color>
     <color name="unselected_rating">#D7D7DA</color>
 </resources>

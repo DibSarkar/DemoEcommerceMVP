@@ -83,6 +83,7 @@
                 android:textSize="16dp"
                 android:textAlignment="center"
                 android:gravity="center"
+                android:id="@+id/tv_wishlist"
                 android:drawablePadding="20dp"
                 android:drawableLeft="@drawable/my_wishlist"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"

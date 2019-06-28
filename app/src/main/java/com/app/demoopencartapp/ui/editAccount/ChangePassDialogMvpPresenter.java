@@ -6,4 +6,5 @@ public interface ChangePassDialogMvpPresenter <V extends ChangePassDialogMvpView
 
     void onChangePass(String pass, String confirm_pass);
 
+
 }

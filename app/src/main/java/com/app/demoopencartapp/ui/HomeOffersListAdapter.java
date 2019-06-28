@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.HomeOffersListBean;
+
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
 import com.bumptech.glide.Glide;
 
@@ -32,7 +32,7 @@ public class HomeOffersListAdapter extends RecyclerView.Adapter<HomeOffersListAd
     }
 
     public interface HomeOffersListener {
-        void onItemClick(HomeOffersListBean item, int position);
+        void onItemClick(HomeProductsResponse.SliderBean.BannerImageBean item, int position);
     }
 
     public void setAdapterListener(HomeOffersListener mListener) {

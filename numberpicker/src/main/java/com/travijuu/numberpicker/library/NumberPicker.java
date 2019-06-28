@@ -123,6 +123,14 @@ public class NumberPicker extends LinearLayout {
         this.refresh();
     }
 
+
+    public void setAddActionEnabled(boolean enabled)
+    {
+        this.addButton.setEnabled(enabled);
+        this.bt_add.setEnabled(enabled);
+    }
+
+
     public void refresh() {
         if(currentValue<=minValue){
             this.addButton.setVisibility(View.VISIBLE);

@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="5dp"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="140dp"
+                android:text="Dib Sarkar"
+                android:maxLines="2"
+                android:fontFamily="sans-serif-bold"
+                android:id="@+id/tv_reviewer"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#000"
+                android:layout_height="wrap_content" />
+            <!--
+                        <android.support.v7.widget.AppCompatRatingBar
+                            android:id="@+id/ratingbar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_centerInParent="true"
+                            android:numStars="5"
+                            android:layout_toEndOf="@+id/tv_reviewer"
+                            android:layout_toRightOf="@+id/tv_reviewer"
+                            android:isIndicator="true"
+                            android:theme="@style/RatingBar"
+                            style="?android:attr/ratingBarStyleSmall"/>-->
+
+            <android.support.v7.widget.AppCompatRatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="?android:attr/ratingBarStyleSmall"
+                android:id="@+id/rb_product"
+                android:gravity="center"
+                android:numStars="5"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/tv_reviewer"
+                android:layout_toRightOf="@+id/tv_reviewer"
+                android:isIndicator="true"
+                android:progressTint="@color/colorPrimaryDark"
+                android:progressBackgroundTint="@color/unselected_rating"
+                android:secondaryProgressTint="@color/unselected_rating"
+                android:layout_marginLeft="20dp"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="6 Aug 2018"
+                android:id="@+id/tv_review_date"
+
+                android:layout_alignParentRight="true"
+                android:textSize="13dp"
+                android:textColor="#334583"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textSize="14dp"
+            android:id="@+id/tv_review"
+            android:textColor="#8e7575"
+            android:text="Lorem,jkjjh"
+            android:layout_height="wrap_content" />
+
+
+
+
+
+    </LinearLayout>
+
+
+
+
+</RelativeLayout>

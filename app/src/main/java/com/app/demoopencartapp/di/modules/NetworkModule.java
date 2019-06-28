@@ -5,18 +5,27 @@ package com.app.demoopencartapp.di.modules;
 
 import com.app.demoopencartapp.data.network.ApiHelper;
 import com.app.demoopencartapp.di.WithOutAuth;
+import com.app.demoopencartapp.shared.CookiesManage;
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.JavaNetCookieJar;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import timber.log.Timber;
+
+import static java.net.CookiePolicy.ACCEPT_ALL;
 
 
 /**
@@ -37,6 +46,7 @@ public class NetworkModule {
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(httpClient)
                 .build();
     }
@@ -62,9 +72,12 @@ public class NetworkModule {
     @Provides
     @WithOutAuth
     OkHttpClient provideHttpClientWithoutAuth(HttpLoggingInterceptor logging){
+
+
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(logging);
+        httpClient.cookieJar(new JavaNetCookieJar(CookiesManage.getCookie()));
         httpClient.connectTimeout(200, TimeUnit.SECONDS);
         httpClient.readTimeout(200, TimeUnit.SECONDS);
         return httpClient.build();

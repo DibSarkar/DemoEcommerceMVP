@@ -6,4 +6,5 @@ public interface MyAccountMvpView extends MvpView {
 
     void openEditAccount();
     void openAddressBook();
+    void openWishlist();
 }

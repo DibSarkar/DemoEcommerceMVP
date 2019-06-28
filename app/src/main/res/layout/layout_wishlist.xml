@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:background="#ececec"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_wishlist"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:id="@+id/ll_wishlist"
+        android:orientation="vertical">
+
+     <!--   <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardElevation="8dp"
+
+            android:clipToPadding="false"
+            app:cardCornerRadius="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+
+
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">-->
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+
+                android:id="@+id/rv_wishlist"
+                android:layout_margin="5dp"
+
+                android:layout_height="match_parent">
+
+
+            </android.support.v7.widget.RecyclerView>
+       <!-- </android.support.v7.widget.CardView>-->
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_wishlist"
+        android:id="@+id/tv_no_wishlist"
+        android:visibility="gone"
+
+        android:textColor="@color/colorPrimaryDark"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_centerInParent="true"/>
+
+
+</RelativeLayout>

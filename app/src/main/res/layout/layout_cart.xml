@@ -12,6 +12,8 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
+        android:id="@+id/nsv_cart"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
 
@@ -402,11 +404,62 @@
 
 
                         </LinearLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+
+                            android:layout_marginTop="15dp"
+                            android:gravity="center"
+
+                            android:background="#e4e4e4"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="100dp"
+                                android:text="Total GST"
+
+                                android:gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
+                                android:textColor="#191919"
+                                android:layout_height="wrap_content" />
+
+                            <View
+
+                                android:layout_width="0.5dp"
+
+                                android:layout_height="match_parent"
+                                android:layout_centerInParent="true"
+                                android:layout_centerHorizontal="true"
+
+
+                                android:background="#000" />
+
+                            <TextView
+                                android:id="@+id/tv_total_gst"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+
+                                android:layout_marginRight="20dp"
+
+                                android:layout_centerVertical="true"
+                                android:gravity="center"
+
+                                android:text="@string/Rs1"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="#191919" />
+
+
+
+                        </RelativeLayout>
 
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:layout_marginTop="10dp"
+
 
                            android:gravity="center"
 
@@ -439,7 +492,7 @@
                                 android:background="#000" />
 
                             <TextView
-                                android:id="@+id/tv_sub_text"
+                                android:id="@+id/tv_sub_total"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -492,7 +545,7 @@
                                 android:background="#000" />
 
                             <TextView
-                                android:id="@+id/tv_sub_text1"
+                                android:id="@+id/tv_total"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -525,6 +578,9 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:weightSum="2"
+        android:visibility="gone"
+        android:id="@+id/ll_btn"
+
         android:layout_centerInParent="true"
 
         android:layout_alignParentBottom="true"
@@ -540,7 +596,7 @@
 
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
 
 
 
@@ -561,6 +617,7 @@
             android:layout_width="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:id="@+id/ll_checkout"
             android:background="@drawable/coupon_btn"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -568,21 +625,28 @@
 
 
             <Button
-                android:layout_width="wrap_content"
-
-
-
+                android:layout_width="match_parent"
 
                 android:textAlignment="center"
                 android:background="@android:color/transparent"
-
                 android:textColor="#fff"
                 android:gravity="center"
-
-                android:text="CheckOut"
-
+                android:id="@+id/btn_checkout"
+                android:text="Checkout"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_height="45dp" />
         </LinearLayout>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_cartlist"
+        android:id="@+id/tv_no_cart"
+        android:visibility="gone"
+
+        android:textColor="@color/colorPrimaryDark"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

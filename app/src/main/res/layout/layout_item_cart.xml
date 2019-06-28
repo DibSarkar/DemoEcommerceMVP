@@ -14,9 +14,9 @@
             android:orientation="horizontal" >
 
             <ImageView
-                android:id="@+id/product_img"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:id="@+id/iv_pro"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                android:scaleType="fitXY"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
@@ -39,7 +39,7 @@
                     android:ellipsize="end"
 
                     android:textAllCaps="false"
-                    android:id="@+id/product_title"
+                    android:id="@+id/tv_name"
                     android:textColor="#e00015"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
@@ -51,26 +51,27 @@
                     android:layout_alignParentRight="true"
                     android:orientation="vertical">
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="5dp"
                         android:layout_gravity="right|bottom"
-                        android:id="@+id/delete"
+                        android:id="@+id/iv_delete"
                         android:src="@drawable/cart_delete"/>
                 </LinearLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
-                    android:ems="12"
+
+                    android:ellipsize="end"
                     android:layout_marginTop="5dp"
                     android:textSize="12dp"
                     android:singleLine="true"
                     android:text="TEST 123"
-                    android:layout_below="@+id/product_title"
-                    android:id="@+id/product_model"
+                    android:layout_below="@+id/tv_name"
+                    android:id="@+id/tv_model"
                     android:textColor="#191919"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
@@ -81,10 +82,22 @@
                     android:maxLines="1"
                     android:text="@string/Rs2"
                     android:layout_marginTop="5dp"
-                    android:layout_below="@+id/product_model"
-                    android:id="@+id/product_cost"
+                    android:layout_below="@+id/tv_model"
+                    android:id="@+id/tv_price"
                     android:textColor="#191919"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="10dp"
+                    android:id="@+id/tv_tax"
+                    android:textColor="@color/category_text_color"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+
+                    android:layout_toRightOf="@+id/tv_price"
+                    android:layout_below="@+id/tv_model"
+                    android:layout_height="wrap_content" />
 
                 <RelativeLayout
                     android:id="@+id/lytCounter"
@@ -94,7 +107,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginTop="20dp"
 
-                    android:layout_below="@+id/product_cost">
+                    android:layout_below="@+id/tv_price">
 
                     <com.travijuu.numberpicker.library.NumberPicker
                         android:id="@+id/np_count"

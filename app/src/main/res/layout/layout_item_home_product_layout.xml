@@ -63,13 +63,18 @@ android:visibility="invisible"
 
 
             </FrameLayout>
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_height="20dp"
+            <com.varunest.sparkbutton.SparkButton
+                android:id="@+id/like_button"
+                android:layout_width="40dp"
+                android:layout_gravity="center"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/like"/>
+                app:sparkbutton_activeImage="@drawable/active_wish"
+                app:sparkbutton_inActiveImage="@drawable/inactive_wish"
+                app:sparkbutton_iconSize="20dp"
+                app:sparkbutton_primaryColor="@color/colorPrimary"
+                app:sparkbutton_secondaryColor="@color/colorPrimaryDark" />
+
 
         </RelativeLayout>
 
@@ -150,10 +155,22 @@ android:visibility="invisible"
                 android:textStyle="bold"
                 />
 
+           <!-- android:textColor="#03002d"-->
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Add To Cart"
+                android:textColor="#fff"
+                android:id="@+id/btn_add"
+                android:textAppearance="?android:textAppearanceSmall"
 
 
+                android:background="#35e0ff"
+                android:layout_height="33dp" />
 
-            <com.travijuu.numberpicker.library.NumberPicker
+         <!--   <com.travijuu.numberpicker.library.NumberPicker
                 android:id="@+id/np_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,8 +182,7 @@ android:visibility="invisible"
                 android:layout_below="@+id/tv_savings"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="10dp"
-                android:layout_gravity="center"/>
-
+                android:layout_gravity="center"/>-->
         </LinearLayout>
 
 
