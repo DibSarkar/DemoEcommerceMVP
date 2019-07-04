@@ -26,6 +26,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -153,7 +156,7 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<AllCategoriesResponse> getAllCategories() {
+    public Observable<AllCategoriesResponse> getAllCategories() {
         return mApiHelper.getAllCategories();
     }
 
@@ -168,18 +171,18 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<CategoriesProductsResponse> getCategoryProducts(String sort, String order, String apitoken, RequestBody category_id, RequestBody user_id,RequestBody session_id) {
+    public Observable<CategoriesProductsResponse> getCategoryProducts(String sort, String order, String apitoken, RequestBody category_id, RequestBody user_id,RequestBody session_id) {
         return mApiHelper.getCategoryProducts(sort,order,apitoken,category_id,user_id,session_id);
     }
 
     @Override
-    public Call<HomeProductsResponse> getHomeProducts(String apitoken, RequestBody customer_id, RequestBody session_id) {
+    public Observable<HomeProductsResponse> getHomeProducts(String apitoken, RequestBody customer_id, RequestBody session_id) {
         return mApiHelper.getHomeProducts(apitoken, customer_id, session_id);
     }
 
 
     @Override
-    public Call<ProductDetailsResponse> getProductDetails(String apitoken, RequestBody product_id, RequestBody user_id,RequestBody session_id) {
+    public Observable<ProductDetailsResponse> getProductDetails(String apitoken, RequestBody product_id, RequestBody user_id,RequestBody session_id) {
         return mApiHelper.getProductDetails(apitoken,product_id,user_id,session_id);
     }
 
@@ -239,12 +242,12 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<AddUpdateCartResponse> addCart(String apitoken, RequestBody customer_id, RequestBody product_id, RequestBody quantity, RequestBody session_id) {
+    public Single<AddUpdateCartResponse> addCart(String apitoken, RequestBody customer_id, RequestBody product_id, RequestBody quantity, RequestBody session_id) {
         return mApiHelper.addCart(apitoken, customer_id, product_id, quantity, session_id);
     }
 
     @Override
-    public Call<AddUpdateCartResponse> addCustomizableCart(String apitoken, String customer_id, String product_id, String quantity, String session_id, Map<String, String> option) {
+    public Single<AddUpdateCartResponse> addCustomizableCart(String apitoken, String customer_id, String product_id, String quantity, String session_id, Map<String, String> option) {
         return mApiHelper.addCustomizableCart(apitoken, customer_id, product_id, quantity, session_id, option);
     }
 
@@ -254,17 +257,17 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<CartListResponse> getCartList(String apitoken, RequestBody customer_id, RequestBody session_id) {
+    public Observable<CartListResponse> getCartList(String apitoken, RequestBody customer_id, RequestBody session_id) {
         return mApiHelper.getCartList(apitoken, customer_id, session_id);
     }
 
     @Override
-    public Call<MessageResponse> updateCart(String apitoken, RequestBody cart_id, RequestBody quantity) {
+    public Completable updateCart(String apitoken, RequestBody cart_id, RequestBody quantity) {
         return mApiHelper.updateCart(apitoken, cart_id, quantity);
     }
 
     @Override
-    public Call<MessageResponse> deleteCart(String apitoken, RequestBody cart_id) {
+    public Completable deleteCart(String apitoken, RequestBody cart_id) {
         return mApiHelper.deleteCart(apitoken, cart_id);
     }
 

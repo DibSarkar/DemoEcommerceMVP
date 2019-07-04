@@ -637,7 +637,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     public void singleAddCart(String product_id, String quantity, boolean isCustomizable, String product_option_id, String product_option_value_id) {
 
         if(isCustomizable) {
-            productDetailsPresenter.onSingleAddCart(product_id, quantity, isCustomizable, product_option_id, product_option_value_id);
+            productDetailsPresenter.onCustomizableAddCart(product_id, quantity, isCustomizable, product_option_id, product_option_value_id);
         }
         else {
             productDetailsPresenter.onAddtoCart(getIntent().getExtras().getString("product_id"),quantity);

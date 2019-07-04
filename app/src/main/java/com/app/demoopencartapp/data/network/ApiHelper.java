@@ -20,6 +20,9 @@ import com.app.demoopencartapp.data.network.models.ReviewsResponse;
 import java.util.ArrayList;
 import java.util.Map;
 
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -41,7 +44,7 @@ public interface ApiHelper {
 
 
     @GET("index.php?route=api/category/allcategory&api_token=b1f24cb121c30a6765791ec1b0")
-    Call<AllCategoriesResponse> getAllCategories();
+    Observable<AllCategoriesResponse> getAllCategories();
 
 
     @Multipart
@@ -67,7 +70,7 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/category/catProduct")
-    Call<CategoriesProductsResponse> getCategoryProducts(
+    Observable<CategoriesProductsResponse> getCategoryProducts(
                                     @Query("sort") String sort,
                                     @Query("order") String order,
                                     @Query("api_token") String apitoken,
@@ -76,13 +79,13 @@ public interface ApiHelper {
                                     @Part("session_id") RequestBody session_id);
     @Multipart
     @POST("index.php?route=api/home/homePage")
-    Call<HomeProductsResponse> getHomeProducts(@Query("api_token") String apitoken,
-                                               @Part("customer_id") RequestBody customer_id,
-                                               @Part("session_id") RequestBody session_id);
+    Observable<HomeProductsResponse> getHomeProducts(@Query("api_token") String apitoken,
+                                                     @Part("customer_id") RequestBody customer_id,
+                                                     @Part("session_id") RequestBody session_id);
 
     @Multipart
     @POST("index.php?route=api/product/getproduct")
-    Call<ProductDetailsResponse> getProductDetails(@Query("api_token") String apitoken,
+    Observable<ProductDetailsResponse> getProductDetails(@Query("api_token") String apitoken,
                                                    @Part("product_id") RequestBody product_id,
                                                    @Part("customer_id") RequestBody customer_id,
                                                    @Part("session_id") RequestBody session_id);
@@ -178,7 +181,7 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/cart/add")
-    Call<AddUpdateCartResponse> addCart(@Query("api_token") String apitoken,
+    Single<AddUpdateCartResponse> addCart(@Query("api_token") String apitoken,
                                         @Part("customer_id") RequestBody customer_id,
                                         @Part("product_id") RequestBody product_id,
                                         @Part("quantity") RequestBody quantity,
@@ -186,7 +189,7 @@ public interface ApiHelper {
 
     @FormUrlEncoded
     @POST("index.php?route=api/cart/add")
-    Call<AddUpdateCartResponse> addCustomizableCart(@Query("api_token") String apitoken,
+    Single<AddUpdateCartResponse> addCustomizableCart(@Query("api_token") String apitoken,
                                         @Field("customer_id") String customer_id,
                                         @Field("product_id") String product_id,
                                         @Field("quantity") String quantity,
@@ -199,19 +202,19 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/cart/cartList")
-    Call<CartListResponse> getCartList(@Query("api_token") String apitoken,
+    Observable<CartListResponse> getCartList(@Query("api_token") String apitoken,
                                        @Part("customer_id") RequestBody customer_id,
                                        @Part("session_id") RequestBody session_id);
 
     @Multipart
     @POST("index.php?route=api/cart/updateCart")
-    Call<MessageResponse> updateCart(@Query("api_token") String apitoken,
-                                     @Part("cart_id") RequestBody cart_id,
-                                     @Part("quantity") RequestBody quantity);
+    Completable updateCart(@Query("api_token") String apitoken,
+                                            @Part("cart_id") RequestBody cart_id,
+                                            @Part("quantity") RequestBody quantity);
 
     @Multipart
     @POST("index.php?route=api/cart/deleteCart")
-    Call<MessageResponse> deleteCart(@Query("api_token") String apitoken,
+    Completable deleteCart(@Query("api_token") String apitoken,
                                      @Part("cart_id") RequestBody cart_id);
 
 

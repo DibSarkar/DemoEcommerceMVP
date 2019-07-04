@@ -10,7 +10,7 @@
 <android.support.v4.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:layout_marginBottom="50dp"
     android:background="#ececec"
 
 
@@ -417,7 +417,7 @@ Recommended bar length max 14In "
             <RelativeLayout
                 android:id="@+id/rl_description"
 
-
+                android:padding="6dp"
                 android:layout_width="match_parent"
                 android:background="@color/category_bg"
                 android:layout_height="wrap_content"
@@ -458,6 +458,7 @@ Recommended bar length max 14In "
                 android:layout_marginTop="5dp"
                 android:id="@+id/tv_desc"
                 android:textColor="#4d4d58"
+
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_height="wrap_content" />
@@ -470,9 +471,6 @@ Recommended bar length max 14In "
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#F0FAFC"
-
-
-
 
             android:orientation="vertical"
             >
@@ -525,6 +523,7 @@ Recommended bar length max 14In "
                 android:layout_width="wrap_content"
                 android:layout_margin="10dp"
                 android:id="@+id/tv_specs"
+
                 android:layout_height="wrap_content"
                 />
 
@@ -585,7 +584,7 @@ Recommended bar length max 14In "
                 android:id="@+id/rv_similar"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="70dp">
+              >
 
             </android.support.v7.widget.RecyclerView>
             </LinearLayout>

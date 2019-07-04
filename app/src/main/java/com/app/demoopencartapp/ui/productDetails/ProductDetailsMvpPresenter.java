@@ -22,7 +22,7 @@ public interface ProductDetailsMvpPresenter  <V extends ProductDetailsMvpView> e
     void onConfirmSimilarAddCart(String product_id, String quantity, String isStock);
     void onAddtoCart(String product_id, String quantity);
     void onConfirmAddCart(String product_id, String quantity, boolean isCustomizable, String product_option_id, String product_option_value_id, boolean isStock);
-    void onSingleAddCart(String product_id, String quantity, boolean isCustomizable, String product_option_id, String product_option_value_id);
+    void onCustomizableAddCart(String product_id, String quantity, boolean isCustomizable, String product_option_id, String product_option_value_id);
     void onMultipleImages(List<ProductDetailsResponse.ProductBean.ImagesBean.ImageBean> image);
     void onLoadVariations(List<ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean> product_option_value);
     void onLoadRelatedProducts(List<ProductDetailsResponse.RelatedProductBean> relatedProduct);

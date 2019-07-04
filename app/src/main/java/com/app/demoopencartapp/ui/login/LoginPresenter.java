@@ -116,12 +116,17 @@ public class LoginPresenter <V extends LoginMvpView> extends BasePresenter<V>
                         if (!isViewAttached()) {
                             return;
                         }
+                        if(response!=null) {
+
+                            getMvpView().showMessage(response.getResponseText());
+                            if (response.getResponseCode() == 1) {
+                                getDataManager().setCurrentUserId(String.valueOf(response.getResponseData().getId()));
+                                getDataManager().setCurrentMobileNumber(response.getResponseData().getTelephone());
+                                getDataManager().setCurrentUserEmail(response.getResponseData().getEmail());
+                                getMvpView().loginDone();
+                            }
+                        }
                         getMvpView().hideLoading();
-                        getMvpView().showMessage(response.getResponseText());
-                        getDataManager().setCurrentUserId(String.valueOf(response.getResponseData().getId()));
-                        getDataManager().setCurrentMobileNumber(response.getResponseData().getTelephone());
-                        getDataManager().setCurrentUserEmail(response.getResponseData().getEmail());
-                        getMvpView().loginDone();
 
                     }
                 }, new Consumer<Throwable>() {

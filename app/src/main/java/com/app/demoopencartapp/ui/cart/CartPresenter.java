@@ -1,6 +1,9 @@
 package com.app.demoopencartapp.ui.cart;
 
+import android.util.Log;
+
 import com.app.demoopencartapp.data.DataManager;
+import com.app.demoopencartapp.data.network.models.AllCategoriesResponse;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
 import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
@@ -9,10 +12,15 @@ import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
+import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -34,206 +42,166 @@ public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
 
     @Override
     public void onGetCartList() {
-        RequestBody user_id,session_id;
-        if(getDataManager().getCurrentUserId()!=null) {
+        if(getMvpView().isNetworkConnected()) {
+            RequestBody user_id, session_id;
+            if (getDataManager().getCurrentUserId() != null) {
 
-            if (!getDataManager().getCurrentUserId().equals("")) {
+                if (!getDataManager().getCurrentUserId().equals("")) {
 
-                user_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
-                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+                    user_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
+                    session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
 
-            }
-            else {
+                } else {
+                    user_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+                    if (getDataManager().getSessionId() != null) {
+
+                        if (!getDataManager().getSessionId().equals("")) {
+
+                            session_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getSessionId());
+                        } else {
+                            session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+
+                        }
+                    } else {
+                        session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+                    }
+
+                }
+            } else {
                 user_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-                if(getDataManager().getSessionId()!=null) {
+                if (getDataManager().getSessionId() != null) {
 
                     if (!getDataManager().getSessionId().equals("")) {
 
                         session_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getSessionId());
-                    }
-                    else {
+                    } else {
                         session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
 
                     }
-                }
-                else {
+                } else {
                     session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
                 }
-
             }
-        }
-        else {
-            user_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-            if(getDataManager().getSessionId()!=null) {
 
-                if (!getDataManager().getSessionId().equals("")) {
+            getMvpView().showLoading();
 
-                    session_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getSessionId());
-                }
-                else {
-                    session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+            getCompositeDisposable().add(getDataManager().getCartList(Constants.API_TOKEN, user_id, session_id)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<CartListResponse>() {
+                        @Override
+                        public void accept(CartListResponse response) throws Exception {
 
-                }
-            }
-            else {
-                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-            }
-        }
-
-        getMvpView().showLoading();
-        getDataManager().getCartList(Constants.API_TOKEN,user_id,session_id).enqueue(new Callback<CartListResponse>() {
-            @Override
-            public void onResponse(Call<CartListResponse> call, Response<CartListResponse> response) {
-                getMvpView().hideLoading();
-
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            if(response.body().getCartlist().getProducts().size()>0) {
-                                getMvpView().getCartList(response.body().getCartlist().getProducts(),response.body().getTotal(),response.body().getSubtotal(),response.body().getTaxdata());
-                            }
-                            else {
-                                getMvpView().getCartList(new ArrayList<CartListResponse.CartlistBean.ProductsBean>(), "","",null);
+                            if (!isViewAttached()) {
+                                return;
                             }
 
-                        } else {
-                            getMvpView().getCartList(new ArrayList<CartListResponse.CartlistBean.ProductsBean>(), "","",null);
-                            getMvpView().showMessage(response.body().getResponseText());
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
+                                    if (response.getCartlist().getProducts().size() > 0) {
+                                        getMvpView().getCartList(response.getCartlist().getProducts(), response.getTotal(), response.getSubtotal(), response.getTaxdata());
+                                    } else {
+                                        getMvpView().getCartList(new ArrayList<CartListResponse.CartlistBean.ProductsBean>(), "", "", null);
+                                    }
+
+                                } else {
+                                    getMvpView().getCartList(new ArrayList<CartListResponse.CartlistBean.ProductsBean>(), "", "", null);
+                                    getMvpView().showMessage(response.getResponseText());
+
+                                }
+                            }
+                            getMvpView().hideLoading();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("hjhdf" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
+
+                            // handle the login error here
 
                         }
-                    } else {
-                        getMvpView().getCartList(new ArrayList<CartListResponse.CartlistBean.ProductsBean>(), "","",null);
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
+                    }));
 
-                } else {
-                    getMvpView().getCartList(new ArrayList<CartListResponse.CartlistBean.ProductsBean>(), "","",null);
 
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CartListResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
-
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
 
     }
 
     @Override
     public void onUpdateCart(String cart_id, int quantity) {
 
-       RequestBody cart_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), cart_id);
-        RequestBody quantity1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(quantity));
+        if(getMvpView().isNetworkConnected()) {
+            RequestBody cart_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), cart_id);
+            RequestBody quantity1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(quantity));
+            getMvpView().showLoading();
 
+            getCompositeDisposable().add(getDataManager().updateCart(Constants.API_TOKEN, cart_id1, quantity1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                                   @Override
+                                   public void onComplete() {
+                                       getMvpView().hideLoading();
+                                       getMvpView().showMessage("Cart updated successfully");
+                                       getMvpView().updateDone();
+                                   }
 
-        getMvpView().showLoading();
-        getDataManager().updateCart(Constants.API_TOKEN,cart_id1,quantity1).enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                getMvpView().hideLoading();
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       getMvpView().hideLoading();
+                                       getMvpView().showMessage(e.getMessage());
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
+                                   }
+                               }
+                    ));
 
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().updateDone();
-
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-                        }
-                    } else {
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-
-                } else {
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
 
 
     }
 
+
     @Override
     public void onCartDelete(String cart_id) {
-        RequestBody cart_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), cart_id);
+        if(getMvpView().isNetworkConnected()) {
+            RequestBody cart_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), cart_id);
+            getMvpView().showLoading();
+            getCompositeDisposable().add(getDataManager().deleteCart(Constants.API_TOKEN, cart_id1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                                       @Override
+                                       public void onComplete() {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage("Item deleted successfully");
+                                           getMvpView().updateDone();
+                                   }
 
+                                       @Override
+                                       public void onError(Throwable e) {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage(e.getMessage());
 
-        getMvpView().showLoading();
-        getDataManager().deleteCart(Constants.API_TOKEN,cart_id1).enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                getMvpView().hideLoading();
+                                       }
+                                   }
+                    ));
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().updateDone();
-
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-                        }
-                    } else {
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-
-                } else {
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
 
     }
 
