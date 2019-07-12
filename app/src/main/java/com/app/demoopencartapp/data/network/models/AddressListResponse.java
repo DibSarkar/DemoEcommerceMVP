@@ -2,7 +2,7 @@ package com.app.demoopencartapp.data.network.models;
 
 import java.util.List;
 
-public class AddressListResponse {
+public class AddressListResponse extends BaseResponse {
 
 
     /**
@@ -11,25 +11,8 @@ public class AddressListResponse {
      * responseData : [{"address_id":"24","firstname":"hfdfhf","lastname":"dfhhh","company":"hghgh","gstin":"","address_1":"hfghfgh","address_2":"kolkata","postcode":"700091","city":"gfhfgh","zone_id":"1506","zone":"West Bengal","country_id":"99","country":"India","default_address":0}]
      */
 
-    private int responseCode;
-    private String responseText;
+
     private List<ResponseDataBean> responseData;
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 
     public List<ResponseDataBean> getResponseData() {
         return responseData;

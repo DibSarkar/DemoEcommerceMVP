@@ -1,23 +1,16 @@
 package com.app.demoopencartapp.ui.editAccount;
 
 import com.app.demoopencartapp.data.DataManager;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
-import java.io.IOException;
-import java.util.regex.Pattern;
-
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class ChangePassDialogPresenter <V extends ChangePassDialogMvpView> extends BasePresenter<V>
         implements ChangePassDialogMvpPresenter<V> {
@@ -73,53 +66,28 @@ public class ChangePassDialogPresenter <V extends ChangePassDialogMvpView> exten
             user_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
         }
         RequestBody password = RequestBody.create(MediaType.parse("multipart/form-data"), pass);
-
-
-
         getMvpView().showLoading();
-        getDataManager().changePass(Constants.API_TOKEN,user_id,password).enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                getMvpView().hideLoading();
-
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().changePassDone();
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-
-                        }
-                    } else {
 
 
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
+        getCompositeDisposable().add(getDataManager().changePass(Constants.API_TOKEN,user_id,password)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribeWith(new DisposableCompletableObserver() {
+                                   @Override
+                                   public void onComplete() {
+                                       getMvpView().hideLoading();
+                                       getMvpView().showMessage("Password changed successfully");
+                                       getMvpView().changePassDone();
+                                   }
 
-                } else {
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       getMvpView().hideLoading();
+                                       getMvpView().showMessage(e.getMessage());
 
+                                   }
+                               }
+                ));
 
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
     }
 }

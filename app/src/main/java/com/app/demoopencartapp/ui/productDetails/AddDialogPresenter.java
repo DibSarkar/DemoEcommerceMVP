@@ -2,16 +2,19 @@ package com.app.demoopencartapp.ui.productDetails;
 
 import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.AddRatingResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
+import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
+
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -36,79 +39,69 @@ public class AddDialogPresenter <V extends AddRateDialogMvpView> extends BasePre
     @Override
     public void onSendRating(String name, String review, float rating, String product_id) {
 
+       if(getMvpView().isNetworkConnected()) {
+           RequestBody customer_id;
+           if (getDataManager().getCurrentUserId() != null) {
 
-        RequestBody customer_id;
-        if(getDataManager().getCurrentUserId()!=null) {
+               if (!getDataManager().getCurrentUserId().equals("")) {
 
-            if (!getDataManager().getCurrentUserId().equals("")) {
+                   customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
+               } else {
+                   customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
 
-                customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
-            }
-            else {
-                customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+               }
+           } else {
+               customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+           }
+           RequestBody name1 = RequestBody.create(MediaType.parse("multipart/form-data"), name);
+           RequestBody review1 = RequestBody.create(MediaType.parse("multipart/form-data"), review);
+           RequestBody rating1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(rating));
+           RequestBody productid1 = RequestBody.create(MediaType.parse("multipart/form-data"), product_id);
+           getMvpView().showLoading();
 
-            }
-        }
-        else {
-            customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-        }
-        RequestBody name1 = RequestBody.create(MediaType.parse("multipart/form-data"), name);
-        RequestBody review1 = RequestBody.create(MediaType.parse("multipart/form-data"), review);
-        RequestBody rating1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(rating));
-        RequestBody productid1 = RequestBody.create(MediaType.parse("multipart/form-data"), product_id);
+           getCompositeDisposable().add(getDataManager().addRating(Constants.API_TOKEN, productid1, name1, review1, rating1, customer_id)
+                   .subscribeOn(getSchedulerProvider().io())
+                   .observeOn(getSchedulerProvider().ui())
+                   .subscribe(new Consumer<AddRatingResponse>() {
+                       @Override
+                       public void accept(AddRatingResponse response) throws Exception {
 
+                           if (!isViewAttached()) {
+                               return;
+                           }
 
+                           if (response != null) {
+                               if (response.getResponseCode() == 1) {
+                                   getMvpView().showMessage(response.getResponseText());
+                                   getMvpView().ratingDone(response.getRating(), response.getReviews());
+                               } else {
+                                   getMvpView().showMessage(response.getResponseText());
 
-        getMvpView().showLoading();
-        getDataManager().addRating(Constants.API_TOKEN,productid1,name1,review1,rating1,customer_id).enqueue(new Callback<AddRatingResponse>() {
-            @Override
-            public void onResponse(Call<AddRatingResponse> call, Response<AddRatingResponse> response) {
-                getMvpView().hideLoading();
-
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().ratingDone(response.body().getRating(),response.body().getReviews());
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-
-                        }
-                    } else {
-
-
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-
-                } else {
+                               }
 
 
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
+                           }
 
-            @Override
-            public void onFailure(Call<AddRatingResponse> call, Throwable t) {
-                getMvpView().hideLoading();
+                           getMvpView().hideLoading();
 
-                Timber.tag(TAG).w(t);
+                       }
+                   }, new Consumer<Throwable>() {
+                       @Override
+                       public void accept(Throwable throwable) throws Exception {
+                           System.out.println("hjhdf" + throwable.getMessage());
 
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
+                           if (!isViewAttached()) {
+                               return;
+                           }
 
+                           getMvpView().hideLoading();
 
-
-
-
+                       }
+                   }));
+       }
+         else {
+           getMvpView().showMessage("No internet connection");
+       }
     }
 
     @Override

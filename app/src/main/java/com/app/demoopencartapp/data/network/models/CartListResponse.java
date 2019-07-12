@@ -2,7 +2,7 @@ package com.app.demoopencartapp.data.network.models;
 
 import java.util.List;
 
-public class CartListResponse {
+public class CartListResponse extends BaseResponse{
 
 
     /**
@@ -14,28 +14,11 @@ public class CartListResponse {
      * total : 7067
      */
 
-    private int responseCode;
-    private String responseText;
+
     private CartlistBean cartlist;
     private String subtotal;
     private String total;
     private List<Integer> taxdata;
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 
     public CartlistBean getCartlist() {
         return cartlist;

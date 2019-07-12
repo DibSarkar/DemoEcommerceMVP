@@ -134,6 +134,7 @@ public class MainPresenter <V extends MainMvpView> extends BasePresenter<V>
                 session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
             }
 
+
             getCompositeDisposable().add(getDataManager().getHomeProducts(Constants.API_TOKEN,user_id,session_id)
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())

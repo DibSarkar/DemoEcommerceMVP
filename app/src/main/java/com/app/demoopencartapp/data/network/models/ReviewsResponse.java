@@ -1,8 +1,12 @@
 package com.app.demoopencartapp.data.network.models;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
 import java.util.List;
 
-public class ReviewsResponse {
+public class ReviewsResponse extends BaseResponse{
 
 
     /**
@@ -11,26 +15,11 @@ public class ReviewsResponse {
      * reviewList : [{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"xbxbnddnddndbdbdbdbd","review":"sgsgsgd<br />\r\ngnfjfjjfjfjfjfjfjfjfjfjfjfjfjfj","rating":4,"date_added":"14/06/2019"},{"name":"hgfgh","review":"fghfghhfghffffffffffffffffffffffffffffffffg","rating":3,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"payal","review":"lorem ipsum","rating":3,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"payal","review":"lorem ipsum","rating":3,"date_added":"14/06/2019"},{"name":"payal","review":"lorem ipsum","rating":3,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"sym","review":"lorem ipsum","rating":5,"date_added":"14/06/2019"},{"name":"som","review":"lorem ipsum","rating":4,"date_added":"14/06/2019"},{"name":"payal","review":"lorem ipsum","rating":3,"date_added":"14/06/2019"},{"name":"payal","review":"lorem ipsum","rating":3,"date_added":"14/06/2019"}]
      */
 
-    private int responseCode;
-    private String responseText;
-    private List<ReviewListBean> reviewList;
 
-    public int getResponseCode() {
-        return responseCode;
-    }
 
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
-
+    @SerializedName("reviewList")
+    @Expose
+    private List<ReviewListBean> reviewList = null;
     public List<ReviewListBean> getReviewList() {
         return reviewList;
     }
@@ -39,7 +28,7 @@ public class ReviewsResponse {
         this.reviewList = reviewList;
     }
 
-    public static class ReviewListBean {
+    public static class ReviewListBean  implements Serializable {
         /**
          * name : sym
          * review : lorem ipsum

@@ -1,6 +1,6 @@
 package com.app.demoopencartapp.data.network.models;
 
-public class GetAccountInfoResponse {
+public class GetAccountInfoResponse extends BaseResponse {
 
 
     /**
@@ -9,25 +9,8 @@ public class GetAccountInfoResponse {
      * responseData : {"firstname":"Dib","lastname":"Sarkar","email":"sarkardibivd@gmail.com","telephone":"8240379920","gstin":"1235","newsletter":"1"}
      */
 
-    private int responseCode;
-    private String responseText;
+
     private ResponseDataBean responseData;
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 
     public ResponseDataBean getResponseData() {
         return responseData;

@@ -2,7 +2,7 @@ package com.app.demoopencartapp.data.network.models;
 
 import java.util.List;
 
-public class HomeProductsResponse {
+public class HomeProductsResponse extends BaseResponse {
 
 
     /**
@@ -17,8 +17,7 @@ public class HomeProductsResponse {
      * angelGrindes : [{"product_id":"208","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/Safari%20Pro%20Safety%20Shoes%20Safex%20Molded%20Steel%20Toe%20200-228x228.jpg","name":"Safari Pro Safety Shoes Safex Molded Steel Toe 200","price":"231.0000","special":"185.0000","seller_name":" ","tax":"","rating":"3.0","manufacturer":"Safari Pro","options":[{"product_option_id":"228","option_id":"11","name":"Shoe Size","product_option_value":[{"product_option_value_id":"20","option_value_id":"46","name":"Size-5","image":"","price":""},{"product_option_value_id":"21","option_value_id":"47","name":"Size-6","image":"","price":""},{"product_option_value_id":"22","option_value_id":"48","name":"Size-7","image":"","price":""},{"product_option_value_id":"23","option_value_id":"50","name":"Size-8","image":"","price":""},{"product_option_value_id":"24","option_value_id":"51","name":"Size-9","image":"","price":"20.0000"},{"product_option_value_id":"25","option_value_id":"52","name":"Size-10","image":"","price":"20.0000"},{"product_option_value_id":"26","option_value_id":"53","name":"Size-11","image":"","price":"30.0000"}]},{"product_option_id":"251","option_id":"14","name":"Chain Size In Mtr.","product_option_value":[{"product_option_value_id":"246","option_value_id":"61","name":"10 Mtr.","image":"","price":""},{"product_option_value_id":"247","option_value_id":"62","name":"11 Mtr.","image":"","price":""}]}]},{"product_id":"231","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/o299497v54_lv-103345-12-gws600_dyn-228x228.png","name":"Bosch Mini Angel Grinder 4'' GWS 600 Professional","price":"2995.0000","special":"1851.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"235","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/o274514v54_lv-50217-12-62_GWS6-125-228x228.png","name":"Bosch Mini Angel Grinder 5'' GWS 6-125 Professional","price":"4550.0000","special":"2805.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"232","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/o256442v54_lv-144128-12-GWS900-100_dyn_01-228x228.png","name":"Bosch Mini Angel Grinder 4'' GWS 900-100 Professional","price":"4955.0000","special":"2786.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"239","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/GWS900-125-228x228.png","name":"Bosch Mini Angel Grinder 5'' GWS 900-125 Professional","price":"5980.0000","special":"3693.2500","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"218","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/angle-grinder-gws-750-100-98447-98447-228x228.png","name":"Bosch Mini Angle Grinder 4&quot; GWS 750-100 Professional","price":"6000.0000","special":"5250.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"240","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/angle-grinder-gws-9-125-p-228x228.png","name":"Bosch Mini Angel Grinder 5'' GWS 9-125 P Professional","price":"6550.0000","special":"6124.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"241","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/angle-grinder-gws-14-125%20CI-228x228.png","name":"Bosch Mini Angel Grinder 5'' GWS 14-125 CI Professional","price":"8975.0000","special":"5544.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"243","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/o292554v54_lv-168471-12-GWS18-125L-228x228.png","name":"Bosch Mini Angle Grinder 4'' GWS18-125L Professional","price":"15000.0000","special":"9270.5200","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]},{"product_id":"242","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/angle-grinder-gws-15-125-cieh-228x228.png","name":"Bosch Mini Angel Grinder 5'' GWS15-125CIH Professional","price":"15220.0000","special":"9406.0000","seller_name":" ","tax":"","rating":"0.0","manufacturer":"Bosch","options":[]}]
      */
 
-    private int responseCode;
-    private String responseText;
+
     private int total_qty;
     private List<TopBannerBean> topBanner;
     private List<SliderBean> slider;
@@ -34,22 +33,6 @@ public class HomeProductsResponse {
 
     public int getTotal_qty() {
         return total_qty;
-    }
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
     }
 
     public List<TopBannerBean> getTopBanner() {

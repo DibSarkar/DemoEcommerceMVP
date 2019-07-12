@@ -2,28 +2,19 @@ package com.app.demoopencartapp.ui.editAccount;
 
 import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
-import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
-import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
-import com.app.demoopencartapp.ui.myaccount.MyAccountMvpPresenter;
-import com.app.demoopencartapp.ui.myaccount.MyAccountMvpView;
-import com.app.demoopencartapp.ui.myaccount.MyAccountPresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePresenter<V>
         implements EditAccountMvpPresenter<V> {
@@ -54,6 +45,8 @@ public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePre
 
     @Override
     public void onGetInfo() {
+        if(getMvpView().isNetworkConnected())
+        {
         RequestBody user_id;
         if(getDataManager().getCurrentUserId()!=null) {
 
@@ -70,58 +63,53 @@ public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePre
             user_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
         }
 
-
         getMvpView().showLoading();
-        getDataManager().getAccountInfo(Constants.API_TOKEN,user_id).enqueue(new Callback<GetAccountInfoResponse>() {
-            @Override
-            public void onResponse(Call<GetAccountInfoResponse> call, Response<GetAccountInfoResponse> response) {
-                getMvpView().hideLoading();
+        getCompositeDisposable().add(getDataManager().getAccountInfo(Constants.API_TOKEN,user_id)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<GetAccountInfoResponse>() {
+                    @Override
+                    public void accept(GetAccountInfoResponse response) throws Exception {
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().getInfo(response.body().getResponseData().getFirstname(),response.body().getResponseData().getLastname(),response.body().getResponseData().getEmail(),response.body().getResponseData().getTelephone(),response.body().getResponseData().getGstin(),response.body().getResponseData().getNewsletter());
-
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-
+                        if (!isViewAttached()) {
+                            return;
                         }
-                    } else {
 
+                        if (response != null) {
+                            if (response.getResponseCode() == 1) {
+                                getMvpView().getInfo(response.getResponseData().getFirstname(),response.getResponseData().getLastname(),response.getResponseData().getEmail(),response.getResponseData().getTelephone(),response.getResponseData().getGstin(),response.getResponseData().getNewsletter());
 
-                        getMvpView().onError(response.code() + ":" + response.message());
+                            } else {
+                                getMvpView().showMessage(response.getResponseText());
+
+                            }
+                        }
+                        getMvpView().hideLoading();
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        System.out.println("hjhdf" + throwable.getMessage());
 
-                } else {
+                        if (!isViewAttached()) {
+                            return;
+                        }
 
+                        getMvpView().hideLoading();
 
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetAccountInfoResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
                     }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
+                }));
+        } else {
+            getMvpView().showMessage("No internet connection");
+        }
 
 
     }
 
     @Override
     public void onSubmitEditAccount(String firstname, String lastname, String email, String telephone, String gstin, String newsletter) {
+        if(getMvpView().isNetworkConnected())
+        {
         RequestBody gstin1;
         RequestBody customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
 
@@ -138,50 +126,28 @@ public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePre
         }
 
         getMvpView().showLoading();
-        getDataManager().updateAccount(Constants.API_TOKEN,customer_id,fname, lname, email1, telephone1,gstin1,newsletter1).enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                getMvpView().hideLoading();
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().showMessage(response.body().getResponseText());
+        getCompositeDisposable().add(getDataManager().updateAccount(Constants.API_TOKEN,customer_id,fname, lname, email1, telephone1,gstin1,newsletter1)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribeWith(new DisposableCompletableObserver() {
+                                   @Override
+                                   public void onComplete() {
+                                       getMvpView().hideLoading();
+                                       getMvpView().showMessage("Account updated successfully");
+                                   }
 
+                                   @Override
+                                   public void onError(Throwable e) {
+                                       getMvpView().hideLoading();
+                                       getMvpView().showMessage(e.getMessage());
 
-
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-
-                        }
-                    } else {
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-
-                } else {
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
-
-
+                                   }
+                               }
+                ));
+        } else {
+            getMvpView().showMessage("No internet connection");
+        }
     }
 
     @Override

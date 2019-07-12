@@ -1,6 +1,6 @@
 package com.app.demoopencartapp.data.network.models;
 
-public class RegisterResponse {
+public class RegisterResponse extends BaseResponse{
 
 
     /**
@@ -9,25 +9,7 @@ public class RegisterResponse {
      * responseData : {"id":32,"name":"payal prachanda","email":"payal2@gmail.com","telephone":"9090909090"}
      */
 
-    private int responseCode;
-    private String responseText;
     private ResponseDataBean responseData;
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 
     public ResponseDataBean getResponseData() {
         return responseData;

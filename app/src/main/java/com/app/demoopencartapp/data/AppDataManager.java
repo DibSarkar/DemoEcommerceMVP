@@ -13,7 +13,6 @@ import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
@@ -21,13 +20,11 @@ import com.app.demoopencartapp.data.prefs.PreferencesHelper;
 import com.app.demoopencartapp.data.prefs.SessionPreferenceHelper;
 import com.app.demoopencartapp.di.ApplicationContext;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
@@ -161,7 +158,7 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<RegisterResponse> register(String apitoken,RequestBody firstname, RequestBody lastname, RequestBody email, RequestBody telephone, RequestBody password, RequestBody newsletter, RequestBody gstin, RequestBody device_type, RequestBody device_token) {
+    public Observable<RegisterResponse> register(String apitoken,RequestBody firstname, RequestBody lastname, RequestBody email, RequestBody telephone, RequestBody password, RequestBody newsletter, RequestBody gstin, RequestBody device_type, RequestBody device_token) {
         return mApiHelper.register(apitoken,firstname,lastname,email,telephone,password,newsletter,gstin,device_type,device_token);
     }
 
@@ -187,57 +184,57 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<GetAccountInfoResponse> getAccountInfo(String apitoken, RequestBody user_id) {
+    public Single<GetAccountInfoResponse> getAccountInfo(String apitoken, RequestBody user_id) {
         return mApiHelper.getAccountInfo(apitoken,user_id);
     }
 
     @Override
-    public Call<MessageResponse> updateAccount(String apitoken, RequestBody customer_id, RequestBody firstname, RequestBody lastname, RequestBody email, RequestBody telephone, RequestBody newsletter, RequestBody gstin) {
+    public Completable updateAccount(String apitoken, RequestBody customer_id, RequestBody firstname, RequestBody lastname, RequestBody email, RequestBody telephone, RequestBody newsletter, RequestBody gstin) {
         return mApiHelper.updateAccount(apitoken,customer_id,firstname,lastname,email,telephone,newsletter,gstin);
     }
 
     @Override
-    public Call<MessageResponse> changePass(String apitoken, RequestBody customer_id, RequestBody password) {
+    public Completable changePass(String apitoken, RequestBody customer_id, RequestBody password) {
         return mApiHelper.changePass(apitoken,customer_id,password);
     }
 
     @Override
-    public Call<AddRatingResponse> addRating(String apitoken, RequestBody product_id, RequestBody name, RequestBody review, RequestBody rating, RequestBody customer_id) {
+    public Observable<AddRatingResponse> addRating(String apitoken, RequestBody product_id, RequestBody name, RequestBody review, RequestBody rating, RequestBody customer_id) {
         return mApiHelper.addRating(apitoken,product_id,name,review,rating,customer_id);
     }
 
     @Override
-    public Call<ReviewsResponse> getReviews(String apitoken, RequestBody product_id) {
+    public Single<ReviewsResponse> getReviews(String apitoken, RequestBody product_id) {
         return mApiHelper.getReviews(apitoken,product_id);
     }
 
     @Override
-    public Call<CountriesStatesResponse> getCountries(String apitoken) {
+    public Single<CountriesStatesResponse> getCountries(String apitoken) {
         return mApiHelper.getCountries(apitoken);
     }
 
     @Override
-    public Call<CountriesStatesResponse> getStates(String apitoken, RequestBody country_id) {
+    public Single<CountriesStatesResponse> getStates(String apitoken, RequestBody country_id) {
         return mApiHelper.getStates(apitoken, country_id);
     }
 
     @Override
-    public Call<MessageResponse> addAddress(String apitoken, RequestBody customer_id, RequestBody firstname, RequestBody lastname, RequestBody company, RequestBody gst_no, RequestBody address_1, RequestBody address_2, RequestBody city, RequestBody country_id, RequestBody state_id, RequestBody postcode, RequestBody default_address) {
+    public Completable addAddress(String apitoken, RequestBody customer_id, RequestBody firstname, RequestBody lastname, RequestBody company, RequestBody gst_no, RequestBody address_1, RequestBody address_2, RequestBody city, RequestBody country_id, RequestBody state_id, RequestBody postcode, RequestBody default_address) {
         return mApiHelper.addAddress(apitoken, customer_id, firstname, lastname, company, gst_no, address_1, address_2, city, country_id, state_id, postcode, default_address);
     }
 
     @Override
-    public Call<MessageResponse> editAddress(String apitoken, RequestBody address_id, RequestBody customer_id, RequestBody firstname, RequestBody lastname, RequestBody company, RequestBody gst_no, RequestBody address_1, RequestBody address_2, RequestBody city, RequestBody country_id, RequestBody state_id, RequestBody postcode, RequestBody default_address) {
+    public Completable editAddress(String apitoken, RequestBody address_id, RequestBody customer_id, RequestBody firstname, RequestBody lastname, RequestBody company, RequestBody gst_no, RequestBody address_1, RequestBody address_2, RequestBody city, RequestBody country_id, RequestBody state_id, RequestBody postcode, RequestBody default_address) {
         return mApiHelper.editAddress(apitoken, address_id, customer_id, firstname, lastname, company, gst_no, address_1, address_2, city, country_id, state_id, postcode, default_address);
     }
 
     @Override
-    public Call<AddressListResponse> getAddress(String apitoken, RequestBody customer_id) {
+    public Single<AddressListResponse> getAddress(String apitoken, RequestBody customer_id) {
         return mApiHelper.getAddress(apitoken, customer_id);
     }
 
     @Override
-    public Call<MessageResponse> deleteAddress(String apitoken, RequestBody customer_id, RequestBody address_id) {
+    public Completable deleteAddress(String apitoken, RequestBody customer_id, RequestBody address_id) {
         return mApiHelper.deleteAddress(apitoken, customer_id, address_id);
     }
 

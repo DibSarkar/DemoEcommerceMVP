@@ -2,7 +2,7 @@ package com.app.demoopencartapp.data.network.models;
 
 import java.util.List;
 
-public class ProductDetailsResponse {
+public class ProductDetailsResponse extends BaseResponse{
 
 
     /**
@@ -12,8 +12,6 @@ public class ProductDetailsResponse {
      * relatedProduct : [{"product_id":"89","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/3-200x200.png","name":"Husqvarna Blower 350BT ALL EX US50/CA","manufacturer":"Husqvarna","description":"The Husqvarna 350BT is a commercial styled blower in the popular 50 cc mid-size range featuring a ne..","price":"53500.0000","special":"37419.8000","minimum":"1","rating":"","options":[]},{"product_id":"91","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/H210-0494-200x200.png","name":"Husqvarna Blower 525BX EMEA  APAC","manufacturer":"Husqvarna","description":"Air flow in housing\r\n  \r\n  \r\n  14\r\n  m³/min\r\n  \r\n \r\n \r\n  \r\n  Air flow in pipe\r\n  \r\n  \r\n  13\r\n  m³/mi..","price":"24800.0000","special":"19244.0000","minimum":"1","rating":"","options":[]},{"product_id":"93","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/H210-0314%20570-200x200.png","name":"Husqvarna Blower 570BTS ALL EX US50 / CA","manufacturer":"Husqvarna","description":"Air flow in housing\r\n  \r\n  \r\n  28 m³/min\r\n  \r\n \r\n \r\n  \r\n  Air flow in pipe\r\n  \r\n  \r\n  22 m³/min\r\n  \r..","price":"59000.0000","special":"45366.0000","minimum":"1","rating":"","options":[]},{"product_id":"94","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/husqvarna-200x200.png","name":"Husqvarna 353 Chainsaw 18&quot; .325&quot; H25 SN","manufacturer":"Husqvarna","description":"Husqvarna 353 is professional saw with high capacity across a wide rpm range. Its high-power, low we..","price":"45000.0000","special":"36603.0000","minimum":"1","rating":"","options":[]},{"product_id":"208","thumb":"http://192.168.5.51/rajudhara_multivender/image/cache/catalog/Safari%20Pro%20Safety%20Shoes%20Safex%20Molded%20Steel%20Toe%20200-200x200.jpg","name":"Safari Pro Safety Shoes Safex Molded Steel Toe 200","manufacturer":"Safari Pro","description":"Hillson Heavy Duty pvc Gumboot with double sole without steel toe cap TORPEDO 216 Size: 11 Material:..","price":"231.0000","special":"185.0000","minimum":"2","rating":3,"options":[{"product_option_id":"228","option_id":"11","name":"Shoe Size","product_option_value":[{"product_option_value_id":"20","option_value_id":"46","name":"Size-5","image":"","price":""},{"product_option_value_id":"21","option_value_id":"47","name":"Size-6","image":"","price":""},{"product_option_value_id":"22","option_value_id":"48","name":"Size-7","image":"","price":""},{"product_option_value_id":"23","option_value_id":"50","name":"Size-8","image":"","price":""},{"product_option_value_id":"24","option_value_id":"51","name":"Size-9","image":"","price":"20.0000"},{"product_option_value_id":"25","option_value_id":"52","name":"Size-10","image":"","price":"20.0000"},{"product_option_value_id":"26","option_value_id":"53","name":"Size-11","image":"","price":"30.0000"}]},{"product_option_id":"251","option_id":"14","name":"Chain Size In Mtr.","product_option_value":[{"product_option_value_id":"246","option_value_id":"61","name":"10 Mtr.","image":"","price":""},{"product_option_value_id":"247","option_value_id":"62","name":"11 Mtr.","image":"","price":""}]}]}]
      */
 
-    private int responseCode;
-    private String responseText;
     private int total_qty;
     private ProductBean product;
     private List<RelatedProductBean> relatedProduct;
@@ -24,22 +22,6 @@ public class ProductDetailsResponse {
 
     public int getTotal_qty() {
         return total_qty;
-    }
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
     }
 
     public ProductBean getProduct() {

@@ -1,32 +1,20 @@
 package com.app.demoopencartapp.ui.cart;
 
-import android.util.Log;
-
 import com.app.demoopencartapp.data.DataManager;
-import com.app.demoopencartapp.data.network.models.AllCategoriesResponse;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
-import io.reactivex.CompletableObserver;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
         implements CartMvpPresenter<V> {

@@ -1,6 +1,6 @@
 package com.app.demoopencartapp.data.network.models;
 
-public class AddUpdateCartResponse {
+public class AddUpdateCartResponse extends BaseResponse{
 
 
     /**
@@ -10,26 +10,10 @@ public class AddUpdateCartResponse {
      * cartData : 11
      */
 
-    private int responseCode;
-    private String responseText;
+
     private String session_id;
     private int cartData;
 
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 
     public String getSession_id() {
         return session_id;

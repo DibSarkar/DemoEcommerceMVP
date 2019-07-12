@@ -2,6 +2,7 @@ package com.app.demoopencartapp.ui.reviews;
 
 import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
+import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.ui.productList.ProductListMvpPresenter;
@@ -12,10 +13,13 @@ import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableSingleObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -45,57 +49,36 @@ public class ReviewsPresenter <V extends ReviewsListMvpView> extends BasePresent
 
 
             getMvpView().showLoading();
-            getDataManager().getReviews(Constants.API_TOKEN,product_id1).enqueue(new Callback<ReviewsResponse>() {
-                @Override
-                public void onResponse(Call<ReviewsResponse> call, Response<ReviewsResponse> response) {
-                    getMvpView().hideLoading();
 
-                    if (response.isSuccessful()) {
-                        if (response.body() != null) {
-                            if (response.body().getResponseCode() == 1) {
-                                if(response.body().getReviewList().size()>0) {
-                                    getMvpView().getReviews(response.body().getReviewList());
-                                }
-                                else {
+
+
+            getCompositeDisposable().add(getDataManager().getReviews(Constants.API_TOKEN,product_id1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableSingleObserver<ReviewsResponse>() {
+                        @Override
+                        public void onSuccess(ReviewsResponse reviewsResponse) {
+                            if (reviewsResponse.getResponseCode() == 1) {
+                                if (reviewsResponse.getReviewList().size() > 0) {
+                                    getMvpView().getReviews(reviewsResponse.getReviewList());
+                                } else {
                                     getMvpView().getReviews(new ArrayList<ReviewsResponse.ReviewListBean>());
                                 }
-
-                            } else {
-                                getMvpView().getReviews(new ArrayList<ReviewsResponse.ReviewListBean>());
-
-                                getMvpView().showMessage(response.body().getResponseText());
-
                             }
-                        } else {
+
+                            getMvpView().hideLoading();
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            getMvpView().showMessage(e.getMessage());
                             getMvpView().getReviews(new ArrayList<ReviewsResponse.ReviewListBean>());
-
-                            getMvpView().onError(response.code() + ":" + response.message());
+                            getMvpView().hideLoading();
+                            // Network error
                         }
+                    }));
 
-                    } else {
-                        getMvpView().getReviews(new ArrayList<ReviewsResponse.ReviewListBean>());
 
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ReviewsResponse> call, Throwable t) {
-                    getMvpView().hideLoading();
-
-                    Timber.tag(TAG).w(t);
-
-                    if (t instanceof IOException) {
-                        if (t.getMessage() != null) {
-                            getMvpView().onError(t.getMessage());
-                        } else {
-                            getMvpView().onError("Network Failure");
-                        }
-                        return;
-                    }
-                    getMvpView().onError("Retrofit failure.Check LOG");
-                }
-            });
 
 
         }

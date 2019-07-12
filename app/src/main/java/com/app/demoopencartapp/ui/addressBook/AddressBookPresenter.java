@@ -1,9 +1,9 @@
 package com.app.demoopencartapp.ui.addressBook;
 
 import com.app.demoopencartapp.data.DataManager;
+import com.app.demoopencartapp.data.network.models.AddUpdateCartResponse;
 import com.app.demoopencartapp.data.network.models.AddressListResponse;
 import com.app.demoopencartapp.data.network.models.AllCategoriesResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.ui.addAddress.AddAddressMvpPresenter;
 import com.app.demoopencartapp.ui.addAddress.AddAddressMvpView;
@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -47,48 +49,44 @@ public class AddressBookPresenter <V extends AddressBookMvpView> extends BasePre
         if (getMvpView().isNetworkConnected()) {
             getMvpView().showLoading();
             RequestBody customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
+            getCompositeDisposable().add(getDataManager().getAddress(Constants.API_TOKEN,customer_id)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<AddressListResponse>() {
+                        @Override
+                        public void accept(AddressListResponse response) throws Exception {
 
-            getDataManager().getAddress(Constants.API_TOKEN,customer_id).enqueue(new Callback<AddressListResponse>() {
+                            if (!isViewAttached()) {
+                                return;
+                            }
 
-                @Override
-                public void onResponse(Call<AddressListResponse> call, Response<AddressListResponse> response) {
-                    getMvpView().hideLoading();
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
 
-                    if (response.isSuccessful()) {
-                        if (response.body().getResponseCode() == 1) {
+                                    getMvpView().getAddress(response.getResponseData());
 
-                            getMvpView().getAddress(response.body().getResponseData());
+                                }
+                                else {
+                                    // getMvpView().showMessage(response.body().getResponseText());
+                                    getMvpView().getAddress(new ArrayList<AddressListResponse.ResponseDataBean>());
+                                }
+                            }
+                            getMvpView().hideLoading();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("hjhdf" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
 
                         }
-                        else {
-                            // getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().getAddress(new ArrayList<AddressListResponse.ResponseDataBean>());
-                        }
-                    } else {
-                        getMvpView().getAddress(new ArrayList<AddressListResponse.ResponseDataBean>());
+                    }));
 
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<AddressListResponse> call, Throwable t) {
-                    getMvpView().hideLoading();
-
-                    Timber.tag(TAG).w(t);
-
-                    if (t instanceof IOException) {
-                        if (t.getMessage() != null) {
-                            getMvpView().onError(t.getMessage());
-                        } else {
-                            getMvpView().onError("Network Failure");
-                        }
-                        return;
-                    }
-                    System.out.println("errre"+" "+t.getMessage());
-                    getMvpView().onError("Retrofit failure.Check LOG"+t.getMessage());
-                }
-            });
         } else {
             getMvpView().showMessage("No internet connection");
         }
@@ -104,44 +102,25 @@ public class AddressBookPresenter <V extends AddressBookMvpView> extends BasePre
             RequestBody customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
             RequestBody address_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), address_id);
 
-            getDataManager().deleteAddress(Constants.API_TOKEN,customer_id,address_id1).enqueue(new Callback<MessageResponse>() {
+            getCompositeDisposable().add(getDataManager().deleteAddress(Constants.API_TOKEN,customer_id,address_id1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                                       @Override
+                                       public void onComplete() {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage("Address deleted successfully");
+                                           getMvpView().deleteAddress(responseDataBean);
 
-                @Override
-                public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                    getMvpView().hideLoading();
+                                       }
+                                       @Override
+                                       public void onError(Throwable e) {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage(e.getMessage());
 
-                    if (response.isSuccessful()) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().deleteAddress(responseDataBean);
-
-                        }
-                        else {
-                            getMvpView().showMessage(response.body().getResponseText());
-                        }
-                    } else {
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<MessageResponse> call, Throwable t) {
-                    getMvpView().hideLoading();
-
-                    Timber.tag(TAG).w(t);
-
-                    if (t instanceof IOException) {
-                        if (t.getMessage() != null) {
-                            getMvpView().onError(t.getMessage());
-                        } else {
-                            getMvpView().onError("Network Failure");
-                        }
-                        return;
-                    }
-                    System.out.println("errre"+" "+t.getMessage());
-                    getMvpView().onError("Retrofit failure.Check LOG"+t.getMessage());
-                }
-            });
+                                       }
+                                   }
+                              ));
         } else {
             getMvpView().showMessage("No internet connection");
         }

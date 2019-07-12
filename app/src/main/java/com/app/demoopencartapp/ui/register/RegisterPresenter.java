@@ -1,6 +1,7 @@
 package com.app.demoopencartapp.ui.register;
 
 import com.app.demoopencartapp.data.DataManager;
+import com.app.demoopencartapp.data.network.models.AddRatingResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.ui.home.MainMvpPresenter;
@@ -15,6 +16,7 @@ import java.util.regex.Pattern;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -69,50 +71,51 @@ public class RegisterPresenter <V extends RegisterMvpView> extends BasePresenter
         RequestBody device_token1 = RequestBody.create(MediaType.parse("multipart/form-data"), device_token);
 
         getMvpView().showLoading();
-        getDataManager().register(Constants.API_TOKEN,fname, lname, email1, telephone1, password1,newsletter1,gstin1, device_type1, device_token1).enqueue(new Callback<RegisterResponse>() {
-            @Override
-            public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
-                getMvpView().hideLoading();
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getDataManager().setCurrentUserId(String.valueOf(response.body().getResponseData().getId()));
-                            getDataManager().setCurrentMobileNumber(response.body().getResponseData().getTelephone());
-                            getDataManager().setCurrentUserEmail(response.body().getResponseData().getEmail());
-                            getMvpView().registerDone();
 
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
+        getCompositeDisposable().add(getDataManager().register(Constants.API_TOKEN,fname, lname, email1, telephone1, password1,newsletter1,gstin1, device_type1, device_token1)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(new Consumer<RegisterResponse>() {
+                    @Override
+                    public void accept(RegisterResponse response) throws Exception {
+
+                        if (!isViewAttached()) {
+                            return;
+                        }
+
+                        if (response != null) {
+                            if (response.getResponseCode() == 1) {
+                                getMvpView().showMessage(response.getResponseText());
+                                getDataManager().setCurrentUserId(String.valueOf(response.getResponseData().getId()));
+                                getDataManager().setCurrentMobileNumber(response.getResponseData().getTelephone());
+                                getDataManager().setCurrentUserEmail(response.getResponseData().getEmail());
+                                getMvpView().registerDone();
+
+                            } else {
+                                getMvpView().showMessage(response.getResponseText());
+
+                            }
+
 
                         }
-                    } else {
-                        getMvpView().onError(response.code() + ":" + response.message());
+
+                        getMvpView().hideLoading();
+
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        System.out.println("hjhdf" + throwable.getMessage());
 
-                } else {
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
+                        if (!isViewAttached()) {
+                            return;
+                        }
 
-            @Override
-            public void onFailure(Call<RegisterResponse> call, Throwable t) {
-                getMvpView().hideLoading();
+                        getMvpView().hideLoading();
 
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
                     }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
+                }));
 
 
 

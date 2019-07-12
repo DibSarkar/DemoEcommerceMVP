@@ -1,8 +1,9 @@
 package com.app.demoopencartapp.ui.addAddress;
 
 import com.app.demoopencartapp.data.DataManager;
+import com.app.demoopencartapp.data.network.models.AddressListResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
+
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -35,52 +38,49 @@ public class AddAddressPresenter  <V extends AddAddressMvpView> extends BasePres
     @Override
     public void onGetAllCountries() {
 
-        getMvpView().showLoading();
-        getDataManager().getCountries(Constants.API_TOKEN).enqueue(new Callback<CountriesStatesResponse>() {
-            @Override
-            public void onResponse(Call<CountriesStatesResponse> call, Response<CountriesStatesResponse> response) {
-                getMvpView().hideLoading();
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().getAllCountries(response.body().getData());
+        if (getMvpView().isNetworkConnected()) {
+            getMvpView().showLoading();
+            getCompositeDisposable().add(getDataManager().getCountries(Constants.API_TOKEN)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<CountriesStatesResponse>() {
+                        @Override
+                        public void accept(CountriesStatesResponse response) throws Exception {
 
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().getAllCountries(new ArrayList<CountriesStatesResponse.DataBean>());
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
+                                    getMvpView().getAllCountries(response.getData());
+
+                                } else {
+                                    getMvpView().showMessage(response.getResponseText());
+                                    getMvpView().getAllCountries(new ArrayList<CountriesStatesResponse.DataBean>());
+
+                                }
+                            }
+                            getMvpView().hideLoading();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("hjhdf" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
 
                         }
-                    } else {
-                        getMvpView().getAllCountries(new ArrayList<CountriesStatesResponse.DataBean>());
+                    }));
 
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-
-                } else {
-
-                    getMvpView().getAllCountries(new ArrayList<CountriesStatesResponse.DataBean>());
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CountriesStatesResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
+        } else {
+            getMvpView().showMessage("No internet connection");
+        }
 
 
     }
@@ -88,54 +88,55 @@ public class AddAddressPresenter  <V extends AddAddressMvpView> extends BasePres
     @Override
     public void onGetStateByCountry(String country_id) {
 
-        RequestBody country_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), country_id);
 
-        getMvpView().showLoading();
-        getDataManager().getStates(Constants.API_TOKEN,country_id1).enqueue(new Callback<CountriesStatesResponse>() {
-            @Override
-            public void onResponse(Call<CountriesStatesResponse> call, Response<CountriesStatesResponse> response) {
-                getMvpView().hideLoading();
 
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().getAllStatesByCountry(response.body().getData());
+        if (getMvpView().isNetworkConnected()) {
+            getMvpView().showLoading();
+            RequestBody country_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), country_id);
 
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().getAllStatesByCountry(new ArrayList<CountriesStatesResponse.DataBean>());
+            getCompositeDisposable().add(getDataManager().getStates(Constants.API_TOKEN,country_id1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<CountriesStatesResponse>() {
+                        @Override
+                        public void accept(CountriesStatesResponse response) throws Exception {
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
+                                    getMvpView().getAllStatesByCountry(response.getData());
+
+                                } else {
+                                    getMvpView().showMessage(response.getResponseText());
+                                    getMvpView().getAllStatesByCountry(new ArrayList<CountriesStatesResponse.DataBean>());
+
+                                }
+                            }
+                            getMvpView().hideLoading();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("hjhdf" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
 
                         }
-                    } else {
-                        getMvpView().getAllStatesByCountry(new ArrayList<CountriesStatesResponse.DataBean>());
+                    }));
 
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
+        } else {
+            getMvpView().showMessage("No internet connection");
+        }
 
-                } else {
 
-                    getMvpView().getAllStatesByCountry(new ArrayList<CountriesStatesResponse.DataBean>());
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<CountriesStatesResponse> call, Throwable t) {
-                getMvpView().hideLoading();
-
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
-            }
-        });
 
     }
 
@@ -198,83 +199,63 @@ public class AddAddressPresenter  <V extends AddAddressMvpView> extends BasePres
     @Override
     public void onAddAddress(String fname, String lname, String comp, String address1, String address2, String city, String pin, String country_id, String state_id, int default_address, String gstin) {
 
-        RequestBody comp1,address22,gstin1;
-        RequestBody customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
-        RequestBody fname1 = RequestBody.create(MediaType.parse("multipart/form-data"), fname);
-        RequestBody lname1 = RequestBody.create(MediaType.parse("multipart/form-data"), lname);
-        if(!comp.equals("")) {
-            comp1 = RequestBody.create(MediaType.parse("multipart/form-data"), comp);
-        }
-        else {
-            comp1 = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-        }
-
-        RequestBody address11 = RequestBody.create(MediaType.parse("multipart/form-data"), address1);
-        if(!address11.equals(""))
-        {
-            address22 = RequestBody.create(MediaType.parse("multipart/form-data"), address2);
-
-        }
-        else {
-            address22 = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-        }
-
-        if(!gstin.equals(""))
-        {
-            gstin1 = RequestBody.create(MediaType.parse("multipart/form-data"), gstin);
-        }
-        else {
-            gstin1 = RequestBody.create(MediaType.parse("multipart/form-data"), "");
-        }
-        RequestBody city1 = RequestBody.create(MediaType.parse("multipart/form-data"), city);
-        RequestBody pin1 = RequestBody.create(MediaType.parse("multipart/form-data"), pin);
-        RequestBody country_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), country_id);
-        RequestBody state_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), state_id);
-        RequestBody default_address1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(default_address));
-
-        getMvpView().showLoading();
-        getDataManager().addAddress(Constants.API_TOKEN,customer_id,fname1,lname1,comp1,gstin1,address11,address22,city1,country_id1,state_id1,pin1,default_address1).enqueue(new Callback<MessageResponse>() {
-            @Override
-            public void onResponse(Call<MessageResponse> call, Response<MessageResponse> response) {
-                getMvpView().hideLoading();
-
-                if (response.isSuccessful()) {
-                    if (response.body() != null) {
-                        if (response.body().getResponseCode() == 1) {
-                            getMvpView().showMessage(response.body().getResponseText());
-                            getMvpView().openAddressBook();
-
-                        } else {
-                            getMvpView().showMessage(response.body().getResponseText());
-
-                        }
-                    } else {
-
-                        getMvpView().onError(response.code() + ":" + response.message());
-                    }
-
-                } else {
-                    getMvpView().onError(response.code() + ":" + response.message());
-                }
+        if (getMvpView().isNetworkConnected()) {
+            RequestBody comp1, address22, gstin1;
+            RequestBody customer_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getCurrentUserId());
+            RequestBody fname1 = RequestBody.create(MediaType.parse("multipart/form-data"), fname);
+            RequestBody lname1 = RequestBody.create(MediaType.parse("multipart/form-data"), lname);
+            if (!comp.equals("")) {
+                comp1 = RequestBody.create(MediaType.parse("multipart/form-data"), comp);
+            } else {
+                comp1 = RequestBody.create(MediaType.parse("multipart/form-data"), "");
             }
 
-            @Override
-            public void onFailure(Call<MessageResponse> call, Throwable t) {
-                getMvpView().hideLoading();
+            RequestBody address11 = RequestBody.create(MediaType.parse("multipart/form-data"), address1);
+            if (!address11.equals("")) {
+                address22 = RequestBody.create(MediaType.parse("multipart/form-data"), address2);
 
-                Timber.tag(TAG).w(t);
-
-                if (t instanceof IOException) {
-                    if (t.getMessage() != null) {
-                        getMvpView().onError(t.getMessage());
-                    } else {
-                        getMvpView().onError("Network Failure");
-                    }
-                    return;
-                }
-                getMvpView().onError("Retrofit failure.Check LOG");
+            } else {
+                address22 = RequestBody.create(MediaType.parse("multipart/form-data"), "");
             }
-        });
+
+            if (!gstin.equals("")) {
+                gstin1 = RequestBody.create(MediaType.parse("multipart/form-data"), gstin);
+            } else {
+                gstin1 = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+            }
+            RequestBody city1 = RequestBody.create(MediaType.parse("multipart/form-data"), city);
+            RequestBody pin1 = RequestBody.create(MediaType.parse("multipart/form-data"), pin);
+            RequestBody country_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), country_id);
+            RequestBody state_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), state_id);
+            RequestBody default_address1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(default_address));
+
+            getMvpView().showLoading();
+
+            getCompositeDisposable().add(getDataManager().addAddress(Constants.API_TOKEN, customer_id, fname1, lname1, comp1, gstin1, address11, address22, city1, country_id1, state_id1, pin1, default_address1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                                       @Override
+                                       public void onComplete() {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage("Address added successfully");
+                                           getMvpView().openAddressBook();
+
+                                       }
+
+                                       @Override
+                                       public void onError(Throwable e) {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage(e.getMessage());
+
+                                       }
+                                   }
+                    ));
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
+
 
     }
 

@@ -12,12 +12,13 @@ import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
-import com.app.demoopencartapp.data.network.models.MessageResponse;
+
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Completable;
@@ -49,7 +50,7 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/customer/add")
-    Call<RegisterResponse> register(@Query("api_token") String apitoken,
+    Observable<RegisterResponse> register(@Query("api_token") String apitoken,
                                     @Part("firstname") RequestBody firstname,
                                     @Part("lastname") RequestBody lastname,
                                     @Part("email") RequestBody email,
@@ -92,12 +93,12 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/customer/myAccount")
-    Call<GetAccountInfoResponse> getAccountInfo(@Query("api_token") String apitoken,
+    Single<GetAccountInfoResponse> getAccountInfo(@Query("api_token") String apitoken,
                                                 @Part("customer_id") RequestBody customer_id);
 
     @Multipart
     @POST("index.php?route=api/customer/editAccount")
-    Call<MessageResponse> updateAccount(@Query("api_token") String apitoken,
+    Completable updateAccount(@Query("api_token") String apitoken,
                                         @Part("customer_id") RequestBody customer_id,
                                         @Part("firstname") RequestBody firstname,
                                         @Part("lastname") RequestBody lastname,
@@ -108,13 +109,13 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/customer/changePassword")
-    Call<MessageResponse> changePass(@Query("api_token") String apitoken,
+    Completable changePass(@Query("api_token") String apitoken,
                                      @Part("customer_id") RequestBody customer_id,
                                      @Part("password") RequestBody password);
 
     @Multipart
     @POST("index.php?route=api/product/reviewadd")
-    Call<AddRatingResponse> addRating(@Query("api_token") String apitoken,
+    Observable<AddRatingResponse> addRating(@Query("api_token") String apitoken,
                                        @Part("product_id") RequestBody product_id,
                                        @Part("name") RequestBody name,
                                        @Part("review") RequestBody review,
@@ -123,21 +124,21 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/product/reviewList")
-    Call<ReviewsResponse> getReviews(@Query("api_token") String apitoken,
-                                     @Part("product_id") RequestBody product_id);
+    Single<ReviewsResponse> getReviews(@Query("api_token") String apitoken,
+                                                            @Part("product_id") RequestBody product_id);
 
 
     @POST("index.php?route=api/address/countryList")
-    Call<CountriesStatesResponse> getCountries(@Query("api_token") String apitoken);
+    Single<CountriesStatesResponse> getCountries(@Query("api_token") String apitoken);
 
     @Multipart
     @POST("index.php?route=api/address/stateList")
-    Call<CountriesStatesResponse> getStates(@Query("api_token") String apitoken,
+    Single<CountriesStatesResponse> getStates(@Query("api_token") String apitoken,
                                             @Part("country_id") RequestBody country_id);
 
     @Multipart
     @POST("index.php?route=api/address/addressAdd")
-    Call<MessageResponse> addAddress(@Query("api_token") String apitoken,
+    Completable addAddress(@Query("api_token") String apitoken,
                                             @Part("customer_id") RequestBody customer_id,
                                             @Part("firstname") RequestBody firstname,
                                             @Part("lastname") RequestBody lastname,
@@ -153,7 +154,7 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/address/addressEdit")
-    Call<MessageResponse> editAddress(@Query("api_token") String apitoken,
+    Completable editAddress(@Query("api_token") String apitoken,
                                       @Part("address_id") RequestBody address_id,
                                       @Part("customer_id") RequestBody customer_id,
                                       @Part("firstname") RequestBody firstname,
@@ -170,12 +171,12 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/address/getAddress")
-    Call<AddressListResponse> getAddress(@Query("api_token") String apitoken,
+    Single<AddressListResponse> getAddress(@Query("api_token") String apitoken,
                                          @Part("customer_id") RequestBody customer_id);
 
     @Multipart
     @POST("index.php?route=api/address/deleteAddress")
-    Call<MessageResponse> deleteAddress(@Query("api_token") String apitoken,
+    Completable deleteAddress(@Query("api_token") String apitoken,
                                             @Part("customer_id") RequestBody customer_id,
                                             @Part("address_id") RequestBody address_id);
 

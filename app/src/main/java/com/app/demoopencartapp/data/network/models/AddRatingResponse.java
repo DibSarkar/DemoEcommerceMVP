@@ -1,6 +1,6 @@
 package com.app.demoopencartapp.data.network.models;
 
-public class AddRatingResponse {
+public class AddRatingResponse extends BaseResponse {
 
 
     /**
@@ -10,26 +10,9 @@ public class AddRatingResponse {
      * reviews : 13
      */
 
-    private int responseCode;
-    private String responseText;
+
     private int rating;
     private String reviews;
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public void setResponseCode(int responseCode) {
-        this.responseCode = responseCode;
-    }
-
-    public String getResponseText() {
-        return responseText;
-    }
-
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 
     public int getRating() {
         return rating;
