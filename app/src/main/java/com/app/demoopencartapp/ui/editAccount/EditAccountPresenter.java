@@ -77,7 +77,7 @@ public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePre
 
                         if (response != null) {
                             if (response.getResponseCode() == 1) {
-                                getMvpView().getInfo(response.getResponseData().getFirstname(),response.getResponseData().getLastname(),response.getResponseData().getEmail(),response.getResponseData().getTelephone(),response.getResponseData().getGstin(),response.getResponseData().getNewsletter());
+                                getMvpView().getInfo(response.getResponseData().getFirstname(),response.getResponseData().getLastname(),response.getResponseData().getEmail(),response.getResponseData().getTelephone(),response.getResponseData().getGstin(), response.getResponseData().getNewsletter());
 
                             } else {
                                 getMvpView().showMessage(response.getResponseText());
@@ -152,6 +152,8 @@ public class EditAccountPresenter <V extends EditAccountMvpView> extends BasePre
 
     @Override
     public void onConfirmEdit(String firstname, String lastname, String email, String telephone, String gstin, int newsletter) {
+
+        System.out.println("newsletter"+" "+newsletter);
         if(!firstname.equals(""))
         {
 

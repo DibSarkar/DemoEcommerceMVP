@@ -56,7 +56,7 @@ public class EditMyAccount extends BaseActivity implements EditAccountMvpView{
     @Inject
     EditAccountPresenter<EditAccountMvpView> editAccountPresenter;
 
-    int news_letter;
+    int news_letter=1;
 
     ChangePasswordDialogFragment changePasswordDialogFragment;
 
@@ -124,20 +124,23 @@ public class EditMyAccount extends BaseActivity implements EditAccountMvpView{
     }
 
     @Override
-    public void getInfo(String firstname, String lastname, String email, String telephone, String gstin, String newsletter) {
+    public void getInfo(String firstname, String lastname, String email, String telephone, String gstin, int newsletter) {
 
         et_fname.setText(firstname);
         et_lname.setText(lastname);
         et_email.setText(email);
         et_telephone.setText(telephone);
         et_gstin.setText(gstin);
-        news_letter=Integer.parseInt(newsletter);
-        if(newsletter.equals("1"))
+        news_letter=newsletter;
+        if(newsletter==1)
         {
             rb_yes.setChecked(true);
+
         }
         else {
+
             rb_no.setChecked(true);
+
         }
 
     }
@@ -145,6 +148,7 @@ public class EditMyAccount extends BaseActivity implements EditAccountMvpView{
     @Override
     public void confirmUpdate(String firstname, String lastname, String email, String telephone, String gstin, int newsletter) {
 
+        System.out.println("newsss"+" "+newsletter);
         editAccountPresenter.onSubmitEditAccount(firstname,lastname,email,telephone,gstin, String.valueOf(newsletter));
     }
 

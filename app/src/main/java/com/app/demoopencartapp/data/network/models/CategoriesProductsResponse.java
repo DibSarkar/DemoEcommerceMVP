@@ -31,6 +31,7 @@ public class CategoriesProductsResponse extends BaseResponse{
     }
 
     public static class ProductBean {
+
         /**
          * product_id : 231
          * thumb : http://192.168.5.51/rajudhara_multivender/image/cache/catalog/o299497v54_lv-103345-12-gws600_dyn-228x228.png

@@ -73,7 +73,7 @@ public class AddDialogPresenter <V extends AddRateDialogMvpView> extends BasePre
                            if (response != null) {
                                if (response.getResponseCode() == 1) {
                                    getMvpView().showMessage(response.getResponseText());
-                                   getMvpView().ratingDone(response.getRating(), response.getReviews());
+                                   getMvpView().ratingDone(response.getRating(), String.valueOf(response.getReviews()));
                                } else {
                                    getMvpView().showMessage(response.getResponseText());
 

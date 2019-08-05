@@ -12,7 +12,7 @@ public class AddRatingResponse extends BaseResponse {
 
 
     private int rating;
-    private String reviews;
+    private int reviews;
 
     public int getRating() {
         return rating;
@@ -22,11 +22,11 @@ public class AddRatingResponse extends BaseResponse {
         this.rating = rating;
     }
 
-    public String getReviews() {
+    public int getReviews() {
         return reviews;
     }
 
-    public void setReviews(String reviews) {
+    public void setReviews(int reviews) {
         this.reviews = reviews;
     }
 }

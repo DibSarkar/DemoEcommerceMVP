@@ -12,5 +12,6 @@ public interface ProductListMvpPresenter <V extends ProductListMvpView> extends 
     void onOpenLoginActivity();
     void onAddtoCart(String product_id, String quantity);
     void onConfirmAddCart(String product_id, String quantity, String stock);
+    void onOpenCartActivity();
 
 }

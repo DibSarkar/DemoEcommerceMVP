@@ -92,6 +92,15 @@ public class ProductDetailsResponse extends BaseResponse{
         private String stock;
         private String delivery_status;
         private List<OptionsBean> options;
+        private int wishlist;
+
+        public void setWishlist(int wishlist) {
+            this.wishlist = wishlist;
+        }
+
+        public int getWishlist() {
+            return wishlist;
+        }
 
         public String getProduct_id() {
             return product_id;
@@ -424,7 +433,7 @@ public class ProductDetailsResponse extends BaseResponse{
         private String price;
         private String special;
         private String minimum;
-        private String rating;
+        private int rating;
         private String stock;
         private List<?> options;
         private boolean activeWish;
@@ -510,11 +519,11 @@ public class ProductDetailsResponse extends BaseResponse{
             this.minimum = minimum;
         }
 
-        public String getRating() {
+        public int getRating() {
             return rating;
         }
 
-        public void setRating(String rating) {
+        public void setRating(int rating) {
             this.rating = rating;
         }
 

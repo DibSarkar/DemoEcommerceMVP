@@ -26,4 +26,7 @@ public interface ProductDetailsMvpPresenter  <V extends ProductDetailsMvpView> e
     void onMultipleImages(List<ProductDetailsResponse.ProductBean.ImagesBean.ImageBean> image);
     void onLoadVariations(List<ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean> product_option_value);
     void onLoadRelatedProducts(List<ProductDetailsResponse.RelatedProductBean> relatedProduct);
-  }
+    void onOpenCartActivity();
+    void onAddWishlist(String product_id, String product_option_id, String product_option_value_id, boolean isCustomizable);
+    void onDeleteWish(String wishlist_id);
+}

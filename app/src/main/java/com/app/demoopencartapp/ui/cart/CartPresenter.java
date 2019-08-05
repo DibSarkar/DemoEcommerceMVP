@@ -2,6 +2,7 @@ package com.app.demoopencartapp.ui.cart;
 
 import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
+import com.app.demoopencartapp.data.network.models.UpdateCartResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
@@ -115,8 +116,6 @@ public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
 
                         }
                     }));
-
-
         }
         else {
             getMvpView().showMessage("No internet connection");
@@ -128,34 +127,65 @@ public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
     public void onUpdateCart(String cart_id, int quantity) {
 
         if(getMvpView().isNetworkConnected()) {
+            RequestBody session_id;
             RequestBody cart_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), cart_id);
             RequestBody quantity1 = RequestBody.create(MediaType.parse("multipart/form-data"), String.valueOf(quantity));
+            if (!getDataManager().getSessionId().equals("")) {
+
+                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getSessionId());
+            } else {
+                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+
+            }
             getMvpView().showLoading();
 
-            getCompositeDisposable().add(getDataManager().updateCart(Constants.API_TOKEN, cart_id1, quantity1)
+            getCompositeDisposable().add(getDataManager().updateCart(Constants.API_TOKEN, cart_id1, quantity1,session_id)
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
-                    .subscribeWith(new DisposableCompletableObserver() {
-                                   @Override
-                                   public void onComplete() {
-                                       getMvpView().hideLoading();
-                                       getMvpView().showMessage("Cart updated successfully");
-                                       getMvpView().updateDone();
-                                   }
+                    .subscribe(new Consumer<UpdateCartResponse>() {
+                        @Override
+                        public void accept(UpdateCartResponse response) throws Exception {
 
-                                   @Override
-                                   public void onError(Throwable e) {
-                                       getMvpView().hideLoading();
-                                       getMvpView().showMessage(e.getMessage());
+                            if (!isViewAttached()) {
+                                return;
+                            }
 
-                                   }
-                               }
-                    ));
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
+                                    getMvpView().showMessage(response.getResponseText());
+                                     getMvpView().cartUpdate(response.getCartData());
+                                    } else {
+                                    getMvpView().showMessage(response.getResponseText());                                    }
 
+                                }
+
+                            getMvpView().hideLoading();
+
+
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("hjhdf" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
+
+                            // handle the login error here
+
+                        }
+                    }));
         }
         else {
             getMvpView().showMessage("No internet connection");
         }
+
+
+
+
 
 
     }
@@ -164,28 +194,55 @@ public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
     @Override
     public void onCartDelete(String cart_id) {
         if(getMvpView().isNetworkConnected()) {
+            RequestBody session_id;
+            if (!getDataManager().getSessionId().equals("")) {
+
+                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), getDataManager().getSessionId());
+            } else {
+                session_id = RequestBody.create(MediaType.parse("multipart/form-data"), "");
+
+            }
             RequestBody cart_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), cart_id);
             getMvpView().showLoading();
-            getCompositeDisposable().add(getDataManager().deleteCart(Constants.API_TOKEN, cart_id1)
+            getCompositeDisposable().add(getDataManager().deleteCart(Constants.API_TOKEN, cart_id1,session_id)
                     .subscribeOn(getSchedulerProvider().io())
                     .observeOn(getSchedulerProvider().ui())
-                    .subscribeWith(new DisposableCompletableObserver() {
-                                       @Override
-                                       public void onComplete() {
-                                           getMvpView().hideLoading();
-                                           getMvpView().showMessage("Item deleted successfully");
-                                           getMvpView().updateDone();
-                                   }
+                    .subscribe(new Consumer<UpdateCartResponse>() {
+                @Override
+                public void accept(UpdateCartResponse response) throws Exception {
 
-                                       @Override
-                                       public void onError(Throwable e) {
-                                           getMvpView().hideLoading();
-                                           getMvpView().showMessage(e.getMessage());
+                    if (!isViewAttached()) {
+                        return;
+                    }
 
-                                       }
-                                   }
-                    ));
+                    if (response != null) {
+                        if (response.getResponseCode() == 1) {
+                            getMvpView().showMessage(response.getResponseText());
+                            getMvpView().cartUpdate(response.getCartData());
+                        } else {
+                            getMvpView().showMessage(response.getResponseText());                                    }
 
+                    }
+
+                    getMvpView().hideLoading();
+
+
+                }
+            }, new Consumer<Throwable>() {
+                @Override
+                public void accept(Throwable throwable) throws Exception {
+                    System.out.println("hjhdf" + throwable.getMessage());
+
+                    if (!isViewAttached()) {
+                        return;
+                    }
+
+                    getMvpView().hideLoading();
+
+                    // handle the login error here
+
+                }
+            }));
         }
         else {
             getMvpView().showMessage("No internet connection");
@@ -210,8 +267,13 @@ public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
     @Override
     public void onOpenLogin() {
 
-
         getMvpView().openLogin();
+    }
+
+    @Override
+    public void onClearSession() {
+    //    getDataManager().destroySessionPref();
+        getMvpView().clearSession();
     }
 
 

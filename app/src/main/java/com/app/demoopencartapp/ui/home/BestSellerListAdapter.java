@@ -81,7 +81,7 @@ public class BestSellerListAdapter extends RecyclerView.Adapter<BestSellerListAd
         final HomeProductsResponse.BestSellerBean mDataBean = mValues.get(position);
         holder.tv_pro_name.setText(mDataBean.getName());
         holder.tv_manufacturer.setText("By - "+mDataBean.getManufacturer());
-        if(!mDataBean.getSpecial().equals(""))
+        if(!mDataBean.getSpecial().equals("0.00"))
         {
             holder.tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(mDataBean.getSpecial()))));
             holder.iv_offer.setVisibility(View.VISIBLE);

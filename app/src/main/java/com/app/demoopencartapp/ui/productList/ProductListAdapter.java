@@ -95,7 +95,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         final CategoriesProductsResponse.ProductBean mDataBean = mValues.get(position);
         holder.tv_pro_name.setText(mDataBean.getName());
         holder.tv_manufacturer.setText("By - "+mDataBean.getManufacturer());
-        if(!mDataBean.getSpecial().equals(""))
+        if(!mDataBean.getSpecial().equals("0.00"))
         {
             holder.tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(mDataBean.getSpecial()))));
             holder.iv_offer.setVisibility(View.VISIBLE);
@@ -109,8 +109,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             double offer = Math.round(((Double.parseDouble(mDataBean.getPrice())-Double.parseDouble(mDataBean.getSpecial()))/Double.parseDouble(mDataBean.getPrice()))*100);
             DecimalFormat df = new DecimalFormat("###.#");
             holder.tv_offer.setText(df.format(offer)+"%"+"\n"+"OFF");
-
-
         }
         else {
             holder.tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(mDataBean.getPrice()))));

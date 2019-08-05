@@ -11,5 +11,6 @@ public interface CartMvpPresenter <V extends CartMvpView> extends MvpPresenter<V
     void onOpenProductDetails(String product_id);
     void onOpenCheckoutAsUI();
     void onOpenLogin();
+    void onClearSession();
 
 }

@@ -5,6 +5,7 @@ package com.app.demoopencartapp.data.network;
 
 import com.app.demoopencartapp.data.network.models.AddRatingResponse;
 import com.app.demoopencartapp.data.network.models.AddUpdateCartResponse;
+import com.app.demoopencartapp.data.network.models.AddWishlistResponse;
 import com.app.demoopencartapp.data.network.models.AddressListResponse;
 import com.app.demoopencartapp.data.network.models.AllCategoriesResponse;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
@@ -16,6 +17,7 @@ import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
+import com.app.demoopencartapp.data.network.models.UpdateCartResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -209,15 +211,26 @@ public interface ApiHelper {
 
     @Multipart
     @POST("index.php?route=api/cart/updateCart")
-    Completable updateCart(@Query("api_token") String apitoken,
-                                            @Part("cart_id") RequestBody cart_id,
-                                            @Part("quantity") RequestBody quantity);
+    Single<UpdateCartResponse> updateCart(@Query("api_token") String apitoken,
+                                          @Part("cart_id") RequestBody cart_id,
+                                          @Part("quantity") RequestBody quantity,
+                                          @Part("session_id") RequestBody session_id);
 
     @Multipart
     @POST("index.php?route=api/cart/deleteCart")
-    Completable deleteCart(@Query("api_token") String apitoken,
-                                     @Part("cart_id") RequestBody cart_id);
-
+    Single<UpdateCartResponse> deleteCart(@Query("api_token") String apitoken,
+                                          @Part("cart_id") RequestBody cart_id,
+                                          @Part("session_id") RequestBody session_id);
+    @FormUrlEncoded
+    @POST("index.php?route=api/wishlist/add")
+    Single<AddWishlistResponse> addWish(@Query("api_token") String apitoken,
+                                        @Field("customer_id") String customer_id,
+                                        @Field("product_id") String product_id,
+                                        @FieldMap Map<String,String> option);
+    @Multipart
+    @POST("index.php?route=api/wishlist/remove")
+    Completable removeWish(@Query("api_token") String apitoken,
+                           @Part("wishlist_id") RequestBody wishlist_id);
 
 
  /*

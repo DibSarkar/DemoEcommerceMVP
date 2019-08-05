@@ -12,6 +12,9 @@ public interface CartMvpView extends MvpView {
     void openProductDetails(String pro_id);
     void openCheckoutAsUI(String user_id);
     void openLogin();
+    void cartUpdate(int count);
+    void clearSession();
+
 
 
 }

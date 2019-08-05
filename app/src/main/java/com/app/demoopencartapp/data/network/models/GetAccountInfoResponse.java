@@ -35,7 +35,7 @@ public class GetAccountInfoResponse extends BaseResponse {
         private String email;
         private String telephone;
         private String gstin;
-        private String newsletter;
+        private int newsletter;
 
         public String getFirstname() {
             return firstname;
@@ -77,11 +77,11 @@ public class GetAccountInfoResponse extends BaseResponse {
             this.gstin = gstin;
         }
 
-        public String getNewsletter() {
+        public int getNewsletter() {
             return newsletter;
         }
 
-        public void setNewsletter(String newsletter) {
+        public void setNewsletter(int newsletter) {
             this.newsletter = newsletter;
         }
     }

@@ -250,5 +250,11 @@ public class ProductListPresenter <V extends ProductListMvpView> extends BasePre
         }
     }
 
+    @Override
+    public void onOpenCartActivity() {
+
+        getMvpView().openCartActivity();
+    }
+
 
 }

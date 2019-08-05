@@ -25,6 +25,7 @@ import android.widget.Toast;
 import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.local_models.CartListBean;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
+import com.app.demoopencartapp.shared.CookiesManage;
 import com.app.demoopencartapp.shared.base.BaseActivity;
 
 import com.app.demoopencartapp.ui.login.LoginActivity;
@@ -312,6 +313,24 @@ public class CartActivity extends BaseActivity implements CartMvpView{
         intent.putExtra(Constants.OPEN_FROM_LOGIN,2);
         startActivityForResult(intent,OPEN_LOGIN);
 
+    }
+
+    @Override
+    public void cartUpdate(int count) {
+        if(count==0)
+        {
+           cartPresenter.onClearSession();
+        }
+        else {
+            cartPresenter.onGetCartList();
+        }
+
+    }
+
+    @Override
+    public void clearSession() {
+       //CookiesManage.removeCookies();
+        cartPresenter.onGetCartList();
     }
 
 

@@ -406,7 +406,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void logoutDone() {
-        CookiesManage.removeCookies();
+       // CookiesManage.removeCookies();
         tv_cart_count.setText("0");
 
     }
@@ -436,9 +436,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void openProductDetails(String product_id) {
         Intent intent = new Intent(mContext,ProductDetailsActivity.class);
         intent.putExtra("product_id",product_id);
-
-
-
         startActivity(intent);
     }
 
@@ -747,7 +744,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void loadSliderData(List<HomeProductsResponse.TopBannerBean> topBanner, List<HomeProductsResponse.SliderBean> slider, List<HomeProductsResponse.BrandBean> brand, List<HomeProductsResponse.DealsOfTheDayBean> dealsOfTheDay, List<HomeProductsResponse.BestSellerBean> bestSeller, List<HomeProductsResponse.TestingProductBean> testingProduct, List<HomeProductsResponse.AngelGrindesBean> angelGrindes) {
         if (topBanner.size() > 0) {
-
 
             for (int i = 0; i < topBanner.get(0).getTopbannerImage().size(); i++) {
                 DefaultSliderView textSliderView = new DefaultSliderView(getApplicationContext());

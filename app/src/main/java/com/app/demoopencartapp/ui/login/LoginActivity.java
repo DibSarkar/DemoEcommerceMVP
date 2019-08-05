@@ -3,12 +3,14 @@ package com.app.demoopencartapp.ui.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.EditText;
 
 import com.app.demoopencartapp.R;
+
 import com.app.demoopencartapp.shared.base.BaseActivity;
 import com.app.demoopencartapp.ui.home.MainActivity;
 import com.app.demoopencartapp.ui.register.RegisterActivity;
@@ -34,14 +36,14 @@ public class LoginActivity extends BaseActivity implements LoginMvpView{
     EditText et_pass;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_login);
         mContext = this;
+       setContentView(R.layout.activity_login);
+       /* activityLoginBinding = DataBindingUtil.setContentView(this,R.layout.activity_login);
+        activityLoginBinding.setView(loginPresenter);*/
         getActivityComponent().inject(this);
         setUnBinder(ButterKnife.bind(this));
         setUp();

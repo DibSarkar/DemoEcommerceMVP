@@ -2,12 +2,12 @@ package com.app.demoopencartapp.ui.productDetails;
 
 import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.AddUpdateCartResponse;
+import com.app.demoopencartapp.data.network.models.AddWishlistResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +16,9 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import timber.log.Timber;
 
 public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends BasePresenter<V>
         implements ProductDetailsMvpPresenter<V>
@@ -107,7 +104,7 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        System.out.println("hjhdf" + throwable.getMessage());
+                        System.out.println("Error" + throwable.getMessage());
 
                         if (!isViewAttached()) {
                             return;
@@ -187,6 +184,9 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
                 getMvpView().checkWishlistByUser();
 
 
+            }
+            else {
+                getMvpView().addWishlist();
             }
         }
         else {
@@ -291,7 +291,7 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(Throwable throwable) throws Exception {
-                            System.out.println("hjhdf" + throwable.getMessage());
+                            System.out.println("Error" + throwable.getMessage());
 
                             if (!isViewAttached()) {
                                 return;
@@ -406,5 +406,101 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
     public void onLoadRelatedProducts(List<ProductDetailsResponse.RelatedProductBean> relatedProduct) {
 
         getMvpView().loadRelatedProducts(relatedProduct);
+    }
+
+    @Override
+    public void onOpenCartActivity() {
+
+        getMvpView().openCartActivity();
+
+    }
+
+    @Override
+    public void onAddWishlist(String product_id, String product_option_id, String product_option_value_id, boolean isCustomizable) {
+
+        if(getMvpView().isNetworkConnected()) {
+            Map<String, String> option = new HashMap<>();
+
+            if (isCustomizable) {
+                option.put("option" + "[" + product_option_id + "]", product_option_value_id);
+            }
+
+            getMvpView().showLoading();
+            getCompositeDisposable().add(getDataManager().addWish(Constants.API_TOKEN, getDataManager().getCurrentUserId(), product_id, option)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<AddWishlistResponse>() {
+                        @Override
+                        public void accept(AddWishlistResponse response) throws Exception {
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
+                                    getMvpView().showMessage(response.getResponseText());
+                                    getMvpView().updateWishDone(response.getWishlist_id());
+
+                                } else {
+                                    getMvpView().showMessage(response.getResponseText());
+
+                                }
+                            }
+                            getMvpView().hideLoading();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("hjhdf" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
+
+                        }
+                    }));
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
+
+
+
+    }
+
+    @Override
+    public void onDeleteWish(String wishlist_id) {
+        if(getMvpView().isNetworkConnected()) {
+
+            getMvpView().showLoading();
+            RequestBody wishlist_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), wishlist_id);
+
+            getCompositeDisposable().add(getDataManager().removeWish(Constants.API_TOKEN, wishlist_id1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                                       @Override
+                                       public void onComplete() {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage("Item removed from your wishlist");
+                                           getMvpView().updateWishDone(0);
+
+                                       }
+
+                                       @Override
+                                       public void onError(Throwable e) {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage(e.getMessage());
+
+                                       }
+                                   }
+                    ));
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
     }
 }

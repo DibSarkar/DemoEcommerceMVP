@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
+import com.app.demoopencartapp.ui.cart.CartActivity;
 import com.app.demoopencartapp.ui.login.LoginActivity;
 import com.app.demoopencartapp.ui.productDetails.ProductDetailsActivity;
 import com.app.demoopencartapp.utils.Constants;
@@ -102,7 +103,7 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
         mBottomSheetBehavior.setPeekHeight(6);
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         linearLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false);
-       gridLayoutManager = new GridLayoutManager(mContext, 2);
+        gridLayoutManager = new GridLayoutManager(mContext, 2);
 
 
         rv_productlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -130,7 +131,7 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
         super.onDestroy();
     }
 
-    @OnClick({R.id.fb_list,R.id.iv_sort})
+    @OnClick({R.id.fb_list,R.id.iv_sort,R.id.iv_cart})
     void onClickEvent(View view) {
         switch (view.getId()) {
 
@@ -147,15 +148,15 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
                     fb_list.setImageResource(R.drawable.menupro);
                     status=0;
                     loadProducts(status);
-
-
                 }
                 break;
 
             case R.id.iv_sort :
                 productListPresenter.onOpenSort();
+                break;
 
-
+            case R.id.iv_cart :
+                productListPresenter.onOpenCartActivity();
                 break;
 
         }
@@ -332,6 +333,13 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
             ll_cart_count.setVisibility(View.VISIBLE);
             tv_cart_count.setText(String.valueOf(cart_count));
         }
+    }
+
+    @Override
+    public void openCartActivity() {
+
+        Intent intent = new Intent(mContext, CartActivity.class);
+        startActivity(intent);
     }
 
     @Override

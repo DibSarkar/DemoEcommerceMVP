@@ -14,4 +14,5 @@ public interface ProductListMvpView extends MvpView {
     void openLoginActivity();
     void addToCart(String product_id, String quantity);
     void addToCartDone(int cart_count);
+    void openCartActivity();
 }

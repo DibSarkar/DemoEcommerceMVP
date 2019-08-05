@@ -78,7 +78,7 @@ public class AngleAdapter extends RecyclerView.Adapter<AngleAdapter.ViewHolder> 
         final HomeProductsResponse.AngelGrindesBean mDataBean = mValues.get(position);
         holder.tv_pro_name.setText(mDataBean.getName());
         holder.tv_manufacturer.setText("By - "+mDataBean.getManufacturer());
-        if(!mDataBean.getSpecial().equals(""))
+        if(!mDataBean.getSpecial().equals("0.00"))
         {
             holder.iv_offer.setVisibility(View.VISIBLE);
             holder.tv_offer.setVisibility(View.VISIBLE);

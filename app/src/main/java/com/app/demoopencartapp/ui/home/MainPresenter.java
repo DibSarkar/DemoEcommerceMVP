@@ -94,7 +94,7 @@ public class MainPresenter <V extends MainMvpView> extends BasePresenter<V>
     public void onLogout() {
         getMvpView().showMessage("Logout successfully");
         getDataManager().destroyPref();
-        getDataManager().destroySessionPref();
+       // getDataManager().destroySessionPref();
         getMvpView().logoutDone();
     }
 
