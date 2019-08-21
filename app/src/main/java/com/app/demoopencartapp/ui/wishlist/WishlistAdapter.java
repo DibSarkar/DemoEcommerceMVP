@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
+import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
+import com.app.demoopencartapp.data.network.models.WishlistResponse;
 import com.app.demoopencartapp.utils.GlideApp;
 
 import java.text.DecimalFormat;
@@ -24,7 +26,7 @@ import butterknife.ButterKnife;
 
 public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHolder>   {
 
-    private final ArrayList<CategoriesProductsResponse.ProductBean> mValues;
+    private final ArrayList<WishlistResponse.ProductListBean> mValues;
 
 
     public WishlistProductListener mListener;
@@ -32,16 +34,17 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     Activity activity;
     int status;
 
-    public WishlistAdapter(ArrayList<CategoriesProductsResponse.ProductBean> items) {
+    public WishlistAdapter(ArrayList<WishlistResponse.ProductListBean> items) {
         mValues = items;
 
 
     }
 
     public interface WishlistProductListener {
-        void onItemClick(CategoriesProductsResponse.ProductBean item, int position);
-        void onWishDeleteSelected(CategoriesProductsResponse.ProductBean item, int position);
-        void onAddtoCart(CategoriesProductsResponse.ProductBean item, int position, String quantity);
+        void onItemClick(WishlistResponse.ProductListBean item, int position);
+        void onWishDeleteSelected(WishlistResponse.ProductListBean item, int position);
+        void onAddtoCart(WishlistResponse.ProductListBean item, int position, String quantity);
+
 
     }
 
@@ -50,13 +53,20 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     }
 
 
-    public void loadWishlistProducts(List<CategoriesProductsResponse.ProductBean> productListBeanList) {
+    public void loadWishlistProducts(List<WishlistResponse.ProductListBean> productListBeanList) {
 
         mValues.addAll(productListBeanList);
         notifyDataSetChanged();
     }
 
 
+    public void remove(int pos, WishlistResponse.ProductListBean item)
+    {
+        mValues.remove(item);
+        notifyDataSetChanged();
+        ((WishlistActivity)mContext).checkWishData(mValues);
+
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -71,10 +81,10 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
     public void onBindViewHolder(final WishlistAdapter.ViewHolder holder, final int position) {
 
 
-        final CategoriesProductsResponse.ProductBean mDataBean = mValues.get(position);
+        final WishlistResponse.ProductListBean mDataBean = mValues.get(position);
         holder.tv_pro_name.setText(mDataBean.getName());
         holder.tv_manufacturer.setText("By - "+mDataBean.getManufacturer());
-        if(!mDataBean.getSpecial().equals(""))
+        if(!mDataBean.getSpecial().equals("0.00"))
         {
             holder.tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(mDataBean.getSpecial()))));
             holder.iv_offer.setVisibility(View.VISIBLE);
@@ -100,7 +110,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
         }
 
         GlideApp.with(mContext)
-                .load(mDataBean.getThumb())
+                .load(mDataBean.getImage())
                 .placeholder(R.drawable.no_image)
                 .centerCrop()
                 .into(holder.iv_product);
@@ -110,7 +120,7 @@ public class WishlistAdapter extends RecyclerView.Adapter<WishlistAdapter.ViewHo
             @Override
             public void onClick(View v) {
 
-                if(mDataBean.getOptions().isEmpty()) {
+                if(mDataBean.getOption().isEmpty()) {
                     mListener.onAddtoCart(mValues.get(position), position, mDataBean.getMinimum());
                 }
                 else {

@@ -14,10 +14,13 @@ import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
 
+import com.app.demoopencartapp.data.network.models.PaymentMethodResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
+import com.app.demoopencartapp.data.network.models.ShippingMethodsResponse;
 import com.app.demoopencartapp.data.network.models.UpdateCartResponse;
+import com.app.demoopencartapp.data.network.models.WishlistResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -199,9 +202,10 @@ public interface ApiHelper {
                                         @Field("session_id") String session_id,
                                         @FieldMap Map<String,String> option);
 
-
-    @GET("http://www.mocky.io/v2/5d0db7083400006800ca4a42")
-    Call<CategoriesProductsResponse> getWishlistProducts();
+    @Multipart
+    @POST("index.php?route=api/wishlist/wishlist")
+    Single<WishlistResponse> getWishlistProducts(@Query("api_token") String apitoken,
+                                                 @Part("customer_id") RequestBody customer_id);
 
     @Multipart
     @POST("index.php?route=api/cart/cartList")
@@ -227,10 +231,22 @@ public interface ApiHelper {
                                         @Field("customer_id") String customer_id,
                                         @Field("product_id") String product_id,
                                         @FieldMap Map<String,String> option);
+
+    @FormUrlEncoded
+    @POST("index.php?route=api/method/shipping_method")
+    Single<ShippingMethodsResponse> getShippingMethods(@Query("api_token") String apitoken,
+                                                       @Field("country_id") String country_id,
+                                                       @Field("zone_id") String zone_id);
+
+    @FormUrlEncoded
+    @POST("index.php?route=api/method/payment_method")
+    Single<PaymentMethodResponse> getPaymentMethods(@Query("api_token") String apitoken,
+                                                     @Field("country_id") String country_id,
+                                                     @Field("zone_id") String zone_id);
     @Multipart
     @POST("index.php?route=api/wishlist/remove")
     Completable removeWish(@Query("api_token") String apitoken,
-                           @Part("wishlist_id") RequestBody wishlist_id);
+                            @Part("wishlist_id") RequestBody wishlist_id);
 
 
  /*

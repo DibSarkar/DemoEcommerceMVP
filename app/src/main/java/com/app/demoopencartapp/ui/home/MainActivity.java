@@ -442,7 +442,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void checkDealsWish(HomeProductsResponse.DealsOfTheDayBean dealsOfTheDayBean, int pos) {
 
-        dealsOfTheDayBean.setActiveWish(false);
+
         if(dealsAdapter!=null)
         {
             dealsAdapter.changeWish(dealsOfTheDayBean,pos);
@@ -470,7 +470,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void checkBestWish(HomeProductsResponse.BestSellerBean bestSellerBean, int pos) {
-        bestSellerBean.setActiveWish(false);
+
         if(bestsellingAdapter!=null)
         {
             bestsellingAdapter.changeWish(bestSellerBean,pos);
@@ -498,7 +498,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void checkTestingWish(HomeProductsResponse.TestingProductBean testingProductBean, int pos) {
-        testingProductBean.setActiveWish(false);
+
         if(testingInstrumentsAdapter!=null)
         {
             testingInstrumentsAdapter.changeWish(testingProductBean,pos);
@@ -526,7 +526,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void checkAnglesWish(HomeProductsResponse.AngelGrindesBean angelGrindesBean, int pos) {
-        angelGrindesBean.setActiveWish(false);
+
         if(angleAdapter!=null)
         {
             angleAdapter.changeWish(angelGrindesBean,pos);
@@ -674,6 +674,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
 
             @Override
+            public void onWishRemoved(HomeProductsResponse.DealsOfTheDayBean item, int position) {
+                if(item.getOptions().isEmpty()) {
+                    mainPresenter.onDeleteDealsWish(item.getProduct_id(),"",item.getWishlist_id());
+                }
+                else {
+                    mainPresenter.onDeleteDealsWish(item.getProduct_id(),item.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id(),item.getWishlist_id());
+
+                }
+
+            }
+
+            @Override
             public void onAddtoCart(HomeProductsResponse.DealsOfTheDayBean item, int position, String quantity) {
 
                 if(item.getOptions().isEmpty()) {
@@ -691,6 +703,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onWishSelected(HomeProductsResponse.BestSellerBean item, int position) {
                 mainPresenter.onCheckBestWish(item,position);
+            }
+
+            @Override
+            public void onWishRemoved(HomeProductsResponse.BestSellerBean item, int position) {
+                if(item.getOptions().isEmpty()) {
+                    mainPresenter.onDeleteBestSellingWish(item.getProduct_id(),"",item.getWishlist_id());
+                }
+                else {
+                    mainPresenter.onDeleteBestSellingWish(item.getProduct_id(),item.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id(),item.getWishlist_id());
+
+                }
             }
 
             @Override
@@ -712,6 +735,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
 
             @Override
+            public void onWishRemoved(HomeProductsResponse.TestingProductBean item, int position) {
+                if(item.getOptions().isEmpty()) {
+                    mainPresenter.onDeleteTestingWish(item.getProduct_id(),"",item.getWishlist_id());
+                }
+                else {
+                    mainPresenter.onDeleteTestingWish(item.getProduct_id(),item.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id(),item.getWishlist_id());
+
+                }
+            }
+
+            @Override
             public void onAddtoCart(HomeProductsResponse.TestingProductBean item, int position, String quantity) {
                 if(item.getOptions().isEmpty()) {
                     mainPresenter.onAddtoCart(item.getProduct_id(), quantity,new ArrayList<Integer>());
@@ -727,6 +761,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             @Override
             public void onWishSelected(HomeProductsResponse.AngelGrindesBean item, int position) {
                 mainPresenter.onCheckAngleWish(item,position);
+            }
+
+            @Override
+            public void onWishRemoved(HomeProductsResponse.AngelGrindesBean item, int position) {
+                if(item.getOptions().isEmpty()) {
+                    mainPresenter.onDeleteAngleWish(item.getProduct_id(),"",item.getWishlist_id());
+                }
+                else {
+                    mainPresenter.onDeleteAngleWish(item.getProduct_id(),item.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id(),item.getWishlist_id());
+
+                }
             }
 
             @Override
@@ -796,4 +841,81 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         mainPresenter.onGetAllCategories();
     }
+
+    @Override
+    public void addDealsWish(String product_id, String product_option_value_id,String product_option_id) {
+
+        System.out.println("product_value_id"+" "+product_option_value_id);
+        mainPresenter.onAddDealsWish(product_id,product_option_value_id,product_option_id);
+
+    }
+
+    @Override
+    public void addBestSellingWish(String product_id, String product_option_value_id, String product_option_id) {
+        mainPresenter.onAddBestSellerWish(product_id,product_option_value_id,product_option_id);
+
+    }
+
+    @Override
+    public void addTestingWish(String product_id, String product_option_value_id, String product_option_id) {
+        mainPresenter.onAddTestingWish(product_id,product_option_value_id,product_option_id);
+    }
+
+    @Override
+    public void addAngleWish(String product_id, String product_option_value_id, String product_option_id) {
+        mainPresenter.onAddAngleWish(product_id,product_option_value_id,product_option_id);
+    }
+
+
+    @Override
+    public void addDealsWishDone(String product_id, String product_option_value_id, String wishlist_id) {
+
+        dealsAdapter.updateWishlist(product_id,product_option_value_id,wishlist_id);
+    }
+
+    @Override
+    public void addBestSellingDone(String product_id, String product_option_value_id, String wishlist_id) {
+
+        bestsellingAdapter.updateWishlist(product_id,product_option_value_id,wishlist_id);
+    }
+
+    @Override
+    public void addTestingDone(String product_id, String product_option_value_id, String wishlist_id) {
+        testingInstrumentsAdapter.updateWishlist(product_id,product_option_value_id,wishlist_id);
+    }
+
+    @Override
+    public void addAngleDone(String product_id, String product_option_value_id, String wishlist_id) {
+        angleAdapter.updateWishlist(product_id,product_option_value_id,wishlist_id);
+    }
+
+    @Override
+    public void removeDealsWishDone(String product_id, String product_option_value_id) {
+
+        dealsAdapter.updateWishlist(product_id,product_option_value_id,"0");
+
+    }
+
+    @Override
+    public void removeBestSellingWishDone(String product_id, String product_option_value_id) {
+
+        bestsellingAdapter.updateWishlist(product_id,product_option_value_id,"0");
+    }
+
+    @Override
+    public void removeTestingDone(String product_id, String product_option_value_id) {
+
+        testingInstrumentsAdapter.updateWishlist(product_id,product_option_value_id,"0");
+
+    }
+
+    @Override
+    public void removeAngleDone(String product_id, String product_option_value_id) {
+
+        angleAdapter.updateWishlist(product_id,product_option_value_id,"0");
+
+    }
+
+
+
 }

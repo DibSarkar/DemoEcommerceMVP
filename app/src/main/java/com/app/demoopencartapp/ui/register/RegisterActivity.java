@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.CartListBean;
+
 import com.app.demoopencartapp.shared.base.BaseActivity;
 
 import com.app.demoopencartapp.ui.home.MainActivity;

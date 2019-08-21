@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center_vertical"
+    android:gravity="center"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+
+
+            android:background="@drawable/card_round1"
+
+            android:orientation="vertical"
+            android:paddingBottom="-50dp"
+
+            >
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:background="@drawable/shipping_label_round"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:textColor="@color/black_color"
+                android:text="Weight Based Shipping"/>
+            <!--   <RatingBar
+                   android:id="@+id/ratingbar_review"
+                   android:layout_width="wrap_content"
+                   android:layout_height="45dp"
+                   android:layout_gravity="center"
+                   android:numStars="5"
+                   android:layout_marginTop="15dp"
+                   android:theme="@style/RatingBar"
+                   android:stepSize="1.0"
+
+                  />-->
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/rg_ship"
+                android:layout_marginTop="30dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:text=""
+                    android:checked="true"
+                    android:id="@+id/rb_ship1"
+
+                    android:buttonTint="@color/colorPrimaryDark"
+                    android:layout_height="wrap_content"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text=""
+                    android:id="@+id/rb_ship2"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                    android:buttonTint="@color/colorPrimaryDark"
+
+                    android:layout_height="wrap_content"
+                    />
+
+            </RadioGroup>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:layout_marginTop="30dp"
+    android:layout_marginBottom="5dp"
+    android:layout_gravity="center"
+
+
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:text="Cancel"
+        android:textAllCaps="false"
+        android:textColor="#fff"
+        android:textStyle="bold"
+        android:id="@+id/btn_cancel"
+        android:layout_gravity="center"
+        android:background="@drawable/cancel_round_btn"
+
+
+        />
+            <Button
+                android:layout_width="wrap_content"
+                android:textSize="14dp"
+                android:text="Apply"
+                android:layout_margin="7dp"
+                android:id="@+id/btn_apply"
+                android:textAllCaps="false"
+                android:textColor="#fff"
+
+                android:textStyle="bold"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:gravity="center"
+
+                android:background="@drawable/submit_review_btn"
+
+                android:layout_height="35dp" />
+
+</LinearLayout>
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+</LinearLayout>

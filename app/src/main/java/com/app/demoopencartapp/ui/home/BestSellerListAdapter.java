@@ -43,6 +43,7 @@ public class BestSellerListAdapter extends RecyclerView.Adapter<BestSellerListAd
     public interface BestSellingProductListListener {
         void onItemClick(HomeProductsResponse.BestSellerBean item, int position);
         void onWishSelected(HomeProductsResponse.BestSellerBean item, int position);
+        void onWishRemoved(HomeProductsResponse.BestSellerBean item, int position);
         void onAddtoCart(HomeProductsResponse.BestSellerBean item, int position,String quantity);
 
 
@@ -64,6 +65,54 @@ public class BestSellerListAdapter extends RecyclerView.Adapter<BestSellerListAd
         notifyItemChanged(pos,bestSellerBean);
     }
 
+    public void updateWishlist(String product_id,String product_option_value_id, String wishlist_id)
+    {
+        if(!wishlist_id.equals("")) {
+
+            if (!wishlist_id.equals("0")) {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("1");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("1");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("0");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+
+        }
+        else {
+            for (int i = 0; i < mValues.size(); i++) {
+                if (mValues.get(i).getProduct_id().equals(product_id)) {
+                    if (product_option_value_id.equals("")) {
+                        mValues.get(i).setIs_wishlist("0");
+                        mValues.get(i).setWishlist_id(wishlist_id);
+                    } else {
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+
+    }
 
     @Override
     public BestSellerListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -107,6 +156,27 @@ public class BestSellerListAdapter extends RecyclerView.Adapter<BestSellerListAd
             holder.tv_savings.setVisibility(View.INVISIBLE);
         }
 
+        if(mDataBean.getOptions().isEmpty())
+        {
+            if(mDataBean.getIs_wishlist().equals("1")) {
+
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
+        else {
+            if(mDataBean.getOptions().get(0).getProduct_option_value().get(0).getIs_wishlist().equals("1")) {
+
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
         holder.btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,13 +191,7 @@ public class BestSellerListAdapter extends RecyclerView.Adapter<BestSellerListAd
             }
         });
 
-        if(!mDataBean.isActiveWish())
-        {
-            holder.like_button.setChecked(false);
-        }
-        else {
-            holder.like_button.setChecked(true);
-        }
+
         GlideApp.with(mContext)
                 .load(mDataBean.getThumb())
                 .placeholder(R.drawable.no_image)
@@ -141,7 +205,10 @@ public class BestSellerListAdapter extends RecyclerView.Adapter<BestSellerListAd
                 {
                     mListener.onWishSelected(mValues.get(position),position);
                 }
+                else {
 
+                    mListener.onWishRemoved(mValues.get(position),position);
+                }
 
             }
 

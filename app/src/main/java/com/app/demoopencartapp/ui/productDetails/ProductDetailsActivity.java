@@ -32,8 +32,8 @@ import com.app.demoopencartapp.ui.reviews.ReviewsListActivity;
 import com.app.demoopencartapp.ui.zoom.ZoomActivity;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.GlideApp;
-import com.varunest.sparkbutton.SparkButton;
-import com.varunest.sparkbutton.SparkEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -135,7 +135,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     RecyclerView rv_variations;
 
     @BindView(R.id.like_button)
-    SparkButton like_button;
+    LikeButton like_button;
 
     @BindView(R.id.ll_add_cart)
     LinearLayout ll_add_cart;
@@ -157,14 +157,10 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
     AddReviewDialogFragment addReviewDialogFragment;
     int wish_id;
-
     public ArrayList<Integer> quantity_list ;
-
     String product_show_img="";
-
     public boolean showDesc = true;
     public boolean showSpec = true;
-
     public static final int OPEN_LOGIN = 500;
     String reviews = "";
     String quantity = "";
@@ -173,9 +169,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     String product_option_value_id = "";
     public boolean isStock = false;
 
-
-
-
+    List<ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean> productOptionValueBeans = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,7 +202,21 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
         }
 
 
-        like_button.setEventListener(new SparkEventListener() {
+        like_button.setOnLikeListener(new OnLikeListener() {
+        @Override
+        public void liked(LikeButton likeButton) {
+            productDetailsPresenter.onCheckWishlistByUser();
+        }
+
+        @Override
+        public void unLiked(LikeButton likeButton) {
+
+            if(wish_id!=0) {
+                productDetailsPresenter.onDeleteWish(String.valueOf(wish_id));
+            }
+        }
+    });
+       /* like_button.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
 
@@ -232,7 +240,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
             }
         });
-
+*/
         sp_quantity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -325,15 +333,6 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     @Override
     public void getProductDetails(ProductDetailsResponse.ProductBean product, List<ProductDetailsResponse.RelatedProductBean> relatedProduct, int total_qty) {
 
-
-        if(product.getWishlist()==1)
-        {
-            like_button.setChecked(true);
-        }
-        else {
-            like_button.setChecked(false);
-        }
-
         if(total_qty==0)
         {
             ll_cart_count.setVisibility(View.GONE);
@@ -342,6 +341,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             ll_cart_count.setVisibility(View.VISIBLE);
             tv_cart_count.setText(String.valueOf(total_qty));
         }
+
         if(product!=null)
         {
             tv_pro_name.setText(Html.fromHtml(product.getName()));
@@ -418,6 +418,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             if(!product.getOptions().isEmpty())
             {
                 isCustomizable=true;
+
                 ll_variations.setVisibility(View.VISIBLE);
                 tv_variation_type.setText(product.getOptions().get(0).getName());
                 product_option_id = product.getOptions().get(0).getProduct_option_id();
@@ -428,6 +429,13 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
             }
             else {
+                if(product.getIs_wishlist().equals("1")) {
+                    like_button.setLiked(true);
+                }
+                else {
+                    like_button.setLiked(false);
+                }
+                wish_id = Integer.parseInt(product.getWishlist_id());
                 isCustomizable=false;
                 ll_variations.setVisibility(View.GONE);
             }
@@ -571,7 +579,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
     @Override
     public void checkWishlistByUser() {
-       like_button.setChecked(false);
+       like_button.setLiked(false);
         try {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.app_name);
@@ -607,7 +615,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
 
     @Override
     public void checkWish(ProductDetailsResponse.RelatedProductBean relatedProductBean, int pos) {
-        relatedProductBean.setActiveWish(false);
+
         if(similarProductsAdapter!=null)
         {
             similarProductsAdapter.changeWish(relatedProductBean,pos);
@@ -687,6 +695,7 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     @Override
     public void loadVariations(List<ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean> product_option_value) {
         if(product_option_value.size()>0) {
+          productOptionValueBeans=product_option_value;
             product_option_value.get(0).setSelected(true);
             product_option_value_id=product_option_value.get(0).getProduct_option_value_id();
             rv_variations.setHasFixedSize(true);
@@ -697,6 +706,14 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
             rv_variations.setNestedScrollingEnabled(false);
             variationsAdapter.loadVariations(product_option_value);
             System.out.println("proopti"+product_option_value_id);
+            wish_id= Integer.parseInt(product_option_value.get(0).getWishlist_id());
+            if(product_option_value.get(0).getIs_wishlist().equals("1")) {
+                like_button.setLiked(true);
+            }
+            else {
+                like_button.setLiked(false);
+            }
+
             variationsAdapter.setAdapterListener(new VariationsAdapter.VariationListener() {
                 @Override
                 public void onItemClick(ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean item, int position) {
@@ -704,6 +721,13 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
                     product_option_value_id=item.getProduct_option_value_id();
                     System.out.println("proopti"+product_option_value_id);
                     variationsAdapter.changeItemBg(item,position);
+                    wish_id= Integer.parseInt(item.getWishlist_id());
+                    if(item.getIs_wishlist().equals("1")) {
+                        like_button.setLiked(true);
+                    }
+                    else {
+                        like_button.setLiked(false);
+                    }
                     if(quantity_list!=null)
                     {
                         quantity_list.clear();
@@ -756,14 +780,77 @@ public class ProductDetailsActivity extends BaseActivity implements ProductDetai
     @Override
     public void addWishlist() {
         if(getIntent().getExtras()!=null) {
+
+
             productDetailsPresenter.onAddWishlist(getIntent().getExtras().getString("product_id"),product_option_id,product_option_value_id,isCustomizable);
+
+         /*   if(isCustomizable) {
+                variationsAdapter.setAdapterListener(new VariationsAdapter.VariationListener() {
+                    @Override
+                    public void onItemClick(ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean item, int position) {
+                        product_option_value_id=item.getProduct_option_value_id();
+                        System.out.println("proopti"+product_option_value_id);
+                        variationsAdapter.changeItemBg(item,position);
+                        variationsAdapter.wishSelect(item, true,position);
+                        wish_id= Integer.parseInt(item.getWishlist_id());
+                        if(item.getIs_wishlist().equals("1")) {
+                            like_button.setLiked(true);
+                        }
+                        else {
+                            like_button.setLiked(false);
+                        }
+                        if(quantity_list!=null)
+                        {
+                            quantity_list.clear();
+                        }
+                        productDetailsPresenter.onLoadQuantities("1", item.getQuantity());
+
+                    }
+                });
+            }*/
         }
     }
 
     @Override
-    public void updateWishDone(int wishlist_id) {
+    public void updateWishDone(int wishlist_id, String product_option_value_id) {
         wish_id = wishlist_id;
+        if(!product_option_value_id.equals(""))
+        {
+            variationsAdapter.wishSelect(product_option_value_id,true,wish_id);
+            for (int i = 0;i<productOptionValueBeans.size();i++)
+            {
+                if(productOptionValueBeans.get(i).getProduct_option_value_id().equals(product_option_value_id))
+                {
+                    wish_id= Integer.parseInt(productOptionValueBeans.get(i).getWishlist_id());
+                    if(productOptionValueBeans.get(i).getIs_wishlist().equals("1")) {
+                        like_button.setLiked(true);
+                    }
+                    else {
+                        like_button.setLiked(false);
+                    }
+                }
+            }
 
+        }
+    }
+
+    @Override
+    public void deleteWishDone() {
+        wish_id = 0;
+
+        if(!product_option_value_id.equals(""))
+        {
+            variationsAdapter.wishSelect(product_option_value_id,false, wish_id);
+            for (int i = 0;i<productOptionValueBeans.size();i++) {
+                if (productOptionValueBeans.get(i).getProduct_option_value_id().equals(product_option_value_id)) {
+                    if (productOptionValueBeans.get(i).getIs_wishlist().equals("1")) {
+                        like_button.setLiked(true);
+                    } else {
+                        like_button.setLiked(false);
+                    }
+                }
+            }
+        }
     }
 
 

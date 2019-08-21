@@ -68,7 +68,7 @@ public class SimilarProductsAdapter extends RecyclerView.Adapter<SimilarProducts
     @Override
     public SimilarProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.layout_item_home_product_layout, parent, false);
+                .inflate(R.layout.layout_similar_product, parent, false);
         mContext=parent.getContext();
         return new SimilarProductsAdapter.ViewHolder(view);
     }
@@ -154,34 +154,13 @@ public class SimilarProductsAdapter extends RecyclerView.Adapter<SimilarProducts
                 .centerCrop()
                 .into(holder.iv_product);
 
-        if(!mDataBean.isActiveWish())
+      /*  if(!mDataBean.isActiveWish())
         {
             holder.like_button.setChecked(false);
         }
         else {
             holder.like_button.setChecked(true);
-        }
-        holder.like_button.setEventListener(new SparkEventListener() {
-            @Override
-            public void onEvent(ImageView button, boolean buttonState) {
-                if(buttonState)
-                {
-                    mListener.onWishSelected(mValues.get(position),position);
-                }
-
-
-            }
-
-            @Override
-            public void onEventAnimationEnd(ImageView button, boolean buttonState) {
-
-            }
-
-            @Override
-            public void onEventAnimationStart(ImageView button, boolean buttonState) {
-
-            }
-        });
+        }*/
 
     }
 
@@ -226,9 +205,6 @@ public class SimilarProductsAdapter extends RecyclerView.Adapter<SimilarProducts
 
         @BindView(R.id.iv_offer)
         ImageView iv_offer;
-
-        @BindView(R.id.like_button)
-        SparkButton like_button;
 
         @BindView(R.id.btn_add)
         Button btn_add;

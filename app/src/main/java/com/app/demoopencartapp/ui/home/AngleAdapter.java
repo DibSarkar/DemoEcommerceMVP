@@ -43,6 +43,7 @@ public class AngleAdapter extends RecyclerView.Adapter<AngleAdapter.ViewHolder> 
     public interface AngleProductListener {
         void onItemClick(HomeProductsResponse.AngelGrindesBean item, int position);
         void onWishSelected(HomeProductsResponse.AngelGrindesBean item, int position);
+        void onWishRemoved(HomeProductsResponse.AngelGrindesBean item, int position);
         void onAddtoCart(HomeProductsResponse.AngelGrindesBean item, int position,String quantity);
 
     }
@@ -61,7 +62,54 @@ public class AngleAdapter extends RecyclerView.Adapter<AngleAdapter.ViewHolder> 
     {
         notifyItemChanged(pos,angelGrindesBean);
     }
+    public void updateWishlist(String product_id,String product_option_value_id, String wishlist_id)
+    {
+        if(!wishlist_id.equals("")) {
 
+            if (!wishlist_id.equals("0")) {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("1");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("1");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("0");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+
+        }
+        else {
+            for (int i = 0; i < mValues.size(); i++) {
+                if (mValues.get(i).getProduct_id().equals(product_id)) {
+                    if (product_option_value_id.equals("")) {
+                        mValues.get(i).setIs_wishlist("0");
+                        mValues.get(i).setWishlist_id(wishlist_id);
+                    } else {
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+
+    }
     @Override
     public AngleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -107,6 +155,27 @@ public class AngleAdapter extends RecyclerView.Adapter<AngleAdapter.ViewHolder> 
             holder.tv_product_price.setText('\u20B9'+" "+String.valueOf(Math.round(Double.parseDouble(mDataBean.getPrice()))));
             holder.tv_product_old__price.setVisibility(View.GONE);
             holder.tv_savings.setVisibility(View.INVISIBLE);
+        }
+        if(mDataBean.getOptions().isEmpty())
+        {
+            if(mDataBean.getIs_wishlist().equals("1")) {
+
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
+        else {
+            if(mDataBean.getOptions().get(0).getProduct_option_value().get(0).getIs_wishlist().equals("1")) {
+
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
         }
 
         GlideApp.with(mContext)
@@ -158,13 +227,7 @@ public class AngleAdapter extends RecyclerView.Adapter<AngleAdapter.ViewHolder> 
             }
         });*/
 
-        if(!mDataBean.isActiveWish())
-        {
-            holder.like_button.setChecked(false);
-        }
-        else {
-            holder.like_button.setChecked(true);
-        }
+
 
         holder.like_button.setEventListener(new SparkEventListener() {
             @Override
@@ -173,7 +236,10 @@ public class AngleAdapter extends RecyclerView.Adapter<AngleAdapter.ViewHolder> 
                 {
                     mListener.onWishSelected(mValues.get(position),position);
                 }
+                else {
 
+                    mListener.onWishRemoved(mValues.get(position),position);
+                }
 
             }
 

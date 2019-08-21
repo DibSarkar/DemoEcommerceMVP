@@ -66,9 +66,6 @@ public class AddAddressActivity extends BaseActivity implements AddAddressMvpVie
     @BindView(R.id.rg_default)
     RadioGroup rg_default;
 
-
-
-
     @Inject
     CountryStateAdpater countryAdpater;
 
@@ -126,9 +123,7 @@ public class AddAddressActivity extends BaseActivity implements AddAddressMvpVie
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
               if(states.get(position).getId()!=null)
               {
-
-                      state_id=states.get(position).getId();
-
+                  state_id=states.get(position).getId();
               }
 
             }

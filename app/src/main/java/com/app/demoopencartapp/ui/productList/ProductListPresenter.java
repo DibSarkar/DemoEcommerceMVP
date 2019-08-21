@@ -2,6 +2,7 @@ package com.app.demoopencartapp.ui.productList;
 
 import com.app.demoopencartapp.data.DataManager;
 import com.app.demoopencartapp.data.network.models.AddUpdateCartResponse;
+import com.app.demoopencartapp.data.network.models.AddWishlistResponse;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.shared.base.BasePresenter;
 import com.app.demoopencartapp.utils.Constants;
@@ -9,11 +10,14 @@ import com.app.demoopencartapp.utils.rx.SchedulerProvider;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -140,6 +144,17 @@ public class ProductListPresenter <V extends ProductListMvpView> extends BasePre
             if (getDataManager().getCurrentUserId().equals("")) {
                 getMvpView().checkWish(productBean,pos);
             }
+            else {
+                if(!productBean.getOptions().isEmpty())
+                {
+                    getMvpView().addWish(productBean.getProduct_id(),productBean.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id(),productBean.getOptions().get(0).getProduct_option_id());
+
+                }
+                else {
+                    getMvpView().addWish(productBean.getProduct_id(),"","");
+
+                }
+            }
         }
         else {
             getMvpView().checkWish(productBean,pos);
@@ -254,6 +269,94 @@ public class ProductListPresenter <V extends ProductListMvpView> extends BasePre
     public void onOpenCartActivity() {
 
         getMvpView().openCartActivity();
+    }
+
+    @Override
+    public void onAddWish(final String product_id,final String product_option_value_id, String product_option_id) {
+
+        if(getMvpView().isNetworkConnected()) {
+            Map<String, String> option = new HashMap<>();
+
+            if (!product_option_id.equals("")) {
+                option.put("option" + "[" + product_option_id + "]", product_option_value_id);
+            }
+
+            getMvpView().showLoading();
+            getCompositeDisposable().add(getDataManager().addWish(Constants.API_TOKEN, getDataManager().getCurrentUserId(), product_id, option)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribe(new Consumer<AddWishlistResponse>() {
+                        @Override
+                        public void accept(AddWishlistResponse response) throws Exception {
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            if (response != null) {
+                                if (response.getResponseCode() == 1) {
+                                    getMvpView().showMessage(response.getResponseText());
+                                    getMvpView().addWishDone(product_id,product_option_value_id,String.valueOf(response.getWishlist_id()));
+
+                                } else {
+                                    getMvpView().showMessage(response.getResponseText());
+
+                                }
+                            }
+                            getMvpView().hideLoading();
+                        }
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(Throwable throwable) throws Exception {
+                            System.out.println("Error" + throwable.getMessage());
+
+                            if (!isViewAttached()) {
+                                return;
+                            }
+
+                            getMvpView().hideLoading();
+
+                        }
+                    }));
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
+
+
+    }
+
+    @Override
+    public void onDeleteWish(final String product_id, final String product_option_value_id, String wishlist_id) {
+        if(getMvpView().isNetworkConnected()) {
+
+            getMvpView().showLoading();
+            RequestBody wishlist_id1 = RequestBody.create(MediaType.parse("multipart/form-data"), wishlist_id);
+
+            getCompositeDisposable().add(getDataManager().removeWish(Constants.API_TOKEN, wishlist_id1)
+                    .subscribeOn(getSchedulerProvider().io())
+                    .observeOn(getSchedulerProvider().ui())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                                       @Override
+                                       public void onComplete() {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage("Item removed from your wishlist");
+                                           getMvpView().removeWishDone(product_id,product_option_value_id);
+
+                                       }
+
+                                       @Override
+                                       public void onError(Throwable e) {
+                                           getMvpView().hideLoading();
+                                           getMvpView().showMessage(e.getMessage());
+
+                                       }
+                                   }
+                    ));
+        }
+        else {
+            getMvpView().showMessage("No internet connection");
+        }
     }
 
 

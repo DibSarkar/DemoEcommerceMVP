@@ -4,7 +4,6 @@ import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.shared.base.MvpView;
 
 import java.util.List;
-import java.util.logging.StreamHandler;
 
 public interface ProductDetailsMvpView extends MvpView {
 
@@ -28,5 +27,6 @@ public interface ProductDetailsMvpView extends MvpView {
     void loadRelatedProducts(List<ProductDetailsResponse.RelatedProductBean> relatedProduct);
     void openCartActivity();
     void addWishlist();
-    void updateWishDone(int wishlist_id);
+    void updateWishDone(int wishlist_id, String product_option_value_id);
+    void deleteWishDone();
 }

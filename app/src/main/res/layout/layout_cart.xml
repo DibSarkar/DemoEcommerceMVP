@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
+
         android:id="@+id/nsv_cart"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -157,6 +158,8 @@
                             android:layout_width="match_parent"
                             android:background="@drawable/coupon_round2"
                             android:layout_marginTop="5dp"
+
+                            android:id="@+id/ll_shipping"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
@@ -217,7 +220,14 @@
 
                                     />
 
-                                <EditText
+                                <Spinner
+                                    android:layout_width="match_parent"
+                                    android:layout_height="42dp"
+                                    android:id="@+id/sp_country"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="20dp"
+                                    android:background="@drawable/estimate_round"/>
+                              <!--  <EditText
                                     android:layout_width="match_parent"
                                     android:layout_height="42dp"
                                     android:hint="India"
@@ -227,7 +237,7 @@
                                     android:textColorHint="#000"
                                     android:paddingRight="20dp"
                                     android:layout_marginLeft="20dp"
-                                    android:background="@drawable/estimate_round"/>
+                                    android:background="@drawable/estimate_round"/>-->
 
 
 
@@ -239,6 +249,7 @@
                                android:layout_marginTop="20dp"
                                 android:layout_marginLeft="20dp"
                                 android:layout_marginRight="20dp"
+                                android:layout_marginBottom="20dp"
                                 android:orientation="horizontal">
 
 
@@ -257,17 +268,16 @@
 
                                     />
 
-                                <EditText
+                                <Spinner
                                     android:layout_width="match_parent"
                                     android:layout_height="42dp"
-                                    android:text=""
+                                    android:id="@+id/sp_state"
+
                                     android:layout_gravity="center"
-                                    android:paddingLeft="20dp"
-                                    android:textColor="#000"
-                                    android:textColorHint="#000"
-                                    android:paddingRight="20dp"
+
                                     android:layout_marginLeft="20dp"
                                     android:background="@drawable/estimate_round"/>
+
 
 
 
@@ -275,54 +285,69 @@
 
 
 
+<!--
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:background="#028277"
+                                android:layout_marginTop="10dp"
+                                android:layout_height="0.8dp"/>
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginTop="20dp"
-                                android:layout_marginRight="20dp"
-                                android:orientation="horizontal">
+                                android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#000"
+                                android:textStyle="bold"
+                                android:layout_margin="10dp"
+                                android:padding="8dp"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:text="Weight Based Shipping"/>
+                            <RadioGroup
+                                android:layout_width="match_parent"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginRight="10dp"
+                                android:id="@+id/rg_ship"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:text=""
+                                    android:id="@+id/rb_ship1"
 
-
-                                <TextView
-                                    android:layout_width="100dp"
-                                    android:text="*Post Code"
-                                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                                    android:textColor="#000"
-                                    android:textStyle="bold"
+                                    android:buttonTint="@color/colorPrimaryDark"
                                     android:layout_height="wrap_content"
+                                    />
+                                <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:text=""
+                                    android:id="@+id/rb_ship2"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                    android:buttonTint="@color/colorPrimaryDark"
 
+                                    android:layout_height="wrap_content"
                                     />
 
-                                <EditText
-                                    android:layout_width="match_parent"
-                                    android:layout_height="42dp"
-                                    android:text=""
-                                    android:paddingLeft="20dp"
-                                    android:textColor="#000"
-                                    android:inputType="number"
-                                    android:textColorHint="#000"
-                                    android:paddingRight="20dp"
-                                    android:layout_marginLeft="20dp"
-                                    android:background="@drawable/estimate_round"/>
-
-
-
-                            </LinearLayout>
-
+                            </RadioGroup>
+-->
 
                             <Button
                                 android:layout_width="150dp"
-                                android:layout_marginTop="30dp"
+                                android:layout_marginTop="10dp"
                                 android:layout_gravity="center"
                                 android:textColor="#000c0c"
+                                android:id="@+id/btn_get_quotes"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                 android:text="Get Quotes"
-                                android:layout_marginBottom="30dp"
+                                android:layout_marginBottom="20dp"
                                 android:background="@drawable/coupon_btn"
                                 android:layout_height="wrap_content"
                                 />
-
+                          <!--  </LinearLayout>-->
                         </LinearLayout>
 
                         <LinearLayout
@@ -404,20 +429,80 @@
 
 
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="15dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:id="@+id/rl_shipping"
+                            android:visibility="gone"
+
+
+                            android:gravity="center"
+
+                            android:background="#fff"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="120dp"
+                                android:text="COD"
+                                android:id="@+id/tv_shipping_title"
+                                android:textSize="16dp"
+                                android:gravity="center"
+                                android:layout_marginLeft="20dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_centerInParent="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+
+                                android:textColor="#191919"
+                                android:layout_height="wrap_content" />
+
+                            <View
+
+                                android:layout_width="0.5dp"
+
+                                android:layout_height="match_parent"
+                                android:layout_centerInParent="true"
+                                android:layout_centerHorizontal="true"
+
+
+                                android:background="#000" />
+
+                            <TextView
+                                android:id="@+id/tv_shipping_price"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+
+                                android:layout_marginRight="20dp"
+
+                                android:layout_centerVertical="true"
+                                android:gravity="center"
+                                android:textSize="16dp"
+                                android:text="@string/Rs1"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="#191919" />
+
+
+
+                        </RelativeLayout>
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
 
-                            android:layout_marginTop="15dp"
+
                             android:gravity="center"
 
                             android:background="#e4e4e4"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="100dp"
+                                android:layout_width="120dp"
                                 android:text="Total GST"
 
                                 android:gravity="center"
+                                android:textSize="16dp"
                                 android:layout_marginLeft="20dp"
                                 android:layout_alignParentLeft="true"
                                 android:layout_centerInParent="true"
@@ -444,7 +529,7 @@
                                 android:layout_alignParentRight="true"
 
                                 android:layout_marginRight="20dp"
-
+                                android:textSize="16dp"
                                 android:layout_centerVertical="true"
                                 android:gravity="center"
 
@@ -466,7 +551,8 @@
                            android:background="@drawable/sub_total_round"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="100dp"
+                                android:layout_width="120dp"
+                                android:textSize="16dp"
                                 android:text="Sub-Total"
                                 android:id="@+id/tv_sub"
                                 android:gravity="center"
@@ -499,6 +585,7 @@
                                 android:layout_marginRight="20dp"
 
 
+                                android:textSize="16dp"
                                 android:layout_centerVertical="true"
                                 android:gravity="center"
 
@@ -521,7 +608,8 @@
                             android:background="#e4e4e4"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="100dp"
+                                android:layout_width="120dp"
+                                android:textSize="16dp"
                                 android:text="Total"
                                 android:id="@+id/tv_sub1"
                                 android:gravity="center"
@@ -552,6 +640,7 @@
 
                                 android:layout_marginRight="20dp"
 
+                                android:textSize="16dp"
                                 android:layout_centerVertical="true"
                                 android:gravity="center"
 
@@ -563,7 +652,7 @@
 
                         </RelativeLayout>
 
-
+                        </LinearLayout>
                     </LinearLayout>
 
 
@@ -597,18 +686,12 @@
 
             <Button
                 android:layout_width="match_parent"
-
-
-
-
                 android:textAlignment="center"
                 android:background="@android:color/transparent"
-
                 android:textColor="#fff"
                 android:gravity="center"
-
                 android:text="Continue Shopping"
-
+                android:id="@+id/btn_continue"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:layout_height="45dp" />
         </LinearLayout>

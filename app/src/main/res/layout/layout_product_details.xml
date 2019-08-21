@@ -68,7 +68,7 @@
 
 
                         android:src="@drawable/inactive_wish" />-->
-                    <com.varunest.sparkbutton.SparkButton
+                <!--    <com.varunest.sparkbutton.SparkButton
                         android:id="@+id/like_button"
                         android:layout_width="40dp"
                         android:layout_gravity="center"
@@ -77,7 +77,25 @@
                         app:sparkbutton_inActiveImage="@drawable/inactive_wish"
                         app:sparkbutton_iconSize="20dp"
                         app:sparkbutton_primaryColor="@color/colorPrimary"
-                        app:sparkbutton_secondaryColor="@color/colorPrimaryDark" />
+                        app:sparkbutton_secondaryColor="@color/colorPrimaryDark" />-->
+
+                    <com.like.LikeButton
+                        app:icon_type="heart"
+                        app:circle_start_color="@color/colorPrimary"
+                        app:like_drawable="@drawable/active_wish"
+                        app:unlike_drawable="@drawable/inactive_wish"
+                        app:dots_primary_color="@color/colorPrimaryDark"
+                        app:dots_secondary_color="@color/colorPrimary"
+                        app:circle_end_color="@color/colorPrimary"
+                        app:icon_size="20dp"
+                        android:id="@+id/like_button"
+                        android:layout_gravity="center"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:liked="false"
+                        app:anim_scale_factor="2"
+
+                        />
                 </LinearLayout>
             </RelativeLayout>
 

@@ -7,7 +7,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.CartListBean;
+
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 
 import java.util.ArrayList;

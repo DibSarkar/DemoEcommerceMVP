@@ -12,5 +12,11 @@ public interface CartMvpPresenter <V extends CartMvpView> extends MvpPresenter<V
     void onOpenCheckoutAsUI();
     void onOpenLogin();
     void onClearSession();
+    void onGetCountries();
+    void onGetStateByCountry(String country_id);
+    void onGetShippingMethods(String country_id,String zone_id);
+    void onOpenShippingMethods();
+    void onFinish();
+    void onOpenCheckout();
 
 }

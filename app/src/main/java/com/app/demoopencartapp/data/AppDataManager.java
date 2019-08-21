@@ -14,10 +14,13 @@ import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
+import com.app.demoopencartapp.data.network.models.PaymentMethodResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
+import com.app.demoopencartapp.data.network.models.ShippingMethodsResponse;
 import com.app.demoopencartapp.data.network.models.UpdateCartResponse;
+import com.app.demoopencartapp.data.network.models.WishlistResponse;
 import com.app.demoopencartapp.data.prefs.PreferencesHelper;
 import com.app.demoopencartapp.data.prefs.SessionPreferenceHelper;
 import com.app.demoopencartapp.di.ApplicationContext;
@@ -251,8 +254,8 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Call<CategoriesProductsResponse> getWishlistProducts() {
-        return mApiHelper.getWishlistProducts();
+    public Single<WishlistResponse> getWishlistProducts(String apitoken, RequestBody customer_id) {
+        return mApiHelper.getWishlistProducts(apitoken, customer_id);
     }
 
     @Override
@@ -273,6 +276,16 @@ public class AppDataManager implements DataManager {
     @Override
     public Single<AddWishlistResponse> addWish(String apitoken, String customer_id, String product_id, Map<String, String> option) {
         return mApiHelper.addWish(apitoken,customer_id,product_id,option);
+    }
+
+    @Override
+    public Single<ShippingMethodsResponse> getShippingMethods(String apitoken, String country_id, String zone_id) {
+        return mApiHelper.getShippingMethods(apitoken, country_id, zone_id);
+    }
+
+    @Override
+    public Single<PaymentMethodResponse> getPaymentMethods(String apitoken, String country_id, String zone_id) {
+        return mApiHelper.getPaymentMethods(apitoken,country_id,zone_id);
     }
 
     @Override

@@ -212,6 +212,17 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
             }
 
             @Override
+            public void onWishRemoved(CategoriesProductsResponse.ProductBean item, int position) {
+                if(item.getOptions().isEmpty()) {
+                    productListPresenter.onDeleteWish(item.getProduct_id(),"",item.getWishlist_id());
+                }
+                else {
+                    productListPresenter.onDeleteWish(item.getProduct_id(),item.getOptions().get(0).getProduct_option_value().get(0).getProduct_option_value_id(),item.getWishlist_id());
+
+                }
+            }
+
+            @Override
             public void onAddtoCart(CategoriesProductsResponse.ProductBean item, int position, String quantity) {
 
                 productListPresenter.onConfirmAddCart(item.getProduct_id(),quantity,item.getStock());
@@ -340,6 +351,22 @@ public class ProductListActivity extends BaseActivity implements ProductListMvpV
 
         Intent intent = new Intent(mContext, CartActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void addWish(String product_id, String product_option_value_id, String product_option_id) {
+        productListPresenter.onAddWish(product_id,product_option_value_id,product_option_id);
+
+    }
+
+    @Override
+    public void addWishDone(String product_id, String product_option_value_id, String wishlist_id) {
+        productListAdapter.updateWishlist(product_id,product_option_value_id,wishlist_id);
+    }
+
+    @Override
+    public void removeWishDone(String product_id, String product_option_value_id) {
+        productListAdapter.updateWishlist(product_id,product_option_value_id,"0");
     }
 
     @Override

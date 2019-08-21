@@ -5,6 +5,8 @@
     android:layout_width="170dp"
     android:background="@drawable/list_shadow"
     android:layout_height="wrap_content"
+    android:layout_marginRight="2dp"
+    android:layout_marginLeft="2dp"
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp">
 
@@ -34,10 +36,15 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp">
 
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_offer"
                     android:layout_width="45dp"
+
+                    android:visibility="invisible"
+
                     android:layout_height="45dp"
+
                     android:layout_gravity="center"
                     android:src="@color/green_discount" />
 
@@ -48,6 +55,7 @@
                     android:text="@string/discount_text"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:textColor="#fff"
+                    android:visibility="invisible"
                     android:textAlignment="center"
                     android:textSize="12dp"
 
@@ -55,26 +63,6 @@
 
 
             </FrameLayout>
-            <com.varunest.sparkbutton.SparkButton
-                android:id="@+id/like_button"
-                android:layout_width="40dp"
-                android:layout_gravity="center"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                app:sparkbutton_activeImage="@drawable/active_wish"
-                app:sparkbutton_inActiveImage="@drawable/inactive_wish"
-                app:sparkbutton_iconSize="20dp"
-                app:sparkbutton_primaryColor="@color/colorPrimary"
-                app:sparkbutton_secondaryColor="@color/colorPrimaryDark" />
-
-
-         <!--   <ImageView
-                android:layout_width="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_height="20dp"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/inactive_wish"/>-->
 
         </RelativeLayout>
 
@@ -100,13 +88,13 @@
 
             <TextView
                 android:id="@+id/tv_manufacturer"
-
+                android:textColor="#a5968f"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:textSize="12dp"
                 android:layout_marginTop="5dp"
-                android:textColor="#a5968f"
+
                 android:text="By Dib"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
@@ -117,24 +105,24 @@
 
                 <TextView
                     android:id="@+id/tv_product_price"
-
+                    android:textColor="#004271"
                     android:layout_alignParentLeft="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/Rs1"
                     android:textSize="12dp"
-                    android:textColor="#004271"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     android:textStyle="bold"
                     />
 
                 <TextView
                     android:id="@+id/tv_product_old__price"
-
+                    android:textColor="#2b2e39"
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/Rs2"
                     android:textSize="12dp"
-                    android:textColor="#2b2e39"
 
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                     />
@@ -143,6 +131,7 @@
             </RelativeLayout>
             <TextView
                 android:id="@+id/tv_savings"
+                android:textColor="@color/green_discount"
                 android:layout_alignParentLeft="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -150,41 +139,38 @@
                 android:textSize="12dp"
 
                 android:layout_marginTop="5dp"
-                android:textColor="@color/green_discount"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:textStyle="bold"
                 />
 
+            <!-- android:textColor="#03002d"-->
+
             <Button
-                android:layout_width="70dp"
+                android:layout_width="100dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:text="Add"
+                android:text="Add To Cart"
                 android:textColor="#fff"
                 android:id="@+id/btn_add"
-
                 android:textAppearance="?android:textAppearanceSmall"
 
 
                 android:background="#35e0ff"
-                android:layout_height="28dp" />
+                android:layout_height="33dp" />
 
-
-
-          <!--  <com.travijuu.numberpicker.library.NumberPicker
-                android:id="@+id/np_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:custom_layout="@layout/number_picker_layout"
-                android:layout_centerHorizontal="true"
-                app:min="0"
-                app:max="10"
-                app:value="0"
-                android:layout_below="@+id/tv_savings"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center"/>
--->
+            <!--   <com.travijuu.numberpicker.library.NumberPicker
+                   android:id="@+id/np_count"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   app:custom_layout="@layout/number_picker_layout"
+                   android:layout_centerHorizontal="true"
+                   app:min="0"
+                   app:max="10"
+                   app:value="0"
+                   android:layout_below="@+id/tv_savings"
+                   android:layout_marginBottom="5dp"
+                   android:layout_marginTop="10dp"
+                   android:layout_gravity="center"/>-->
         </LinearLayout>
 
 

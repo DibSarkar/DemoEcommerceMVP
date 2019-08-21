@@ -53,6 +53,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public interface ProductListListener {
         void onItemClick(CategoriesProductsResponse.ProductBean item, int position);
         void onWishSelected(CategoriesProductsResponse.ProductBean item, int position);
+        void onWishRemoved(CategoriesProductsResponse.ProductBean item, int position);
         void onAddtoCart(CategoriesProductsResponse.ProductBean item, int position, String quantity);
 
     }
@@ -67,6 +68,56 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         mValues.addAll(productListBeanList);
         notifyDataSetChanged();
     }
+
+    public void updateWishlist(String product_id,String product_option_value_id, String wishlist_id)
+    {
+        if(!wishlist_id.equals("")) {
+
+            if (!wishlist_id.equals("0")) {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("1");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("1");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("0");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+
+        }
+        else {
+            for (int i = 0; i < mValues.size(); i++) {
+                if (mValues.get(i).getProduct_id().equals(product_id)) {
+                    if (product_option_value_id.equals("")) {
+                        mValues.get(i).setIs_wishlist("0");
+                        mValues.get(i).setWishlist_id(wishlist_id);
+                    } else {
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+
+    }
+
 
     public void changeWish(CategoriesProductsResponse.ProductBean productBean,int pos)
     {
@@ -123,7 +174,27 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 .placeholder(R.drawable.no_image)
                 .centerCrop()
                 .into(holder.iv_product);
+        if(mDataBean.getOptions().isEmpty())
+        {
+            if(mDataBean.getIs_wishlist().equals("1")) {
 
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
+        else {
+            if(mDataBean.getOptions().get(0).getProduct_option_value().get(0).getIs_wishlist().equals("1")) {
+
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
 
        /* holder.np_count.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,13 +239,6 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             }
         });
 
-        if(!mDataBean.isActiveWish())
-        {
-            holder.like_button.setChecked(false);
-        }
-        else {
-            holder.like_button.setChecked(true);
-        }
 
         holder.like_button.setEventListener(new SparkEventListener() {
             @Override
@@ -182,6 +246,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 if(buttonState)
                 {
                     mListener.onWishSelected(mValues.get(position),position);
+                }
+                else {
+
+                    mListener.onWishRemoved(mValues.get(position),position);
                 }
 
 

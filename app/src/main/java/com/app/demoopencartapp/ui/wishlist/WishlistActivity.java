@@ -2,12 +2,9 @@ package com.app.demoopencartapp.ui.wishlist;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -16,12 +13,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.CartListBean;
-import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
+import com.app.demoopencartapp.data.network.models.WishlistResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
 
 import com.app.demoopencartapp.ui.productDetails.ProductDetailsActivity;
-import com.app.demoopencartapp.utils.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +41,12 @@ public class WishlistActivity extends BaseActivity implements WishlistMvpView{
 
     @BindView(R.id.tv_no_wishlist)
     TextView tv_no_wishlist;
+
+    @BindView(R.id.ll_cart_count)
+    LinearLayout ll_cart_count;
+
+    @BindView(R.id.tv_cart_count)
+    TextView tv_cart_count;
 
     @Inject
     WishlistAdapter wishlistAdapter;
@@ -97,28 +98,32 @@ public class WishlistActivity extends BaseActivity implements WishlistMvpView{
         rv_wishlist.setAdapter(wishlistAdapter);
         wishlistAdapter.setAdapterListener(new WishlistAdapter.WishlistProductListener() {
             @Override
-            public void onItemClick(CategoriesProductsResponse.ProductBean item, int position) {
+            public void onItemClick(WishlistResponse.ProductListBean item, int position) {
 
                 wishlistPresenter.onOpenProductDetails(item.getProduct_id());
             }
 
             @Override
-            public void onWishDeleteSelected(CategoriesProductsResponse.ProductBean item, int position) {
+            public void onWishDeleteSelected(WishlistResponse.ProductListBean item, int position) {
 
+                wishlistPresenter.onDeleteWish(item.getWishlist_id(),position,item);
             }
 
 
             @Override
-            public void onAddtoCart(CategoriesProductsResponse.ProductBean item, int position, String quantity) {
+            public void onAddtoCart(WishlistResponse.ProductListBean item, int position, String quantity) {
 
-
+                if(item.getOption().isEmpty()) {
+                    wishlistPresenter.onAddtoCart(item.getProduct_id(), quantity,new ArrayList<Integer>());
+                }
             }
         });
+
 
     }
 
     @Override
-    public void getWislist(List<CategoriesProductsResponse.ProductBean> product, int total_qty) {
+    public void getWislist(List<WishlistResponse.ProductListBean> product, int total_qty) {
 
         if(product.size()>0)
         {
@@ -131,6 +136,15 @@ public class WishlistActivity extends BaseActivity implements WishlistMvpView{
             tv_no_wishlist.setVisibility(View.VISIBLE);
             ll_wishlist.setVisibility(View.GONE);
         }
+        if(total_qty==0)
+        {
+            ll_cart_count.setVisibility(View.GONE);
+        }
+        else {
+            ll_cart_count.setVisibility(View.VISIBLE);
+            tv_cart_count.setText(String.valueOf(total_qty));
+        }
+
 
 
     }
@@ -143,6 +157,26 @@ public class WishlistActivity extends BaseActivity implements WishlistMvpView{
     }
 
     @Override
+    public void addToCartDone(int cart_count) {
+        if(cart_count==0)
+        {
+            ll_cart_count.setVisibility(View.GONE);
+        }
+        else {
+            ll_cart_count.setVisibility(View.VISIBLE);
+            tv_cart_count.setText(String.valueOf(cart_count));
+        }
+    }
+
+    @Override
+    public void removeWishDone(int pos, WishlistResponse.ProductListBean item) {
+
+        wishlistAdapter.remove(pos,item);
+
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -150,6 +184,19 @@ public class WishlistActivity extends BaseActivity implements WishlistMvpView{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public  void checkWishData(ArrayList<WishlistResponse.ProductListBean> mValues)
+    {
+        if(mValues.size()>0)
+        {
+            tv_no_wishlist.setVisibility(View.GONE);
+            ll_wishlist.setVisibility(View.VISIBLE);
+        }
+        else {
+            tv_no_wishlist.setVisibility(View.VISIBLE);
+            ll_wishlist.setVisibility(View.GONE);
+        }
     }
 }
 

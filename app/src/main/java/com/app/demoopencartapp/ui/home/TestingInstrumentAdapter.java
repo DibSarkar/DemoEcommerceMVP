@@ -43,6 +43,7 @@ public class TestingInstrumentAdapter extends RecyclerView.Adapter<TestingInstru
     public interface TestingInstrumentListener {
         void onItemClick(HomeProductsResponse.TestingProductBean item, int position);
         void onWishSelected(HomeProductsResponse.TestingProductBean item, int position);
+        void onWishRemoved(HomeProductsResponse.TestingProductBean item, int position);
         void onAddtoCart(HomeProductsResponse.TestingProductBean item, int position,String quantity);
 
 
@@ -62,6 +63,54 @@ public class TestingInstrumentAdapter extends RecyclerView.Adapter<TestingInstru
     public void changeWish(HomeProductsResponse.TestingProductBean dealsOfTheDayBean,int pos)
     {
         notifyItemChanged(pos,dealsOfTheDayBean);
+    }
+    public void updateWishlist(String product_id,String product_option_value_id, String wishlist_id)
+    {
+        if(!wishlist_id.equals("")) {
+
+            if (!wishlist_id.equals("0")) {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("1");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("1");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+            else {
+                for (int i = 0; i < mValues.size(); i++) {
+                    if (mValues.get(i).getProduct_id().equals(product_id)) {
+                        if (product_option_value_id.equals("")) {
+                            mValues.get(i).setIs_wishlist("0");
+                            mValues.get(i).setWishlist_id(wishlist_id);
+                        } else {
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                            mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                        }
+                    }
+                }
+            }
+
+        }
+        else {
+            for (int i = 0; i < mValues.size(); i++) {
+                if (mValues.get(i).getProduct_id().equals(product_id)) {
+                    if (product_option_value_id.equals("")) {
+                        mValues.get(i).setIs_wishlist("0");
+                        mValues.get(i).setWishlist_id(wishlist_id);
+                    } else {
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setIs_wishlist("0");
+                        mValues.get(i).getOptions().get(0).getProduct_option_value().get(0).setWishlist_id(wishlist_id);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+
     }
 
     @Override
@@ -107,7 +156,27 @@ public class TestingInstrumentAdapter extends RecyclerView.Adapter<TestingInstru
             holder.iv_offer.setVisibility(View.INVISIBLE);
             holder.tv_offer.setVisibility(View.INVISIBLE);
         }
+        if(mDataBean.getOptions().isEmpty())
+        {
+            if(mDataBean.getIs_wishlist().equals("1")) {
 
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
+        else {
+            if(mDataBean.getOptions().get(0).getProduct_option_value().get(0).getIs_wishlist().equals("1")) {
+
+                holder.like_button.setChecked(true);
+            }
+            else {
+                holder.like_button.setChecked(false);
+            }
+
+        }
 
         holder.btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -158,19 +227,17 @@ public class TestingInstrumentAdapter extends RecyclerView.Adapter<TestingInstru
             }
         });*/
 
-        if(!mDataBean.isActiveWish())
-        {
-            holder.like_button.setChecked(false);
-        }
-        else {
-            holder.like_button.setChecked(true);
-        }
+
         holder.like_button.setEventListener(new SparkEventListener() {
             @Override
             public void onEvent(ImageView button, boolean buttonState) {
                 if(buttonState)
                 {
                     mListener.onWishSelected(mValues.get(position),position);
+                }
+                else {
+
+                    mListener.onWishRemoved(mValues.get(position),position);
                 }
 
 

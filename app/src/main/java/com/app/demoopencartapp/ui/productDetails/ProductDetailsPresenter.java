@@ -416,7 +416,7 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
     }
 
     @Override
-    public void onAddWishlist(String product_id, String product_option_id, String product_option_value_id, boolean isCustomizable) {
+    public void onAddWishlist(String product_id, String product_option_id, final String product_option_value_id, boolean isCustomizable) {
 
         if(getMvpView().isNetworkConnected()) {
             Map<String, String> option = new HashMap<>();
@@ -440,7 +440,7 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
                             if (response != null) {
                                 if (response.getResponseCode() == 1) {
                                     getMvpView().showMessage(response.getResponseText());
-                                    getMvpView().updateWishDone(response.getWishlist_id());
+                                    getMvpView().updateWishDone(response.getWishlist_id(),product_option_value_id);
 
                                 } else {
                                     getMvpView().showMessage(response.getResponseText());
@@ -486,7 +486,7 @@ public class ProductDetailsPresenter<V extends ProductDetailsMvpView> extends Ba
                                        public void onComplete() {
                                            getMvpView().hideLoading();
                                            getMvpView().showMessage("Item removed from your wishlist");
-                                           getMvpView().updateWishDone(0);
+                                           getMvpView().deleteWishDone();
 
                                        }
 

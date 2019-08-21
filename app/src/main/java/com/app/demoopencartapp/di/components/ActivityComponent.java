@@ -3,6 +3,7 @@ package com.app.demoopencartapp.di.components;
 import com.app.demoopencartapp.di.PerActivity;
 import com.app.demoopencartapp.di.modules.ActivityModule;
 import com.app.demoopencartapp.ui.cart.CartActivity;
+import com.app.demoopencartapp.ui.cart.Shipping_Fragment;
 import com.app.demoopencartapp.ui.wishlist.WishlistActivity;
 import com.app.demoopencartapp.ui.addAddress.AddAddressActivity;
 import com.app.demoopencartapp.ui.addressBook.AddressBookActivity;
@@ -57,9 +58,9 @@ public  interface ActivityComponent {
 
     void inject(WishlistActivity activity);
 
-    /* void inject(AboutActivity activity);
+    void inject(Shipping_Fragment shipping_fragment);
 
-    void inject(PrivacyActivity activity);
+   /* void inject(PrivacyActivity activity);
 
     void inject(TermsActivity activity);
 

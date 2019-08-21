@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
-import com.app.demoopencartapp.data.local_models.CartListBean;
+
 import com.app.demoopencartapp.data.network.models.CartListResponse;
 import com.app.demoopencartapp.utils.GlideApp;
 import com.travijuu.numberpicker.library.Enums.ActionEnum;

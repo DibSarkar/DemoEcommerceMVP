@@ -19,7 +19,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
 
-import com.app.demoopencartapp.data.local_models.CartListBean;
+
 import com.app.demoopencartapp.data.network.models.AddressListResponse;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
 import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
@@ -27,6 +27,7 @@ import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
+import com.app.demoopencartapp.data.network.models.WishlistResponse;
 import com.app.demoopencartapp.di.ActivityContext;
 import com.app.demoopencartapp.ui.BrandedOffersAdapter;
 
@@ -34,6 +35,7 @@ import com.app.demoopencartapp.ui.HomeOffersListAdapter;
 import com.app.demoopencartapp.ui.addAddress.CountryStateAdpater;
 import com.app.demoopencartapp.ui.addressBook.AddressBookAdapter;
 import com.app.demoopencartapp.ui.cart.CartAdapter;
+import com.app.demoopencartapp.ui.cart.Shipping_Fragment;
 import com.app.demoopencartapp.ui.home.AngleAdapter;
 import com.app.demoopencartapp.ui.home.BestSellerListAdapter;
 import com.app.demoopencartapp.ui.home.DealsProductListAdapter;
@@ -262,7 +264,12 @@ public class ActivityModule {
 
     @Provides
     WishlistAdapter provideWishlistAdapter() {
-        return new WishlistAdapter(new ArrayList<CategoriesProductsResponse.ProductBean>());
+        return new WishlistAdapter(new ArrayList<WishlistResponse.ProductListBean>());
+    }
+
+    @Provides
+    Shipping_Fragment provideShipping_Fragment() {
+        return new Shipping_Fragment();
     }
 /*
     @Provides

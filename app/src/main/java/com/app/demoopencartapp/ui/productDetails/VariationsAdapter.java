@@ -5,13 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
-import com.app.demoopencartapp.utils.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +44,26 @@ public class VariationsAdapter extends RecyclerView.Adapter<VariationsAdapter.Vi
         mValues.addAll(productOptionValueBeanList);
         notifyDataSetChanged();
     }
+    public void wishSelect(String product_option_value_id, boolean isCheckWish, int wish_id)
+    {
+
+        for (int i=0;i<mValues.size();i++)
+        {
+                 if (mValues.get(i).getProduct_option_value_id().equals(product_option_value_id)) {
+                     mValues.get(i).setWishlist_id(String.valueOf(wish_id));
+                     if(isCheckWish) {
+                         mValues.get(i).setIs_wishlist("1");
+                     }
+                     else {
+                         mValues.get(i).setIs_wishlist("0");
+                     }
+             }
+
+
+        }
+        notifyDataSetChanged();
+    }
+
 
     public void changeItemBg(ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean productOptionValueBean,int pos)
     {
@@ -63,7 +81,30 @@ public class VariationsAdapter extends RecyclerView.Adapter<VariationsAdapter.Vi
         notifyDataSetChanged();
     }
 
+    public void changeItemBgWish(ProductDetailsResponse.ProductBean.OptionsBean.ProductOptionValueBean productOptionValueBean,boolean selectWish,int pos)
+    {
 
+
+            for (int j=0;j<mValues.size();j++) {
+                if (mValues.get(pos).getProduct_option_value_id().equals(productOptionValueBean.getProduct_option_value_id())) {
+                   if(mValues.get(j).getIs_wishlist().equals("1")) {
+                       if (selectWish) {
+                           mValues.get(j).setIs_wishlist("1");
+                       }
+                   }
+                   else {
+
+                   }
+                }
+
+
+
+
+
+        }
+
+        notifyDataSetChanged();
+    }
     @Override
     public VariationsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())

@@ -22,4 +22,16 @@ public interface MainMvpView extends MvpView {
     void loadProducts(List<HomeProductsResponse.SliderBean> slider, List<HomeProductsResponse.BrandBean> brand, List<HomeProductsResponse.DealsOfTheDayBean> dealsOfTheDay, List<HomeProductsResponse.BestSellerBean> bestSeller, List<HomeProductsResponse.TestingProductBean> testingProduct, List<HomeProductsResponse.AngelGrindesBean> angelGrindes);
     void loadSliderData(List<HomeProductsResponse.TopBannerBean> topBanner, List<HomeProductsResponse.SliderBean> slider, List<HomeProductsResponse.BrandBean> brand, List<HomeProductsResponse.DealsOfTheDayBean> dealsOfTheDay, List<HomeProductsResponse.BestSellerBean> bestSeller, List<HomeProductsResponse.TestingProductBean> testingProduct, List<HomeProductsResponse.AngelGrindesBean> angelGrindes);
     void loadOffersBrands(List<HomeProductsResponse.SliderBean> slider, List<HomeProductsResponse.BrandBean> brand);
+    void addDealsWish(String product_id,String product_option_value_id,String product_option_id);
+    void addBestSellingWish(String product_id,String product_option_value_id, String product_option_id);
+    void addTestingWish(String product_id,String product_option_value_id, String product_option_id);
+    void addAngleWish(String product_id,String product_option_value_id, String product_option_id);
+    void addDealsWishDone(String product_id,String product_option_value_id,String wishlist_id);
+    void addBestSellingDone(String product_id,String product_option_value_id,String wishlist_id);
+    void addTestingDone(String product_id,String product_option_value_id,String wishlist_id);
+    void addAngleDone(String product_id,String product_option_value_id,String wishlist_id);
+    void removeDealsWishDone(String product_id,String product_option_value_id);
+    void removeBestSellingWishDone(String product_id,String product_option_value_id);
+    void removeTestingDone(String product_id,String product_option_value_id);
+    void removeAngleDone(String product_id,String product_option_value_id);
 }

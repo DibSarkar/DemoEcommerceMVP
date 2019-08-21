@@ -37,8 +37,6 @@ public class AddAddressPresenter  <V extends AddAddressMvpView> extends BasePres
 
     @Override
     public void onGetAllCountries() {
-
-
         if (getMvpView().isNetworkConnected()) {
             getMvpView().showLoading();
             getCompositeDisposable().add(getDataManager().getCountries(Constants.API_TOKEN)

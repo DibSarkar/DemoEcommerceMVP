@@ -93,6 +93,15 @@ public class CartListResponse extends BaseResponse{
             private String quantity;
             private String price;
             private List<?> option;
+            private String shipping;
+
+            public void setShipping(String shipping) {
+                this.shipping = shipping;
+            }
+
+            public String getShipping() {
+                return shipping;
+            }
 
             public String getCart_id() {
                 return cart_id;
