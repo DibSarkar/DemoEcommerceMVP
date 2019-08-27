@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.app.demoopencartapp.R;
@@ -25,10 +27,11 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
 
     private final ArrayList<AddressListResponse.ResponseDataBean> mValues;
 
-
+    int selectedPosition = -1;
     public AddressBookListener mListener;
     public AddressBookDeleteListener mListener1;
     Context mContext;
+    public boolean isVisible = false;
 
     public AddressBookAdapter(ArrayList<AddressListResponse.ResponseDataBean> items) {
         this.mValues = items;
@@ -39,6 +42,7 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
         void onItemClick(AddressListResponse.ResponseDataBean item, int position);
         void onItemDelete(AddressListResponse.ResponseDataBean item, int position);
         void onItemEdit(AddressListResponse.ResponseDataBean item);
+        void onItemSelectedAddress(AddressListResponse.ResponseDataBean item);
     }
 
     public interface AddressBookDeleteListener
@@ -62,6 +66,11 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
         notifyDataSetChanged();
 
 
+    }
+
+    public void visibleRadio()
+    {
+        isVisible = true;
     }
 
     public void deleteAddress(AddressListResponse.ResponseDataBean responseDataBean)
@@ -104,6 +113,34 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
             }
         });
 
+        if(isVisible)
+        {
+            holder.rg_select_address.setVisibility(View.VISIBLE);
+
+            if(selectedPosition==position){
+                holder.rb_address.setChecked(true);
+            }else{
+                holder.rb_address.setChecked(false);
+            }
+
+            holder.rb_address.setTag(position);
+        }
+        else {
+            holder.rg_select_address.setVisibility(View.GONE);
+        }
+
+        holder.rb_address.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                selectedPosition = (Integer)holder.rb_address.getTag();
+                notifyDataSetChanged();
+                mListener.onItemSelectedAddress(mValues.get(position));
+
+            }
+        });
+
+
     }
 
 
@@ -132,6 +169,12 @@ public class AddressBookAdapter extends RecyclerView.Adapter<AddressBookAdapter.
 
         @BindView(R.id.iv_edit)
         ImageView iv_edit;
+
+        @BindView(R.id.rg_select_address)
+        RadioGroup rg_select_address;
+
+        @BindView(R.id.rb_address)
+        RadioButton rb_address;
 
 
         public ViewHolder(View view) {

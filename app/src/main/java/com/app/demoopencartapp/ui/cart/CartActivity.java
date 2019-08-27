@@ -19,10 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -33,14 +30,12 @@ import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.CartListResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.ShippingMethodsResponse;
-import com.app.demoopencartapp.shared.CookiesManage;
 import com.app.demoopencartapp.shared.base.BaseActivity;
 
 import com.app.demoopencartapp.ui.addAddress.CountryStateAdpater;
 import com.app.demoopencartapp.ui.checkout.CheckoutActivity;
 import com.app.demoopencartapp.ui.home.MainActivity;
 import com.app.demoopencartapp.ui.login.LoginActivity;
-import com.app.demoopencartapp.ui.productDetails.AddReviewDialogFragment;
 import com.app.demoopencartapp.ui.productDetails.ProductDetailsActivity;
 import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.DividerItemDecoration;
@@ -74,6 +69,9 @@ public class CartActivity extends BaseActivity implements CartMvpView{
     @BindView(R.id.tv_total_gst)
     TextView tv_total_gst;
 
+    @BindView(R.id.tv_shipping_price)
+    TextView tv_shipping_price;
+
     @BindView(R.id.tv_no_cart)
     TextView tv_no_cart;
 
@@ -88,6 +86,8 @@ public class CartActivity extends BaseActivity implements CartMvpView{
 
     @BindView(R.id.ll_shipping)
     LinearLayout ll_shipping;
+
+
 
     BottomSheetBehavior sheetBehavior;
 
@@ -115,8 +115,7 @@ public class CartActivity extends BaseActivity implements CartMvpView{
     @BindView(R.id.tv_shipping_title)
     TextView tv_shipping_title;
 
-    @BindView(R.id.tv_shipping_price)
-    TextView tv_shipping_price;
+
 
     @Inject
     CountryStateAdpater countryAdpater;
@@ -134,6 +133,8 @@ public class CartActivity extends BaseActivity implements CartMvpView{
     double shipping_tax_price2 = 0;
     double total_gst = 0;
     int radio_selected = 1;
+    String weight_code = "";
+    String weight_title = "";
 
     private boolean isShipping = false;
     public static final int OPEN_LOGIN = 503;
@@ -380,7 +381,7 @@ public class CartActivity extends BaseActivity implements CartMvpView{
 
     }
 
-    public void setShippingText(String title, double cost, double tax, int radio_selected){
+    public void setShippingText(String title, double cost, double tax, int radio_selected, String weight_code1){
 
         if(!title.isEmpty())
         {
@@ -389,7 +390,8 @@ public class CartActivity extends BaseActivity implements CartMvpView{
             tv_shipping_price.setText('\u20B9'+" "+new DecimalFormat("0.00").format(cost));
             tv_total_gst.setText('\u20B9'+" "+String.valueOf(Math.round((double)(total_gst+tax))));
             tv_total.setText('\u20B9'+" "+String.valueOf(Math.round((double)(total_price+cost+tax))));
-
+            weight_code = weight_code1;
+            this.weight_title = title;
         }
 
         this.radio_selected = radio_selected;
@@ -419,7 +421,7 @@ public class CartActivity extends BaseActivity implements CartMvpView{
         {
             if(!user_id.equals(""))
             {
-             cartPresenter.onOpenCheckout();
+             cartPresenter.onOpenCheckout(isShipping,country_id,state_id,weight_code,isShipping);
             }
             else {
                 layoutBottomSheet.setVisibility(View.VISIBLE);
@@ -551,9 +553,29 @@ public class CartActivity extends BaseActivity implements CartMvpView{
     }
 
     @Override
-    public void openCheckout() {
+    public void openCheckout(boolean isShipping, String country_id1, String state_id1) {
+
 
         Intent intent = new Intent(mContext, CheckoutActivity.class);
+        intent.putExtra("isShipping",isShipping);
+        intent.putExtra("country_id",country_id1);
+        intent.putExtra("zone_id",state_id1);
+        String [] total_gst = tv_total_gst.getText().toString().split(" ", 2);
+        String [] sub_total = tv_sub_total.getText().toString().split(" ", 2);
+        String [] total = tv_total.getText().toString().split(" ", 2);
+        intent.putExtra("total_gst",total_gst[1]);
+        intent.putExtra("sub_total",sub_total[1]);
+
+
+        if(isShipping)
+        {
+            String [] shipping_total = tv_shipping_price.getText().toString().split(" ", 2);
+            intent.putExtra("shipping_cost",shipping_total[1]);
+            intent.putExtra("weight_code",weight_code);
+            intent.putExtra("weight_title",weight_title);
+        }
+        intent.putExtra("total_price",total[1]);
+
         startActivity(intent);
     }
 

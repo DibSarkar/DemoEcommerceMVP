@@ -14,7 +14,7 @@ import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
-import com.app.demoopencartapp.data.network.models.PaymentMethodResponse;
+import com.app.demoopencartapp.data.network.models.PaymentMethodsResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
@@ -284,7 +284,7 @@ public class AppDataManager implements DataManager {
     }
 
     @Override
-    public Single<PaymentMethodResponse> getPaymentMethods(String apitoken, String country_id, String zone_id) {
+    public Single<PaymentMethodsResponse> getPaymentMethods(String apitoken, String country_id, String zone_id) {
         return mApiHelper.getPaymentMethods(apitoken,country_id,zone_id);
     }
 

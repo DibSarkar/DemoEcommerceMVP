@@ -28,6 +28,7 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
 
     double final_shipping_cost = 0;
     double final_shipping_tax_price = 0;
+    String weight_code = "";
 
     ShippingMethodsResponse.ShippingBean.WeightBean weightBean;
 
@@ -84,12 +85,14 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
 
             weightBean= (ShippingMethodsResponse.ShippingBean.WeightBean) getArguments().getSerializable("weights");
             System.out.println("weightsss"+" "+weightBean.getTitle());
+
             rb_ship1.setText(weightBean.getQuote().getWeight_5().getTitle()+"("+weightBean.getQuote().getWeight_5().getText()+")");
             rb_ship2.setText(weightBean.getQuote().getWeight_6().getTitle()+"("+weightBean.getQuote().getWeight_6().getText()+")");
 
             if(radio_selected==1)
             {
                 rb_ship1.setChecked(true);
+                weight_code = weightBean.getQuote().getWeight_5().getCode();
                 title = weightBean.getQuote().getWeight_5().getTitle();
                 final_shipping_cost = Double.parseDouble(weightBean.getQuote().getWeight_5().getCost());
                 final_shipping_tax_price = Double.parseDouble(weightBean.getQuote().getWeight_5().getTax());
@@ -97,6 +100,7 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
             }
             else {
                 rb_ship2.setChecked(true);
+                weight_code = weightBean.getQuote().getWeight_6().getCode();
                 title = weightBean.getQuote().getWeight_6().getTitle();
                 final_shipping_cost = Double.parseDouble(weightBean.getQuote().getWeight_6().getCost());
                 final_shipping_tax_price = Double.parseDouble(weightBean.getQuote().getWeight_6().getTax());
@@ -122,6 +126,7 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
                       title = weightBean.getQuote().getWeight_5().getTitle();
                       final_shipping_cost = Double.parseDouble(weightBean.getQuote().getWeight_5().getCost());
                       final_shipping_tax_price = Double.parseDouble(weightBean.getQuote().getWeight_5().getTax());
+                      weight_code = weightBean.getQuote().getWeight_5().getCode();
                       radio_selected = 1;
                       break;
 
@@ -129,6 +134,7 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
                       title = weightBean.getQuote().getWeight_6().getTitle();
                       final_shipping_cost =  Double.parseDouble(weightBean.getQuote().getWeight_6().getCost());
                       final_shipping_tax_price = Double.parseDouble(weightBean.getQuote().getWeight_6().getTax());
+                      weight_code = weightBean.getQuote().getWeight_6().getCode();
                       radio_selected = 2;
                       break;
 
@@ -158,7 +164,7 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
 
                 dismissDialog("");
 
-                shipping_fragment_presenter.onSendShippingData(title,final_shipping_tax_price,final_shipping_cost,radio_selected);
+                shipping_fragment_presenter.onSendShippingData(title,final_shipping_tax_price,final_shipping_cost,radio_selected,weight_code);
 
                 break;
 
@@ -185,9 +191,9 @@ public class Shipping_Fragment extends BaseDialog implements Shipping_Fragment_M
     }
 
     @Override
-    public void getSendShippingData(String title, double cost, double tax, int radio_selected) {
+    public void getSendShippingData(String title, double cost, double tax, int radio_selected, String weight_code) {
 
-        ((CartActivity) getActivity()).setShippingText(title,cost,tax,radio_selected);
+        ((CartActivity) getActivity()).setShippingText(title,cost,tax,radio_selected,weight_code);
 
     }
 

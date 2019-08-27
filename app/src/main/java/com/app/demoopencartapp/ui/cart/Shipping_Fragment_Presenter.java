@@ -21,9 +21,9 @@ public class Shipping_Fragment_Presenter <V extends Shipping_Fragment_MvpView> e
     }
 
     @Override
-    public void onSendShippingData(String title, double cost, double tax, int radio_selected) {
+    public void onSendShippingData(String title, double cost, double tax, int radio_selected, String weight_code) {
 
-        getMvpView().getSendShippingData(title,cost,tax,radio_selected);
+        getMvpView().getSendShippingData(title,cost,tax,radio_selected,weight_code);
 
     }
 

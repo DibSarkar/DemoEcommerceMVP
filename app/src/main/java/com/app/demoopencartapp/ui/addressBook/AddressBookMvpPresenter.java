@@ -11,5 +11,5 @@ public interface AddressBookMvpPresenter<V extends AddressBookMvpView> extends M
     void onGetAddress();
     void onDeleteAddress(AddressListResponse.ResponseDataBean responseDataBean,String address_id);
     void onOpenEditAddress(String address_id,String fname,String lname,String comp,String address1,String address2,String city,String pin, String country_id, String state_id, int default_address,String gstin);
-
+    void onSendDataCheckout(AddressListResponse.ResponseDataBean responseDataBean);
 }

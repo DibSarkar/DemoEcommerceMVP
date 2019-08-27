@@ -11,4 +11,6 @@ public interface AddressBookMvpView extends MvpView {
     void getAddress(List<AddressListResponse.ResponseDataBean> responseData);
     void deleteAddress(AddressListResponse.ResponseDataBean responseDataBean);
     void openEditAddress(String address_id,String fname,String lname,String comp,String address1,String address2,String city,String pin, String country_id, String state_id, int default_address,String gstin);
+    void sendDataCheckout(AddressListResponse.ResponseDataBean responseDataBean);
+
 }

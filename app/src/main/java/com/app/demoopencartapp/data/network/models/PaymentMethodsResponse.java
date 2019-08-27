@@ -1,17 +1,17 @@
 package com.app.demoopencartapp.data.network.models;
 
-public class PaymentMethodResponse {
+public class PaymentMethodsResponse {
 
 
     /**
      * responseCode : 1
      * responseText : Data Found
-     * shipping : {"cod":{"code":"cod","title":"Cash On Delivery","terms":"","sort_order":"1"}}
+     * payment : {"cod":{"code":"cod","title":"Cash On Delivery","terms":"","sort_order":"1"}}
      */
 
     private int responseCode;
     private String responseText;
-    private ShippingBean shipping;
+    private PaymentBean payment;
 
     public int getResponseCode() {
         return responseCode;
@@ -29,15 +29,15 @@ public class PaymentMethodResponse {
         this.responseText = responseText;
     }
 
-    public ShippingBean getShipping() {
-        return shipping;
+    public PaymentBean getPayment() {
+        return payment;
     }
 
-    public void setShipping(ShippingBean shipping) {
-        this.shipping = shipping;
+    public void setPayment(PaymentBean payment) {
+        this.payment = payment;
     }
 
-    public static class ShippingBean {
+    public static class PaymentBean {
         /**
          * cod : {"code":"cod","title":"Cash On Delivery","terms":"","sort_order":"1"}
          */
@@ -97,5 +97,13 @@ public class PaymentMethodResponse {
                 this.sort_order = sort_order;
             }
         }
+
+        @Override
+        public String toString() {
+            return "PaymentBean{" +
+                    "cod=" + cod +
+                    '}';
+        }
     }
+
 }

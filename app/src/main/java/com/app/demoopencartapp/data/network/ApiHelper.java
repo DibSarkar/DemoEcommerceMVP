@@ -13,8 +13,7 @@ import com.app.demoopencartapp.data.network.models.CategoriesProductsResponse;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.data.network.models.GetAccountInfoResponse;
 import com.app.demoopencartapp.data.network.models.HomeProductsResponse;
-
-import com.app.demoopencartapp.data.network.models.PaymentMethodResponse;
+import com.app.demoopencartapp.data.network.models.PaymentMethodsResponse;
 import com.app.demoopencartapp.data.network.models.ProductDetailsResponse;
 import com.app.demoopencartapp.data.network.models.RegisterResponse;
 import com.app.demoopencartapp.data.network.models.ReviewsResponse;
@@ -240,7 +239,7 @@ public interface ApiHelper {
 
     @FormUrlEncoded
     @POST("index.php?route=api/method/payment_method")
-    Single<PaymentMethodResponse> getPaymentMethods(@Query("api_token") String apitoken,
+    Single<PaymentMethodsResponse> getPaymentMethods(@Query("api_token") String apitoken,
                                                      @Field("country_id") String country_id,
                                                      @Field("zone_id") String zone_id);
     @Multipart

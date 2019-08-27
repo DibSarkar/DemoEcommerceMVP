@@ -13,6 +13,7 @@ public class Constants {
    public static String PRIORITY_PRICE = "p.price";
    public static String PRIORITY_RATING = "rating";
    public static String OPEN_FROM_LOGIN= "open_from_login";
+   public static String OPEN_FROM_CHECKOUT = "checkout_flag";
 
    public static int  OPEN_FROM_MYPROFILE = 2;
    public static String U_DEVICETOKEN = "devicetoken";

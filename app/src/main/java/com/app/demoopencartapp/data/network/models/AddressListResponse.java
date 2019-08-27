@@ -1,8 +1,9 @@
 package com.app.demoopencartapp.data.network.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AddressListResponse extends BaseResponse {
+public class AddressListResponse extends BaseResponse   {
 
 
     /**
@@ -22,7 +23,7 @@ public class AddressListResponse extends BaseResponse {
         this.responseData = responseData;
     }
 
-    public static class ResponseDataBean {
+    public static class ResponseDataBean implements Serializable{
         /**
          * address_id : 24
          * firstname : hfdfhf
@@ -166,5 +167,28 @@ public class AddressListResponse extends BaseResponse {
         public void setDefault_address(int default_address) {
             this.default_address = default_address;
         }
+
+
+        @Override
+        public String toString() {
+            return "ResponseDataBean{" +
+                    "address_id='" + address_id + '\'' +
+                    ", firstname='" + firstname + '\'' +
+                    ", lastname='" + lastname + '\'' +
+                    ", company='" + company + '\'' +
+                    ", gstin='" + gstin + '\'' +
+                    ", address_1='" + address_1 + '\'' +
+                    ", address_2='" + address_2 + '\'' +
+                    ", postcode='" + postcode + '\'' +
+                    ", city='" + city + '\'' +
+                    ", zone_id='" + zone_id + '\'' +
+                    ", zone='" + zone + '\'' +
+                    ", country_id='" + country_id + '\'' +
+                    ", country='" + country + '\'' +
+                    ", default_address=" + default_address +
+                    '}';
+        }
     }
+
+
 }

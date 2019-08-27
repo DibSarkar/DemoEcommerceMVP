@@ -1,7 +1,6 @@
 package com.app.demoopencartapp.ui.cart;
 
 import com.app.demoopencartapp.shared.base.MvpPresenter;
-import com.app.demoopencartapp.ui.home.MainMvpView;
 
 public interface CartMvpPresenter <V extends CartMvpView> extends MvpPresenter<V> {
 
@@ -17,6 +16,6 @@ public interface CartMvpPresenter <V extends CartMvpView> extends MvpPresenter<V
     void onGetShippingMethods(String country_id,String zone_id);
     void onOpenShippingMethods();
     void onFinish();
-    void onOpenCheckout();
+    void onOpenCheckout(boolean isShipping, String country_id, String state_id, String weight_code, boolean shipping);
 
 }

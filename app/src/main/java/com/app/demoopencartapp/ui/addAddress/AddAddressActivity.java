@@ -16,6 +16,7 @@ import android.widget.Spinner;
 import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
+import com.app.demoopencartapp.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -219,8 +220,15 @@ public class AddAddressActivity extends BaseActivity implements AddAddressMvpVie
     public void openAddressBook() {
 
         Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
+        if(getIntent().getExtras()!=null) {
+            if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 1) {
+                returnIntent.putExtra(Constants.OPEN_FROM_CHECKOUT, getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            } else if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 2) {
+                returnIntent.putExtra(Constants.OPEN_FROM_CHECKOUT, getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            }
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
+        }
 
     }
 

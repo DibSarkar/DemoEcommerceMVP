@@ -20,9 +20,12 @@ import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.AddressListResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
 import com.app.demoopencartapp.ui.addAddress.AddAddressActivity;
+import com.app.demoopencartapp.ui.checkout.CheckoutActivity;
 import com.app.demoopencartapp.ui.editAddress.EditAddressActivity;
+import com.app.demoopencartapp.utils.Constants;
 import com.app.demoopencartapp.utils.DividerItemDecoration;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AddressBookActivity extends BaseActivity implements AddressBookMvpView{
+
 
     Context mContext;
 
@@ -52,9 +56,12 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
 
     @Inject
     AddressBookPresenter<AddressBookMvpView> addressBookPresenter;
-
+    public static final int OPEN_ADDRESS = 1001;
+    public static int SEND_BILLING = 1002;
+    public static int SEND_SHIPPING= 1003;
     public  static final int ADD_CODE = 400;
     public  static final int EDIT_CODE = 401;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +109,11 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
             @Override
             public void onItemEdit(AddressListResponse.ResponseDataBean item) {
                 addressBookPresenter.onOpenEditAddress(item.getAddress_id(),item.getFirstname(),item.getLastname(),item.getCompany(),item.getAddress_1(),item.getAddress_2(),item.getCity(),item.getPostcode(),item.getCountry_id(),item.getZone_id(),item.getDefault_address(),item.getGstin());
+            }
 
+            @Override
+            public void onItemSelectedAddress(AddressListResponse.ResponseDataBean item) {
+                addressBookPresenter.onSendDataCheckout(item);
             }
         });
     }
@@ -128,6 +139,20 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
     public void openAddAddress() {
 
         Intent intent = new Intent(mContext, AddAddressActivity.class);
+        if(getIntent().getExtras()!=null)
+        {
+            if(getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT)==1)
+            {
+                intent.putExtra("billing_address",getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            }
+
+            else if(getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT)==2)
+            {
+                intent.putExtra("shipping_address",getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+
+            }
+        }
+
         startActivityForResult(intent,ADD_CODE);
 
     }
@@ -141,11 +166,24 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
             ll_address_book.setVisibility(View.VISIBLE);
             loadAdapter();
             addressBookAdapter.loadAddress(responseData);
+            if(getIntent().getExtras()!=null)
+            {
+                if(getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT)==1)
+                {
+                    addressBookAdapter.visibleRadio();
+                }
+
+                else if(getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT)==2)
+                {
+                    addressBookAdapter.visibleRadio();
+                }
+            }
         }
         else {
             ll_address_book.setVisibility(View.GONE);
             tv_no_address.setVisibility(View.VISIBLE);
         }
+
 
 
     }
@@ -176,6 +214,7 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
 
     @Override
     public void openEditAddress(String address_id, String fname, String lname, String comp, String address1, String address2, String city, String pin, String country_id, String state_id, int default_address, String gstin) {
+        Intent intent = new Intent(mContext, EditAddressActivity.class);
 
         Bundle bundle = new Bundle();
         bundle.putString("address_id",address_id);
@@ -190,10 +229,48 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
         bundle.putString("state_id",state_id);
         bundle.putInt("default_address",default_address);
         bundle.putString("gstin",gstin);
+        if(getIntent().getExtras()!=null) {
+            if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 1) {
+                bundle.putInt("billing_address",getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            }
+            else  if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 2) {
+                bundle.putInt("shipping_address",getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
 
-        Intent intent = new Intent(mContext, EditAddressActivity.class);
-        intent.putExtras(bundle);
-        startActivityForResult(intent,EDIT_CODE);
+            }
+        }
+           intent.putExtras(bundle);
+            startActivityForResult(intent, EDIT_CODE);
+
+
+    }
+
+    @Override
+    public void sendDataCheckout(AddressListResponse.ResponseDataBean responseDataBean) {
+
+        if(getIntent().getExtras()!=null)
+        {
+            Intent intent = new Intent(mContext, CheckoutActivity.class);
+            System.out.println("ressss"+" "+responseDataBean);
+            if(getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT)==1)
+            {
+                Bundle args = new Bundle();
+                args.putSerializable("billing_address",responseDataBean);
+                intent.putExtra("billing_address", args);
+                setResult(SEND_BILLING, intent);
+                finish();
+            }
+            else if(getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT)==2)
+            {
+                Bundle args = new Bundle();
+                args.putSerializable("shipping_address",responseDataBean);
+                intent.putExtra("shipping_address", args);
+                setResult(SEND_SHIPPING, intent);
+                finish();
+            }
+
+        }
+
+
 
     }
 
@@ -210,6 +287,8 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+       // super.onActivityResult(requestCode,requestCode,data);
+
         if (requestCode == ADD_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 addressBookPresenter.onGetAddress();
@@ -226,6 +305,8 @@ public class AddressBookActivity extends BaseActivity implements AddressBookMvpV
                 System.out.println("edit address modified");
             }
         }
+
+
     }
 
 

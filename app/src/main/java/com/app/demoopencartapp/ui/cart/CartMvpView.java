@@ -21,7 +21,7 @@ public interface CartMvpView extends MvpView {
     void getShippingMethods(ShippingMethodsResponse.ShippingBean.WeightBean weight);
     void openShippingMethods();
     void finishActivity();
-    void openCheckout();
+    void openCheckout(boolean isShipping, String country_id, String state_id);
 
 
 }

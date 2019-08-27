@@ -15,7 +15,6 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.observers.DisposableCompletableObserver;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -438,9 +437,45 @@ public class CartPresenter <V extends CartMvpView> extends BasePresenter<V>
     }
 
     @Override
-    public void onOpenCheckout() {
+    public void onOpenCheckout(boolean isShipping, String country_id, String state_id, String weight_code, boolean shipping) {
 
-        getMvpView().openCheckout();
+        if(isShipping)
+        {
+            if(!country_id.equals(""))
+            {
+                if(!state_id.equals(""))
+                {
+
+                    if(isShipping)
+                    {
+                        if(!weight_code.equals(""))
+                        {
+                            getMvpView().openCheckout(isShipping,country_id,state_id);
+                        }
+                        else {
+                            getMvpView().showMessage("Please select method of shipping");
+                        }
+                    }
+                    else {
+                        getMvpView().openCheckout(isShipping,country_id,state_id);
+
+                    }
+
+                }
+                else {
+                     getMvpView().showMessage("Please select state for shipping");
+                }
+            }
+            else {
+                getMvpView().showMessage("Please select country for shipping");
+            }
+
+
+        }
+        else {
+            getMvpView().openCheckout(isShipping,country_id,state_id);
+        }
+
 
     }
 

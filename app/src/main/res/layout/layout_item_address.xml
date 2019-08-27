@@ -25,10 +25,13 @@
             android:layout_width="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
+            android:id="@+id/rg_select_address"
             android:layout_height="wrap_content"
             >
         <RadioButton
             android:layout_width="wrap_content"
+            android:id="@+id/rb_address"
+            android:buttonTint="@color/colorAccent"
             android:layout_height="wrap_content"
             />
         </RadioGroup>

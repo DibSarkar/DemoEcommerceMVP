@@ -132,4 +132,11 @@ public class AddressBookPresenter <V extends AddressBookMvpView> extends BasePre
 
         getMvpView().openEditAddress(address_id, fname, lname, comp, address1, address2, city, pin, country_id, state_id, default_address, gstin);
     }
+
+    @Override
+    public void onSendDataCheckout(AddressListResponse.ResponseDataBean responseDataBean) {
+
+        getMvpView().sendDataCheckout(responseDataBean);
+
+    }
 }

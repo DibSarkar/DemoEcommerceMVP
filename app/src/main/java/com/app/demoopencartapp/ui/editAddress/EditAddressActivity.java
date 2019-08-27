@@ -21,6 +21,8 @@ import com.app.demoopencartapp.R;
 import com.app.demoopencartapp.data.network.models.CountriesStatesResponse;
 import com.app.demoopencartapp.shared.base.BaseActivity;
 import com.app.demoopencartapp.ui.addAddress.CountryStateAdpater;
+import com.app.demoopencartapp.ui.addressBook.AddressBookActivity;
+import com.app.demoopencartapp.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -282,6 +284,13 @@ public class EditAddressActivity extends BaseActivity implements EditAddressMvpV
     public void openAddressBook() {
 
         Intent returnIntent = new Intent();
+        if(getIntent().getExtras()!=null) {
+            if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 1) {
+                returnIntent.putExtra(Constants.OPEN_FROM_CHECKOUT, getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            } else if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 2) {
+                returnIntent.putExtra(Constants.OPEN_FROM_CHECKOUT, getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            }
+        }
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
@@ -326,6 +335,12 @@ public class EditAddressActivity extends BaseActivity implements EditAddressMvpV
             }
 
 
+                if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 1) {
+                    bundle.putInt("billing_address",getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+                }
+                else  if (getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT) == 2) {
+                    bundle.putInt("shipping_address",getIntent().getExtras().getInt(Constants.OPEN_FROM_CHECKOUT));
+            }
             editAddressPresenter.onGetAllCountries();
         }
 
